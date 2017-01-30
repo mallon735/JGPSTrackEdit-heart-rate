@@ -1919,6 +1919,14 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 
 	protected void handleMerge() {
 		try {
+			if(db.getTracks().size() < 2) {
+				return;
+			}
+			
+			if(jTableTracks.getSelectedRow() == -1) {
+				return;
+			}
+			
 			DlgMerge dialog = new DlgMerge(db.getTrack(
 					jTableTracks.getSelectedRow()).getName(), db.getTracks());
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);

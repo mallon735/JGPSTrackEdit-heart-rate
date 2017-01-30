@@ -1,21 +1,21 @@
 package jgpstrackedit.config.view;
 
-import javax.swing.ButtonGroup;
-import javax.swing.JPanel;
-import javax.swing.JCheckBox;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
-import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.ButtonGroup;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JTextField;
+
 import jgpstrackedit.config.Configuration;
-import jgpstrackedit.view.Transform;
+import jgpstrackedit.international.International;
 import jgpstrackedit.map.TileManager;
 import jgpstrackedit.map.util.MapExtractManager;
-import javax.swing.JButton;
-import javax.swing.JRadioButton;
-import javax.swing.JComboBox;
-import jgpstrackedit.international.International;
-import net.miginfocom.swing.MigLayout;
 
 
 public class MapsPanel extends JPanel implements ConfigurationPanel {

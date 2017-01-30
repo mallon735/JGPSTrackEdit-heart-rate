@@ -14,8 +14,11 @@ package jgpstrackedit.trackfile.gpxroute;
 
 import java.io.IOException;
 import java.util.Stack;
+
 import javax.xml.parsers.ParserConfigurationException;
+
 import org.xml.sax.*;
+import org.xml.sax.helpers.AttributesImpl;
 
 /**
  *
@@ -23,7 +26,7 @@ import org.xml.sax.*;
  */
 public class GPXRoute_Parser implements ContentHandler {
     private GPXRoute_Handler handler;
-    private Stack context;
+    private Stack<Context> contextStack;
     private StringBuffer buffer;
     private EntityResolver resolver;
 
@@ -38,7 +41,7 @@ public class GPXRoute_Parser implements ContentHandler {
         this.handler = handler;
         this.resolver = resolver;
         buffer = new StringBuffer(111);
-        context = new java.util.Stack();
+        contextStack = new java.util.Stack<>();
     }
 
     /**
@@ -68,7 +71,7 @@ public class GPXRoute_Parser implements ContentHandler {
      */
     public final void startElement(java.lang.String ns, java.lang.String name, java.lang.String qname, org.xml.sax.Attributes attrs) throws org.xml.sax.SAXException {
         dispatch(true);
-        context.push(new Object[]{qname, new org.xml.sax.helpers.AttributesImpl(attrs)});
+        contextStack.push(new Context(qname, new org.xml.sax.helpers.AttributesImpl(attrs)));
         if ("rtept".equals(qname)) {
             handler.start_rtept(attrs);
         } else if ("link".equals(qname)) {
@@ -99,7 +102,7 @@ public class GPXRoute_Parser implements ContentHandler {
      */
     public final void endElement(java.lang.String ns, java.lang.String name, java.lang.String qname) throws org.xml.sax.SAXException {
         dispatch(false);
-        context.pop();
+        contextStack.pop();
         if ("rtept".equals(qname)) {
             handler.end_rtept();
         } else if ("link".equals(qname)) {
@@ -149,9 +152,9 @@ public class GPXRoute_Parser implements ContentHandler {
             return;
         }
         //skip it
-        Object[] ctx = (Object[]) context.peek();
-        String here = (String) ctx[0];
-        org.xml.sax.Attributes attrs = (org.xml.sax.Attributes) ctx[1];
+        Context ctx = contextStack.peek();
+        String here = ctx.getQname();
+        org.xml.sax.Attributes attrs = ctx.getAttributes();
         if ("time".equals(here)) {
             if (fireOnlyIfMixed) {
                 throw new IllegalStateException("Unexpected characters() event! (Missing DTD?)");
@@ -263,7 +266,7 @@ public class GPXRoute_Parser implements ContentHandler {
         return new ErrorHandler() {
 
             public void error(SAXParseException ex) throws SAXException {
-                if (context.isEmpty()) {
+                if (contextStack.isEmpty()) {
                     System.err.println("Missing DOCTYPE.");
                 }
                 throw ex;
@@ -277,5 +280,23 @@ public class GPXRoute_Parser implements ContentHandler {
             }
         };
     }
-
+    
+    private class Context {
+    	private final String qname;
+    	private final org.xml.sax.helpers.AttributesImpl attributes;
+    	
+    	
+		public Context(String qname, AttributesImpl attributes) {
+			this.qname = qname;
+			this.attributes = attributes;
+		}
+		
+		public String getQname() {
+			return qname;
+		}
+		
+		public org.xml.sax.helpers.AttributesImpl getAttributes() {
+			return attributes;
+		}
+    }
 }

@@ -8,16 +8,13 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.xml.sax.SAXException;
-
-import jgpstrackedit.control.UIController;
 import jgpstrackedit.data.Track;
+
+import org.xml.sax.SAXException;
 
 /**
  * Manages opening and saving of trackfiles.
@@ -75,6 +72,11 @@ public class TrackFileManager {
 		} else {
 			System.out.println("TrackFileManager: "+track.getTrackFileType()+" imported.");
 		}
+		
+		if(track.getName() == null) {
+			track.setName(file.getName());
+		}
+		
 		return track;
 
 	}
@@ -88,27 +90,78 @@ public class TrackFileManager {
 	 * @throws TrackFileException 
 	 */
 	public static void saveTrack(Track track, File file, String trackFileType) throws TrackFileException {
+		final TrackFile trackFile = getTrackFileObject(track, trackFileType);
+		
+		if(trackFile == null) {
+			throw new TrackFileException("Can't save track! No file type specified!");
+		}
+		
+		try {
+			String fileName = file.getAbsolutePath();
+			System.out.println("TrackFileManager.saveTrack: "+file.getAbsolutePath());
+			if (!fileName.endsWith(trackFile.getTrackFileExtension())) {
+				fileName = fileName + "." + trackFile.getTrackFileExtension();
+				file = new File(fileName);
+			}
+			
+			updateFileAndType(track, trackFile, fileName);
+			System.out.println("                            " + file.getAbsolutePath());
+			trackFile.saveTrack(track, file);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			throw new TrackFileException("Trackfile "+file.getAbsolutePath()+" could not be created",e);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			throw new TrackFileException("Error writing to trackfile "+file.getAbsolutePath(),e);
+		}
+	}
+
+	/**
+	 * Update the underlying track file name and the track file type.
+	 *  
+	 * @param track The Track object.
+	 * @param trackFile The track file object.
+	 * @param fileName The given file name.
+	 */
+	private static void updateFileAndType(Track track, TrackFile trackFile, String fileName) {
+		track.setTrackFileName(fileName);
+		track.setTrackFileType(trackFile.getTypeDescription());
+	}
+	
+	/**
+	 * Select a track file object for a given track object and a requested file type.
+	 * 
+	 * @param track The track to be saved.
+	 * @param trackFileType The given file type.
+	 * @return TrackFile object
+	 */
+	private static TrackFile getTrackFileObject(Track track, String trackFileType) {
+		TrackFile targetTackFile = getTrackFileObject(trackFileType);
+		
+		if(targetTackFile == null && track.getTrackFileType() != null) {
+			targetTackFile = getTrackFileObject(track.getTrackFileType());
+		}
+		
+		return targetTackFile;
+	}
+	
+	/**
+	 * Select a track file object for a requested file type.
+	 * 
+	 * @param track The track to be saved.
+	 * @param trackFileType The given file type.
+	 * @return TrackFile object
+	 */
+	private static TrackFile getTrackFileObject(String trackFileType) {
+		TrackFile targetTackFile = null;
 		for (TrackFile trackFile : trackFiles) {
 			if (trackFile.getTypeDescription().equals(trackFileType)) {
-				try {
-					String fileName = file.getAbsolutePath();
-					System.out.println("TrackFileManager.saveTrack: "+file.getAbsolutePath());
-					if (!fileName.endsWith(trackFile.getTrackFileExtension())) {
-						fileName = fileName + "." + trackFile.getTrackFileExtension();
-						file = new File(fileName);
-					}
-					System.out.println("                            "+file.getAbsolutePath());
-					trackFile.saveTrack(track, file);
-				} catch (FileNotFoundException e) {
-					// TODO Auto-generated catch block
-					throw new TrackFileException("Trackfile "+file.getAbsolutePath()+" could not be created",e);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					throw new TrackFileException("Error writing to trackfile "+file.getAbsolutePath(),e);
-				}
+				targetTackFile = trackFile;
+				break;
 			}
 		}
 		
+		return targetTackFile;
 	}
 
 	/**

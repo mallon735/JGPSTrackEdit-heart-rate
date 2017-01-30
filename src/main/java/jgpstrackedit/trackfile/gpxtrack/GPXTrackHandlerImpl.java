@@ -125,8 +125,13 @@ public class GPXTrackHandlerImpl implements GPXTrackHandler {
         if (DEBUG) {
             System.err.println("handle_name: " + meta);
         }
-        if (metadataFlag)
+        if (metadataFlag) {
             track.setName(data);
+        } else {
+        	if(track.getName() == null || track.getName().length() == 0) {
+        		track.setName(data);
+        	}
+        }
     }
 
     public void handle_gpsies_totalDescentMeter(final String data, final Attributes meta) throws SAXException {

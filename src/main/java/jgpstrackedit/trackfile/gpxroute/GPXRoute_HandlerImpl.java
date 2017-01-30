@@ -37,10 +37,15 @@ public class GPXRoute_HandlerImpl implements GPXRoute_Handler {
         if (DEBUG) {
             System.err.println("handle_time: " + meta);
         }
-        if (metadataFlag)
+        if (metadataFlag) {
             track.setTime(data);
-        else
-            point.setTime(data);
+        } else {
+        	if(point != null) {
+        		point.setTime(data);
+        	} else {
+        		track.setTime(data);
+        	}
+        }
     }
 
     public void handle_text(final String data, final Attributes meta) throws SAXException {

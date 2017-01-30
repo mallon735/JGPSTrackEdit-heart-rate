@@ -17,6 +17,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -284,6 +285,9 @@ public class UIController implements Runnable {
 		if (form.getTracksTable().getSelectedRowCount() == 1) {
 			Track saveTrack = db.getTracks().get(
 					form.getTracksTable().getSelectedRow());
+			
+			this.preselectFileFilterInFileSaveChooser(saveTrack);
+			
 			int returnVal = fileSaveChooser.showSaveDialog(form);
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
 				try {
@@ -298,6 +302,24 @@ public class UIController implements Runnable {
 							"Error while saving track: " + e.getMessage(),
 							"Error", JOptionPane.ERROR_MESSAGE);
 				}
+			}
+		}
+	}
+	
+	/**
+	 * Preselect the file chooser dialog with the file type of the track.
+	 * 
+	 * @param track The track to be saved
+	 */
+	private void preselectFileFilterInFileSaveChooser(final Track track) {
+		if(track.getTrackFileType() == null) {
+			return;
+		}
+		
+		for(FileFilter filter: fileSaveChooser.getChoosableFileFilters()) {
+			if(filter.getDescription().equals(track.getTrackFileType())) {
+				fileSaveChooser.setFileFilter(filter);
+				break;
 			}
 		}
 	}

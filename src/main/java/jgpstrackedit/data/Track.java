@@ -652,6 +652,11 @@ public class Track {
 	public Track split(Point splitPoint, String name) {
 		int splitIndex = points.indexOf(splitPoint);
 		assert (splitIndex != -1);
+		
+		if(name == null) {
+			name = "Track";
+		}
+		
 		Track secondTrack = new Track();
 		secondTrack.setName(name + "_2");
 		secondTrack.setLink(this.getLink());
@@ -660,6 +665,8 @@ public class Track {
 		secondTrack.setGpxAttributes(this.getGpxAttributes());
 		secondTrack.setCopyright(this.getCopyright());
 		secondTrack.add(splitPoint);
+		secondTrack.setTrackFileType(this.getTrackFileType());
+		
 		for (int i = splitIndex + 1; i < points.size(); i++)
 			secondTrack.add(points.get(i));
 		for (int i = points.size() - 1; i > splitIndex; i--)
