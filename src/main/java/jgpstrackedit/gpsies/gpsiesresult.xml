@@ -1,0 +1,455 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpsies>
+  <meta>
+    <requestUrl>http://ws.gpsies.com/api.do?key=eiqteveemajmlfhn&amp;username=spqr&amp;limit=20&amp;filetype=kml</requestUrl>
+    <username>spqr</username>
+    <resultPage>1</resultPage>
+    <limit>20</limit>
+    <filetype>kml</filetype>
+    <downloadBaseUrl>http://ws.gpsies.com/download.do?</downloadBaseUrl>
+    <resultSize>20</resultSize>
+  </meta>
+  <tracks>
+    <track>
+      <title>MariaWoerth_Pyramidenkogel</title>
+      <fileId>cjedutjnhjeztjvp</fileId>
+      <downloadLink>http://ws.gpsies.com/download.do?fileId=cjedutjnhjeztjvp&amp;filetype=kml</downloadLink>
+      <createdDate>2009-08-01 20:51:51.0</createdDate>
+      <changedDate>2012-01-11 00:03:35.0</changedDate>
+      <description>Von Maria WÃ¶rth (Startpunkt: Bushaltestelle SÃ¼duferstraÃŸe) Ã¼ber Feldwege zum Gipfel des Pyramidenkogels</description>
+      <startPointLat>46.6152469</startPointLat>
+      <startPointLon>14.1599139</startPointLon>
+      <endPointLat>46.6089799</endPointLat>
+      <endPointLon>14.1449759</endPointLon>
+      <startPointCountry>AT</startPointCountry>
+      <endPointCountry>AT</endPointCountry>
+      <trackLengthM>4838.471623717241</trackLengthM>
+      <countTrackpoints>215</countTrackpoints>
+      <trackProperty>oneWayTrip</trackProperty>
+      <altitudeMinHeightM>458</altitudeMinHeightM>
+      <altitudeMaxHeightM>850</altitudeMaxHeightM>
+      <altitudeDifferenceM>392</altitudeDifferenceM>
+      <totalAscentM>412</totalAscentM>
+      <totalDescentM>34</totalDescentM>
+    </track>
+    <track>
+      <title>tour_KLU_Vir_Aich</title>
+      <fileId>ljtyxmkmkriebwze</fileId>
+      <downloadLink>http://ws.gpsies.com/download.do?fileId=ljtyxmkmkriebwze&amp;filetype=kml</downloadLink>
+      <createdDate>2009-08-05 17:41:33.0</createdDate>
+      <changedDate>2012-01-11 00:03:35.0</changedDate>
+      <description>Klagenfurt Virunum, Ã¼ber KÃ¼hnsdorf nach Juvenna Beliburg und Aich</description>
+      <startPointLat>46.6113290</startPointLat>
+      <startPointLon>14.2852400</startPointLon>
+      <endPointLat>46.6301329</endPointLat>
+      <endPointLon>14.8114699</endPointLon>
+      <startPointCountry>AT</startPointCountry>
+      <endPointCountry>AT</endPointCountry>
+      <trackLengthM>73210.244990566</trackLengthM>
+      <countTrackpoints>2141</countTrackpoints>
+      <trackProperty>oneWayTrip</trackProperty>
+      <altitudeMinHeightM>389</altitudeMinHeightM>
+      <altitudeMaxHeightM>565</altitudeMaxHeightM>
+      <altitudeDifferenceM>176</altitudeDifferenceM>
+      <totalAscentM>529</totalAscentM>
+      <totalDescentM>510</totalDescentM>
+    </track>
+    <track>
+      <title>Tour_Aich_Bleiburg_KÃ¼hnsdorf</title>
+      <fileId>bofyodlaocavnhkz</fileId>
+      <downloadLink>http://ws.gpsies.com/download.do?fileId=bofyodlaocavnhkz&amp;filetype=kml</downloadLink>
+      <createdDate>2009-08-05 17:48:16.0</createdDate>
+      <changedDate>2012-01-11 00:03:35.0</changedDate>
+      <startPointLat>46.6301260</startPointLat>
+      <startPointLon>14.8114740</startPointLon>
+      <endPointLat>46.6217789</endPointLat>
+      <endPointLon>14.6301020</endPointLon>
+      <startPointCountry>AT</startPointCountry>
+      <endPointCountry>AT</endPointCountry>
+      <trackLengthM>20389.7251148382</trackLengthM>
+      <countTrackpoints>579</countTrackpoints>
+      <trackProperty>oneWayTrip</trackProperty>
+      <altitudeMinHeightM>436</altitudeMinHeightM>
+      <altitudeMaxHeightM>502</altitudeMaxHeightM>
+      <altitudeDifferenceM>66</altitudeDifferenceM>
+      <totalAscentM>58</totalAscentM>
+      <totalDescentM>78</totalDescentM>
+    </track>
+    <track>
+      <title>Tour_Sattnitz_Training</title>
+      <fileId>dcpffbitcjtfzrgd</fileId>
+      <downloadLink>http://ws.gpsies.com/download.do?fileId=dcpffbitcjtfzrgd&amp;filetype=kml</downloadLink>
+      <createdDate>2009-08-09 18:53:00.0</createdDate>
+      <changedDate>2012-01-11 00:03:35.0</changedDate>
+      <description>Kurze Trainingsstrecke 200HM</description>
+      <startPointLat>46.6113170</startPointLat>
+      <startPointLon>14.2850859</startPointLon>
+      <endPointLat>46.5869670</endPointLat>
+      <endPointLon>14.3157509</endPointLon>
+      <startPointCountry>AT</startPointCountry>
+      <endPointCountry>AT</endPointCountry>
+      <trackLengthM>6246.736351810091</trackLengthM>
+      <countTrackpoints>220</countTrackpoints>
+      <trackProperty>oneWayTrip</trackProperty>
+      <altitudeMinHeightM>437</altitudeMinHeightM>
+      <altitudeMaxHeightM>667</altitudeMaxHeightM>
+      <altitudeDifferenceM>230</altitudeDifferenceM>
+      <totalAscentM>229</totalAscentM>
+      <totalDescentM>4</totalDescentM>
+    </track>
+    <track>
+      <title>Tour_KLU_KlagenfurterHÃ¼tte</title>
+      <fileId>naprldmdbnxinkex</fileId>
+      <downloadLink>http://ws.gpsies.com/download.do?fileId=naprldmdbnxinkex&amp;filetype=kml</downloadLink>
+      <createdDate>2009-08-16 19:28:51.0</createdDate>
+      <changedDate>2012-01-11 00:03:35.0</changedDate>
+      <description>Von Klagenfurt Ã¼ber KÃ¶ttmannsdorf und Feistritz auf die Klagenfurter HÃ¼tte</description>
+      <startPointLat>46.6113280</startPointLat>
+      <startPointLon>14.2851810</startPointLon>
+      <endPointLat>46.6113329</endPointLat>
+      <endPointLon>14.2851970</endPointLon>
+      <startPointCountry>AT</startPointCountry>
+      <endPointCountry>AT</endPointCountry>
+      <trackLengthM>60151.2022252931</trackLengthM>
+      <countTrackpoints>2093</countTrackpoints>
+      <trackProperty>roundTrip</trackProperty>
+      <altitudeMinHeightM>437</altitudeMinHeightM>
+      <altitudeMaxHeightM>1664</altitudeMaxHeightM>
+      <altitudeDifferenceM>1227</altitudeDifferenceM>
+      <totalAscentM>1679</totalAscentM>
+      <totalDescentM>1679</totalDescentM>
+    </track>
+    <track>
+      <title>Tour_WÃ¶rtherseerunde mit Pyramidenkogel</title>
+      <fileId>lbfnwaxihofxeept</fileId>
+      <downloadLink>http://ws.gpsies.com/download.do?fileId=lbfnwaxihofxeept&amp;filetype=kml</downloadLink>
+      <createdDate>2009-08-19 20:38:05.0</createdDate>
+      <changedDate>2012-01-11 00:03:35.0</changedDate>
+      <description>Von KlagenfÃ¼rt am SÃ¼duferradweg nach Maria WÃ¶rth, Ã¼ber Forstwege auf den Pyramidenkogel, dann nach Schiefling, Velden wieder nach Klagenfurt</description>
+      <startPointLat>46.6113479</startPointLat>
+      <startPointLon>14.2851820</startPointLon>
+      <endPointLat>46.6113379</endPointLat>
+      <endPointLon>14.2851990</endPointLon>
+      <startPointCountry>AT</startPointCountry>
+      <endPointCountry>AT</endPointCountry>
+      <trackLengthM>48702.6717211765</trackLengthM>
+      <countTrackpoints>1518</countTrackpoints>
+      <trackProperty>roundTrip</trackProperty>
+      <altitudeMinHeightM>437</altitudeMinHeightM>
+      <altitudeMaxHeightM>850</altitudeMaxHeightM>
+      <altitudeDifferenceM>413</altitudeDifferenceM>
+      <totalAscentM>591</totalAscentM>
+      <totalDescentM>591</totalDescentM>
+    </track>
+    <track>
+      <title>Tour_Pyramidenkogel_VarianteA</title>
+      <fileId>lmjugeqblprvmwxk</fileId>
+      <downloadLink>http://ws.gpsies.com/download.do?fileId=lmjugeqblprvmwxk&amp;filetype=kml</downloadLink>
+      <createdDate>2009-09-26 19:11:11.0</createdDate>
+      <changedDate>2012-01-11 00:03:35.0</changedDate>
+      <description>Von Klagenfurt Ã¼ber den SÃ¼duferradweg nach Maria WÃ¶rth, Ã¼ber Forstwege zum Gipfel, Ã¼ber StraÃŸe nach Keutschach und durch das Seental Ã¼ber den Radfahrweg wieder zurÃ¼ck.</description>
+      <startPointLat>46.6112430</startPointLat>
+      <startPointLon>14.2851840</startPointLon>
+      <endPointLat>46.6113150</endPointLat>
+      <endPointLon>14.2852100</endPointLon>
+      <startPointCountry>AT</startPointCountry>
+      <endPointCountry>AT</endPointCountry>
+      <trackLengthM>32956.5146339066</trackLengthM>
+      <countTrackpoints>1013</countTrackpoints>
+      <trackProperty>roundTrip</trackProperty>
+      <altitudeMinHeightM>437</altitudeMinHeightM>
+      <altitudeMaxHeightM>850</altitudeMaxHeightM>
+      <altitudeDifferenceM>413</altitudeDifferenceM>
+      <totalAscentM>560</totalAscentM>
+      <totalDescentM>559</totalDescentM>
+    </track>
+    <track>
+      <title>Tour_Pyramidenkogel_VarianteB</title>
+      <fileId>ttegjwixshahauhb</fileId>
+      <downloadLink>http://ws.gpsies.com/download.do?fileId=ttegjwixshahauhb&amp;filetype=kml</downloadLink>
+      <createdDate>2009-09-26 19:14:53.0</createdDate>
+      <changedDate>2012-01-11 00:03:35.0</changedDate>
+      <description>Von Klagenfurt Ã¼ber den SÃ¼duferradweg nach Maria WÃ¶rth, Ã¼ber Forstwege zum Gipfel, entlang der StraÃŸe nach Keutschach und Reifnitz, dann am SÃ¼duferradweg wieder zurÃ¼ck</description>
+      <startPointLat>46.6112909</startPointLat>
+      <startPointLon>14.2849759</startPointLon>
+      <endPointLat>46.6113339</endPointLat>
+      <endPointLon>14.2852090</endPointLon>
+      <startPointCountry>AT</startPointCountry>
+      <endPointCountry>AT</endPointCountry>
+      <trackLengthM>32273.186942860404</trackLengthM>
+      <countTrackpoints>986</countTrackpoints>
+      <trackProperty>roundTrip</trackProperty>
+      <altitudeMinHeightM>437</altitudeMinHeightM>
+      <altitudeMaxHeightM>850</altitudeMaxHeightM>
+      <altitudeDifferenceM>413</altitudeDifferenceM>
+      <totalAscentM>595</totalAscentM>
+      <totalDescentM>595</totalDescentM>
+    </track>
+    <track>
+      <title>Tour_Rund_Um_Klagenfurt</title>
+      <fileId>tazlemcrsthikkmg</fileId>
+      <downloadLink>http://ws.gpsies.com/download.do?fileId=tazlemcrsthikkmg&amp;filetype=kml</downloadLink>
+      <createdDate>2009-11-08 10:57:14.0</createdDate>
+      <changedDate>2012-01-11 00:03:35.0</changedDate>
+      <description>Rundstrecke um Klagenfurt, grÃ¶ÃŸtenteils auf Fahrradwegen</description>
+      <startPointLat>46.6113030</startPointLat>
+      <startPointLon>14.2851250</startPointLon>
+      <endPointLat>46.6112150</endPointLat>
+      <endPointLon>14.2855410</endPointLon>
+      <startPointCountry>AT</startPointCountry>
+      <endPointCountry>AT</endPointCountry>
+      <trackLengthM>22749.505781239895</trackLengthM>
+      <countTrackpoints>672</countTrackpoints>
+      <trackProperty>roundTrip</trackProperty>
+      <altitudeMinHeightM>430</altitudeMinHeightM>
+      <altitudeMaxHeightM>474</altitudeMaxHeightM>
+      <altitudeDifferenceM>44</altitudeDifferenceM>
+      <totalAscentM>79</totalAscentM>
+      <totalDescentM>81</totalDescentM>
+    </track>
+    <track>
+      <title>Predigtstuhl</title>
+      <fileId>csbdvhqytifxiklr</fileId>
+      <downloadLink>http://ws.gpsies.com/download.do?fileId=csbdvhqytifxiklr&amp;filetype=kml</downloadLink>
+      <createdDate>2010-05-03 19:15:52.0</createdDate>
+      <changedDate>2012-01-11 00:03:35.0</changedDate>
+      <description>Anfahrt auf Fahrradwegen bzw. NebenstraÃŸen. Ab SteihangstraÃŸe Anstieg auf Feldweg durch Wald, nach dem ersten Gipfelplateau fast waagrecht durch den Wald bis Zwanzigerberg, einige Passagen nur mit MTB bewÃ¤ltigbar, bei Regen sehr matschig. Vom Gasthof Piber zum Predigtstuhl zeitweise Schiebepassagen. RÃ¼ckweg grÃ¶ÃŸtenteils Ã¼ber asphaltierte NebenstraÃŸen.</description>
+      <startPointLat>46.6113700</startPointLat>
+      <startPointLon>14.2851500</startPointLon>
+      <endPointLat>46.6099220</endPointLat>
+      <endPointLon>14.2851909</endPointLon>
+      <startPointCountry>AT</startPointCountry>
+      <endPointCountry>AT</endPointCountry>
+      <trackLengthM>21178.495009280203</trackLengthM>
+      <countTrackpoints>771</countTrackpoints>
+      <trackProperty>roundTrip</trackProperty>
+      <altitudeMinHeightM>430</altitudeMinHeightM>
+      <altitudeMaxHeightM>685</altitudeMaxHeightM>
+      <altitudeDifferenceM>255</altitudeDifferenceM>
+      <totalAscentM>367</totalAscentM>
+      <totalDescentM>367</totalDescentM>
+    </track>
+    <track>
+      <title>Schrottbauer</title>
+      <fileId>obfvxtwfxxggfwkf</fileId>
+      <downloadLink>http://ws.gpsies.com/download.do?fileId=obfvxtwfxxggfwkf&amp;filetype=kml</downloadLink>
+      <createdDate>2010-05-03 21:26:22.0</createdDate>
+      <changedDate>2012-01-11 00:03:35.0</changedDate>
+      <description>Ãœber Feldwege und Singletrails durch den Wald zum Schrottbauer</description>
+      <startPointLat>46.6111339</startPointLat>
+      <startPointLon>14.2850169</startPointLon>
+      <endPointLat>46.6113030</endPointLat>
+      <endPointLon>14.2852909</endPointLon>
+      <startPointCountry>AT</startPointCountry>
+      <endPointCountry>AT</endPointCountry>
+      <trackLengthM>12240.1988116954</trackLengthM>
+      <countTrackpoints>503</countTrackpoints>
+      <trackProperty>roundTrip</trackProperty>
+      <altitudeMinHeightM>437</altitudeMinHeightM>
+      <altitudeMaxHeightM>690</altitudeMaxHeightM>
+      <altitudeDifferenceM>253</altitudeDifferenceM>
+      <totalAscentM>289</totalAscentM>
+      <totalDescentM>288</totalDescentM>
+    </track>
+    <track>
+      <title>Tour_Zwanzgerberg_Arduino</title>
+      <fileId>pbvjwbfkmpascgye</fileId>
+      <downloadLink>http://ws.gpsies.com/download.do?fileId=pbvjwbfkmpascgye&amp;filetype=kml</downloadLink>
+      <createdDate>2010-05-15 12:58:46.0</createdDate>
+      <changedDate>2012-01-11 00:03:35.0</changedDate>
+      <description>Von Klagenfurt nach Zwanzigerberg und zurÃ¼ck. Ãœberwiegend auf Radwegen und Forstwegen, MTB empfehlenswert</description>
+      <startPointLat>46.6112939</startPointLat>
+      <startPointLon>14.2851039</startPointLon>
+      <endPointLat>46.6111550</endPointLat>
+      <endPointLon>14.2854759</endPointLon>
+      <startPointCountry>AT</startPointCountry>
+      <endPointCountry>AT</endPointCountry>
+      <trackLengthM>18507.855875517704</trackLengthM>
+      <countTrackpoints>781</countTrackpoints>
+      <trackProperty>roundTrip</trackProperty>
+      <altitudeMinHeightM>436</altitudeMinHeightM>
+      <altitudeMaxHeightM>671</altitudeMaxHeightM>
+      <altitudeDifferenceM>235</altitudeDifferenceM>
+      <totalAscentM>263</totalAscentM>
+      <totalDescentM>264</totalDescentM>
+    </track>
+    <track>
+      <title>Tour_Lipizach</title>
+      <fileId>exjkxheyndibktmc</fileId>
+      <downloadLink>http://ws.gpsies.com/download.do?fileId=exjkxheyndibktmc&amp;filetype=kml</downloadLink>
+      <createdDate>2010-05-15 13:12:38.0</createdDate>
+      <changedDate>2012-01-11 00:03:35.0</changedDate>
+      <description>Von Klagenfurt hinauf auf die Sattnitz bis kurz nach Lipitzach, Radwege und StraÃŸe (leider befahren), durchwegs asphaltiert, relativ steil. Alternativtour wenn die Forstwege schlammig sind.</description>
+      <startPointLat>46.6113049</startPointLat>
+      <startPointLon>14.2850820</startPointLon>
+      <endPointLat>46.6111870</endPointLat>
+      <endPointLon>14.2854219</endPointLon>
+      <startPointCountry>AT</startPointCountry>
+      <endPointCountry>AT</endPointCountry>
+      <trackLengthM>21136.7320500913</trackLengthM>
+      <countTrackpoints>653</countTrackpoints>
+      <trackProperty>roundTrip</trackProperty>
+      <altitudeMinHeightM>430</altitudeMinHeightM>
+      <altitudeMaxHeightM>758</altitudeMaxHeightM>
+      <altitudeDifferenceM>328</altitudeDifferenceM>
+      <totalAscentM>371</totalAscentM>
+      <totalDescentM>372</totalDescentM>
+    </track>
+    <track>
+      <title>Tour_Kreuzbergl_Schrottbauer</title>
+      <fileId>loejdbnftkittgna</fileId>
+      <downloadLink>http://ws.gpsies.com/download.do?fileId=loejdbnftkittgna&amp;filetype=kml</downloadLink>
+      <createdDate>2010-05-15 13:17:13.0</createdDate>
+      <changedDate>2012-01-11 00:03:35.0</changedDate>
+      <description>Von Klagenfurt aufs Kreuzbergl, dann zum Schrottkogel/Schrottbauer uns zurÃ¼ck. Sehr viel auf Forstwegen und Singletrail durch den Wald. FÃ¼r MTB.</description>
+      <startPointLat>46.6116490</startPointLat>
+      <startPointLon>14.2852700</startPointLon>
+      <endPointLat>46.6112590</endPointLat>
+      <endPointLon>14.2851999</endPointLon>
+      <startPointCountry>AT</startPointCountry>
+      <endPointCountry>AT</endPointCountry>
+      <trackLengthM>25415.389636282</trackLengthM>
+      <countTrackpoints>1003</countTrackpoints>
+      <trackProperty>roundTrip</trackProperty>
+      <altitudeMinHeightM>439</altitudeMinHeightM>
+      <altitudeMaxHeightM>690</altitudeMaxHeightM>
+      <altitudeDifferenceM>251</altitudeDifferenceM>
+      <totalAscentM>533</totalAscentM>
+      <totalDescentM>533</totalDescentM>
+    </track>
+    <track>
+      <title>Tour_Magdalensberg</title>
+      <fileId>trkincaywjdzjufw</fileId>
+      <downloadLink>http://ws.gpsies.com/download.do?fileId=trkincaywjdzjufw&amp;filetype=kml</downloadLink>
+      <createdDate>2010-05-27 19:43:39.0</createdDate>
+      <changedDate>2012-01-11 00:03:35.0</changedDate>
+      <description>Von Klagenfurt Ã¼ber Maria Saal (Dom!) und NebenstraÃŸen auf den Magdalensberg, zurÃ¼ck Variante Ã¼ber St.Georgen am Sandhof. Fast durchgehend asphaltiert</description>
+      <startPointLat>46.6117659</startPointLat>
+      <startPointLon>14.2852489</startPointLon>
+      <endPointLat>46.6112909</endPointLat>
+      <endPointLon>14.2854000</endPointLon>
+      <startPointCountry>AT</startPointCountry>
+      <endPointCountry>AT</endPointCountry>
+      <trackLengthM>56220.05331401381</trackLengthM>
+      <countTrackpoints>1738</countTrackpoints>
+      <trackProperty>roundTrip</trackProperty>
+      <altitudeMinHeightM>441</altitudeMinHeightM>
+      <altitudeMaxHeightM>1048</altitudeMaxHeightM>
+      <altitudeDifferenceM>607</altitudeDifferenceM>
+      <totalAscentM>827</totalAscentM>
+      <totalDescentM>827</totalDescentM>
+    </track>
+    <track>
+      <title>Tour_Kreuzbergl</title>
+      <fileId>kdovsyblovpilxyz</fileId>
+      <downloadLink>http://ws.gpsies.com/download.do?fileId=kdovsyblovpilxyz&amp;filetype=kml</downloadLink>
+      <createdDate>2010-05-27 19:50:20.0</createdDate>
+      <changedDate>2012-01-11 00:03:35.0</changedDate>
+      <description>Kurze Tour auf Kreuzbergl, Anreise asphaltiert, dann Waldwege.</description>
+      <startPointLat>46.6113170</startPointLat>
+      <startPointLon>14.2851690</startPointLon>
+      <endPointLat>46.6112880</endPointLat>
+      <endPointLon>14.2852599</endPointLon>
+      <startPointCountry>AT</startPointCountry>
+      <endPointCountry>AT</endPointCountry>
+      <trackLengthM>7070.287355910261</trackLengthM>
+      <countTrackpoints>342</countTrackpoints>
+      <trackProperty>roundTrip</trackProperty>
+      <altitudeMinHeightM>440</altitudeMinHeightM>
+      <altitudeMaxHeightM>558</altitudeMaxHeightM>
+      <altitudeDifferenceM>118</altitudeDifferenceM>
+      <totalAscentM>120</totalAscentM>
+      <totalDescentM>120</totalDescentM>
+    </track>
+    <track>
+      <title>Tour_Ulrichsberg</title>
+      <fileId>yingdkrtfktrqclk</fileId>
+      <downloadLink>http://ws.gpsies.com/download.do?fileId=yingdkrtfktrqclk&amp;filetype=kml</downloadLink>
+      <createdDate>2010-08-01 14:45:42.0</createdDate>
+      <changedDate>2012-01-11 00:03:35.0</changedDate>
+      <description>Von Klagenfurt Ã¼ber PÃ¶rtschach/Berg auf den Ulrichsberg und zurÃ¼ck</description>
+      <startPointLat>46.6113649</startPointLat>
+      <startPointLon>14.2852090</startPointLon>
+      <endPointLat>46.6113010</endPointLat>
+      <endPointLon>14.2851260</endPointLon>
+      <startPointCountry>AT</startPointCountry>
+      <endPointCountry>AT</endPointCountry>
+      <trackLengthM>37458.586434337296</trackLengthM>
+      <countTrackpoints>1339</countTrackpoints>
+      <trackProperty>roundTrip</trackProperty>
+      <altitudeMinHeightM>441</altitudeMinHeightM>
+      <altitudeMaxHeightM>999</altitudeMaxHeightM>
+      <altitudeDifferenceM>558</altitudeDifferenceM>
+      <totalAscentM>809</totalAscentM>
+      <totalDescentM>809</totalDescentM>
+    </track>
+    <track>
+      <title>Tour_KLU_Hochrindl</title>
+      <fileId>yccpbblkmlfgjpnc</fileId>
+      <downloadLink>http://ws.gpsies.com/download.do?fileId=yccpbblkmlfgjpnc&amp;filetype=kml</downloadLink>
+      <createdDate>2010-08-31 18:26:19.0</createdDate>
+      <changedDate>2012-01-11 00:03:35.0</changedDate>
+      <description>Von Klagenfurt aufs Hochrindl und retour (Ãœber Himmelberg und Ebene Reichenau)</description>
+      <startPointLat>46.6111779</startPointLat>
+      <startPointLon>14.2853049</startPointLon>
+      <endPointLat>46.6112769</endPointLat>
+      <endPointLon>14.2853110</endPointLon>
+      <startPointCountry>AT</startPointCountry>
+      <endPointCountry>AT</endPointCountry>
+      <trackLengthM>132859.380358505</trackLengthM>
+      <countTrackpoints>4074</countTrackpoints>
+      <trackProperty>roundTrip</trackProperty>
+      <altitudeMinHeightM>439</altitudeMinHeightM>
+      <altitudeMaxHeightM>1624</altitudeMaxHeightM>
+      <altitudeDifferenceM>1185</altitudeDifferenceM>
+      <totalAscentM>1857</totalAscentM>
+      <totalDescentM>1856</totalDescentM>
+    </track>
+    <track>
+      <title>Tour_Koschutahaus</title>
+      <fileId>ucxbedtwmmtyksoz</fileId>
+      <downloadLink>http://ws.gpsies.com/download.do?fileId=ucxbedtwmmtyksoz&amp;filetype=kml</downloadLink>
+      <createdDate>2010-09-05 16:18:24.0</createdDate>
+      <changedDate>2012-01-11 00:03:35.0</changedDate>
+      <description>Von Klagenfurt auf Fahrradwegen und StraÃŸen und Feldwegen zum Koschutahaus.</description>
+      <startPointLat>46.5906340</startPointLat>
+      <startPointLon>14.2736620</startPointLon>
+      <endPointLat>46.6112809</endPointLat>
+      <endPointLon>14.2850729</endPointLon>
+      <startPointCountry>AT</startPointCountry>
+      <endPointCountry>AT</endPointCountry>
+      <trackLengthM>54112.6938076194</trackLengthM>
+      <countTrackpoints>1810</countTrackpoints>
+      <trackProperty>oneWayTrip</trackProperty>
+      <altitudeMinHeightM>417</altitudeMinHeightM>
+      <altitudeMaxHeightM>1320</altitudeMaxHeightM>
+      <altitudeDifferenceM>903</altitudeDifferenceM>
+      <totalAscentM>1341</totalAscentM>
+      <totalDescentM>1350</totalDescentM>
+    </track>
+    <track>
+      <title>CH_StVeit_KLU</title>
+      <fileId>twtdnfokhubkpukk</fileId>
+      <downloadLink>http://ws.gpsies.com/download.do?fileId=twtdnfokhubkpukk&amp;filetype=kml</downloadLink>
+      <createdDate>2010-11-01 19:07:08.0</createdDate>
+      <changedDate>2012-01-11 00:03:35.0</changedDate>
+      <description>Von Glandorf/St Veit Ã¼ber den Fahrradweg nach Klagenfurt</description>
+      <startPointLat>46.7490690</startPointLat>
+      <startPointLon>14.3813529</startPointLon>
+      <endPointLat>46.6111759</endPointLat>
+      <endPointLon>14.2854990</endPointLon>
+      <startPointCountry>AT</startPointCountry>
+      <endPointCountry>AT</endPointCountry>
+      <trackLengthM>21374.831795893802</trackLengthM>
+      <countTrackpoints>685</countTrackpoints>
+      <trackProperty>oneWayTrip</trackProperty>
+      <altitudeMinHeightM>441</altitudeMinHeightM>
+      <altitudeMaxHeightM>476</altitudeMaxHeightM>
+      <altitudeDifferenceM>35</altitudeDifferenceM>
+      <totalAscentM>31</totalAscentM>
+      <totalDescentM>59</totalDescentM>
+    </track>
+  </tracks>
+</gpsies>
+
+

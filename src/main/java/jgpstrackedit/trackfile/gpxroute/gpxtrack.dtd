@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!--
+    TODO define vocabulary identification
+    PUBLIC ID: -//vendor//vocabulary//EN
+    SYSTEM ID: http://server/path/gpxtrack_example.dtd
+
+-->
+
+<!--
+    An example how to use this DTD from your XML document:
+
+    <?xml version="1.0"?>
+
+    <!DOCTYPE gpx SYSTEM "gpxtrack_example.dtd">
+
+    <gpx>
+    ...
+    </gpx>
+-->
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT gpx (rte|metadata)*>
+<!ATTLIST gpx
+    version CDATA #IMPLIED
+    creator CDATA #IMPLIED
+    xsi:schemaLocation CDATA #IMPLIED
+    xmlns:xsi CDATA #IMPLIED
+    xmlns CDATA #IMPLIED
+  >
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT metadata (time|link|copyright|name)*>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT name (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT copyright EMPTY>
+<!ATTLIST copyright
+    author CDATA #IMPLIED
+  >
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT link (text)*>
+<!ATTLIST link
+    href CDATA #IMPLIED
+  >
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT text (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT time (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT rte (rtept|link|name)*>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT rtept (time|ele)*>
+<!ATTLIST rtept
+    lon CDATA #IMPLIED
+    lat CDATA #IMPLIED
+  >
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT ele (#PCDATA)>

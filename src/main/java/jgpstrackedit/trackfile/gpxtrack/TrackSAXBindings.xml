@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE SAX-bindings PUBLIC "-//XML Module//DTD SAX Bindings 1.0//EN" "">
+<SAX-bindings version='1'>
+	<bind element='gpsies:totalAscentMeter' method='gpsies_totalAscentMeter' type='DATA' ></bind>
+	<bind element='text' method='text' type='DATA' ></bind>
+	<bind element='trkpt' method='trkpt' type='CONTAINER' ></bind>
+	<bind element='link' method='link' type='CONTAINER' ></bind>
+	<bind element='trk' method='trk' type='CONTAINER' ></bind>
+	<bind element='extensions' method='extensions' type='CONTAINER' ></bind>
+	<bind element='time' method='time' type='DATA' ></bind>
+	<bind element='trkseg' method='trkseg' type='CONTAINER' ></bind>
+	<bind element='gpsies:maxHeightMeter' method='gpsies_maxHeightMeter' type='DATA' ></bind>
+	<bind element='name' method='name' type='DATA' ></bind>
+	<bind element='gpsies:totalDescentMeter' method='gpsies_totalDescentMeter' type='DATA' ></bind>
+	<bind element='gpsies:property' method='gpsies_property' type='DATA' ></bind>
+	<bind element='gpsies:minHeightMeter' method='gpsies_minHeightMeter' type='DATA' ></bind>
+	<bind element='gpx' method='gpx' type='CONTAINER' ></bind>
+	<bind element='gpsies:trackLengthMeter' method='gpsies_trackLengthMeter' type='DATA' ></bind>
+	<bind element='ele' method='ele' type='DATA' ></bind>
+	<bind element='metadata' method='metadata' type='CONTAINER' ></bind>
+</SAX-bindings>

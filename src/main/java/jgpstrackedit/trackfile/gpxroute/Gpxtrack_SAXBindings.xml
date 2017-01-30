@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE SAX-bindings PUBLIC "-//XML Module//DTD SAX Bindings 1.0//EN" "">
+<SAX-bindings version='1'>
+	<bind element='time' method='time' type='DATA' ></bind>
+	<bind element='text' method='text' type='DATA' ></bind>
+	<bind element='rtept' method='rtept' type='CONTAINER' ></bind>
+	<bind element='link' method='link' type='CONTAINER' ></bind>
+	<bind element='name' method='name' type='DATA' ></bind>
+	<bind element='rte' method='rte' type='CONTAINER' ></bind>
+	<bind element='copyright' method='copyright' type='EMPTY' ></bind>
+	<bind element='gpx' method='gpx' type='CONTAINER' ></bind>
+	<bind element='ele' method='ele' type='DATA' ></bind>
+	<bind element='metadata' method='metadata' type='CONTAINER' ></bind>
+</SAX-bindings>

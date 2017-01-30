@@ -1,0 +1,151 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!--
+    TODO define vocabulary identification
+    PUBLIC ID: -//vendor//vocabulary//EN
+    SYSTEM ID: http://server/path/tcx.dtd
+
+-->
+
+<!--
+    An example how to use this DTD from your XML document:
+
+    <?xml version="1.0"?>
+
+    <!DOCTYPE TrainingCenterDatabase SYSTEM "tcx.dtd">
+
+    <TrainingCenterDatabase>
+    ...
+    </TrainingCenterDatabase>
+-->
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT TrainingCenterDatabase (#PCDATA|Author|Activities)*>
+<!ATTLIST TrainingCenterDatabase
+    xsi:schemaLocation CDATA #IMPLIED
+    xmlns:xsi CDATA #IMPLIED
+    xmlns CDATA #IMPLIED
+  >
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT Activities (#PCDATA|Activity)*>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT Activity (#PCDATA|Creator|Lap|Id)*>
+<!ATTLIST Activity
+    Sport CDATA #IMPLIED
+  >
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT Id (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT Lap (#PCDATA|Track|TriggerMethod|Cadence|Intensity|MaximumHeartRateBpm|AverageHeartRateBpm|Calories|MaximumSpeed|DistanceMeters|TotalTimeSeconds)*>
+<!ATTLIST Lap
+    StartTime CDATA #IMPLIED
+  >
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT TotalTimeSeconds (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT DistanceMeters (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT MaximumSpeed (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT Calories (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT AverageHeartRateBpm (Value)*>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT Value (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT MaximumHeartRateBpm (Value)*>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT Intensity (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT Cadence (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT TriggerMethod (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT Track (#PCDATA|Trackpoint)*>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT Trackpoint (#PCDATA|Cadence|SensorState|HeartRateBpm|DistanceMeters|AltitudeMeters|Position|Time)*>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT Time (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT Position (LongitudeDegrees|LatitudeDegrees)*>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT LatitudeDegrees (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT LongitudeDegrees (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT AltitudeMeters (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT HeartRateBpm (Value)*>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT SensorState (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT Creator (#PCDATA|Version|ProductID|UnitId|Name)*>
+<!ATTLIST Creator
+    xsi:type CDATA #IMPLIED
+  >
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT Name (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT UnitId (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT ProductID (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT Version (BuildMinor|BuildMajor|VersionMinor|VersionMajor)*>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT VersionMajor (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT VersionMinor (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT BuildMajor (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT BuildMinor (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT Author (#PCDATA|PartNumber|LangID|Build|Name)*>
+<!ATTLIST Author
+    xsi:type CDATA #IMPLIED
+  >
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT Build (#PCDATA|Type|Version)*>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT Type (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT LangID (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT PartNumber (#PCDATA)>

@@ -1,0 +1,299 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!--
+    TODO define vocabulary identification
+    PUBLIC ID: -//vendor//vocabulary//EN
+    SYSTEM ID: http://server/path/mapquestrouting.dtd
+
+-->
+
+<!--
+    An example how to use this DTD from your XML document:
+
+    <?xml version="1.0"?>
+
+    <!DOCTYPE response SYSTEM "mapquestrouting.dtd">
+
+    <response>
+    ...
+    </response>
+-->
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT response (route|info)*>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT info (copyright|messages|statusCode)*>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT statusCode (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT messages EMPTY>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT copyright (text|imageAltText|imageUrl)*>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT imageUrl (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT imageAltText (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT text (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT route (shape|computedWaypoints|locationSequence|locations|hasCountryCross|hasUnpaved|sessionId|options|boundingBox|distance|time|realTime|fuelUsed|formattedTime|legs|hasTollRoad|hasFerry|hasHighway|hasSeasonalClosure)*>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT sessionId (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT options (isCollapseDestNarrEnabled|isCollapseOrigNarrEnabled|useTraffic|highwayEfficiency|drivingStyle|manmaps|mustAvoidLinkIds|tryAvoidLinkIds|unit|locale|shapeFormat|generalize|maxLinkId|narrativeType|stateBoundaryDisplay|countryBoundaryDisplay|sideOfStreetDisplay|destinationManeuverDisplay|avoidTimedConditions|enhancedNarrative|returnLinkDirections|timeType|routeType)*>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT shapeFormat (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT generalize (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT maxLinkId (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT narrativeType (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT stateBoundaryDisplay (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT countryBoundaryDisplay (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT sideOfStreetDisplay (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT destinationManeuverDisplay (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT avoidTimedConditions (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT enhancedNarrative (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT returnLinkDirections (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT timeType (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT routeType (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT locale (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT unit (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT tryAvoidLinkIds EMPTY>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT mustAvoidLinkIds EMPTY>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT manmaps (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT drivingStyle (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT highwayEfficiency (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT useTraffic (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT isCollapseOrigNarrEnabled (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT isCollapseDestNarrEnabled (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT boundingBox (lr|ul)*>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT ul (lng|lat)*>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT lat (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT lng (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT lr (lng|lat)*>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT distance (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT time (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT realTime (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT fuelUsed (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT formattedTime (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT legs (leg)*>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT leg (hasCountryCross|hasUnpaved|hasSeasonalClosure|hasHighway|hasFerry|hasTollRoad|maneuvers|index|formattedTime|time|distance)*>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT index (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT maneuvers (maneuver)*>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT maneuver (mapUrl|linkIds|iconUrl|startPoint|maneuverNotes|distance|time|formattedTime|attributes|turnType|direction|narrative|directionName|index|streets|signs)*>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT startPoint (lng|lat)*>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT maneuverNotes EMPTY>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT attributes (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT turnType (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT direction (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT narrative (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT directionName (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT streets (street)*>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT street (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT signs EMPTY>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT iconUrl (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT linkIds EMPTY>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT mapUrl (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT hasTollRoad (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT hasFerry (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT hasHighway (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT hasSeasonalClosure (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT hasUnpaved (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT hasCountryCross (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT locations (location)*>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT location (latLng|street|adminArea5|adminArea3|adminArea4|postalCode|adminArea1|geocodeQuality|geocodeQualityCode|dragPoint|sideOfStreet|displayLatLng|linkId|type)*>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT adminArea5 EMPTY>
+<!ATTLIST adminArea5
+    type CDATA #IMPLIED
+  >
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT adminArea3 (#PCDATA)>
+<!ATTLIST adminArea3
+    type CDATA #IMPLIED
+  >
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT adminArea4 (#PCDATA)>
+<!ATTLIST adminArea4
+    type CDATA #IMPLIED
+  >
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT postalCode EMPTY>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT adminArea1 (#PCDATA)>
+<!ATTLIST adminArea1
+    type CDATA #IMPLIED
+  >
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT geocodeQuality (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT geocodeQualityCode (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT dragPoint (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT sideOfStreet (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT displayLatLng (latLng)*>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT latLng (lng|lat)*>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT linkId (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT type (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT locationSequence (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT computedWaypoints EMPTY>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT shape (#PCDATA|maneuverIndexes|legIndexes|shapePoints)*>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT shapePoints (#PCDATA|latLng)*>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT legIndexes (index)*>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT maneuverIndexes (index)*>

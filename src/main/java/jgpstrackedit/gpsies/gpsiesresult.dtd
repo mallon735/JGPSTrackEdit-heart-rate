@@ -1,0 +1,113 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!--
+    TODO define vocabulary identification
+    PUBLIC ID: -//vendor//vocabulary//EN
+    SYSTEM ID: http://server/path/gpsiesresult.dtd
+
+-->
+
+<!--
+    An example how to use this DTD from your XML document:
+
+    <?xml version="1.0"?>
+
+    <!DOCTYPE gpsies SYSTEM "gpsiesresult.dtd">
+
+    <gpsies>
+    ...
+    </gpsies>
+-->
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT gpsies (tracks|meta)*>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT meta (resultSize|downloadBaseUrl|filetype|limit|resultPage|username|requestUrl)*>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT requestUrl (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT username (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT resultPage (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT limit (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT filetype (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT downloadBaseUrl (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT resultSize (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT tracks (track)*>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT track (totalDescentM|totalAscentM|altitudeDifferenceM|altitudeMaxHeightM|altitudeMinHeightM|trackProperty|countTrackpoints|title|fileId|downloadLink|createdDate|changedDate|description|startPointLat|startPointLon|endPointLat|endPointLon|startPointCountry|endPointCountry|trackLengthM)*>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT title (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT fileId (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT downloadLink (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT createdDate (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT changedDate (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT description (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT startPointLat (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT startPointLon (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT endPointLat (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT endPointLon (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT startPointCountry (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT endPointCountry (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT trackLengthM (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT countTrackpoints (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT trackProperty (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT altitudeMinHeightM (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT altitudeMaxHeightM (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT altitudeDifferenceM (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT totalAscentM (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT totalDescentM (#PCDATA)>

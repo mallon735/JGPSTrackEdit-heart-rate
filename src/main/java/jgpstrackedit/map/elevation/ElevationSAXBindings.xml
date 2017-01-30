@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE SAX-bindings PUBLIC "-//XML Module//DTD SAX Bindings 1.0//EN" "">
+<SAX-bindings version='1'>
+	<bind element='result' method='result' type='CONTAINER' ></bind>
+	<bind element='location' method='location' type='CONTAINER' ></bind>
+	<bind element='status' method='status' type='DATA' ></bind>
+	<bind element='elevation' method='elevation' type='DATA' ></bind>
+	<bind element='lng' method='lng' type='DATA' ></bind>
+	<bind element='resolution' method='resolution' type='DATA' ></bind>
+	<bind element='lat' method='lat' type='DATA' ></bind>
+	<bind element='ElevationResponse' method='ElevationResponse' type='CONTAINER' ></bind>
+</SAX-bindings>

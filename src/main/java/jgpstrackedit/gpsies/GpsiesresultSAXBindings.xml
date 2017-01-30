@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE SAX-bindings PUBLIC "-//XML Module//DTD SAX Bindings 1.0//EN" "">
+<SAX-bindings version='1'>
+	<bind element='startPointLon' method='startPointLon' type='DATA' ></bind>
+	<bind element='startPointLat' method='startPointLat' type='DATA' ></bind>
+	<bind element='endPointLat' method='endPointLat' type='DATA' ></bind>
+	<bind element='meta' method='meta' type='CONTAINER' ></bind>
+	<bind element='resultPage' method='resultPage' type='DATA' ></bind>
+	<bind element='changedDate' method='changedDate' type='DATA' ></bind>
+	<bind element='title' method='title' type='DATA' ></bind>
+	<bind element='username' method='username' type='DATA' ></bind>
+	<bind element='description' method='description' type='DATA' ></bind>
+	<bind element='endPointCountry' method='endPointCountry' type='DATA' ></bind>
+	<bind element='filetype' method='filetype' type='DATA' ></bind>
+	<bind element='altitudeMaxHeightM' method='altitudeMaxHeightM' type='DATA' ></bind>
+	<bind element='createdDate' method='createdDate' type='DATA' ></bind>
+	<bind element='endPointLon' method='endPointLon' type='DATA' ></bind>
+	<bind element='limit' method='limit' type='DATA' ></bind>
+	<bind element='altitudeDifferenceM' method='altitudeDifferenceM' type='DATA' ></bind>
+	<bind element='totalDescentM' method='totalDescentM' type='DATA' ></bind>
+	<bind element='track' method='track' type='CONTAINER' ></bind>
+	<bind element='totalAscentM' method='totalAscentM' type='DATA' ></bind>
+	<bind element='altitudeMinHeightM' method='altitudeMinHeightM' type='DATA' ></bind>
+	<bind element='tracks' method='tracks' type='CONTAINER' ></bind>
+	<bind element='requestUrl' method='requestUrl' type='DATA' ></bind>
+	<bind element='countTrackpoints' method='countTrackpoints' type='DATA' ></bind>
+	<bind element='fileId' method='fileId' type='DATA' ></bind>
+	<bind element='startPointCountry' method='startPointCountry' type='DATA' ></bind>
+	<bind element='trackProperty' method='trackProperty' type='DATA' ></bind>
+	<bind element='downloadLink' method='downloadLink' type='DATA' ></bind>
+	<bind element='trackLengthM' method='trackLengthM' type='DATA' ></bind>
+	<bind element='gpsies' method='gpsies' type='CONTAINER' ></bind>
+	<bind element='resultSize' method='resultSize' type='DATA' ></bind>
+	<bind element='downloadBaseUrl' method='downloadBaseUrl' type='DATA' ></bind>
+</SAX-bindings>

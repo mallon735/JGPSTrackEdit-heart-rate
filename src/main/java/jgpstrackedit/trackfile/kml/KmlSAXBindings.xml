@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE SAX-bindings PUBLIC "-//XML Module//DTD SAX Bindings 1.0//EN" "">
+<SAX-bindings version='1'>
+	<bind element='scale' method='scale' type='DATA' ></bind>
+	<bind element='LineStyle' method='LineStyle' type='CONTAINER' ></bind>
+	<bind element='visibility' method='visibility' type='DATA' ></bind>
+	<bind element='Pair' method='Pair' type='CONTAINER' ></bind>
+	<bind element='Style' method='Style' type='CONTAINER' ></bind>
+	<bind element='styleUrl' method='styleUrl' type='DATA' ></bind>
+	<bind element='extrude' method='extrude' type='DATA' ></bind>
+	<bind element='open' method='open' type='DATA' ></bind>
+	<bind element='description' method='description' type='DATA' ></bind>
+	<bind element='name' method='name' type='DATA' ></bind>
+	<bind element='MultiGeometry' method='MultiGeometry' type='CONTAINER' ></bind>
+	<bind element='kml' method='kml' type='CONTAINER' ></bind>
+	<bind element='BalloonStyle' method='BalloonStyle' type='CONTAINER' ></bind>
+	<bind element='colorMode' method='colorMode' type='DATA' ></bind>
+	<bind element='href' method='href' type='DATA' ></bind>
+	<bind element='key' method='key' type='DATA' ></bind>
+	<bind element='Point' method='Point' type='CONTAINER' ></bind>
+	<bind element='coordinates' method='coordinates' type='DATA' ></bind>
+	<bind element='Document' method='Document' type='CONTAINER' ></bind>
+	<bind element='text' method='text' type='DATA' ></bind>
+	<bind element='width' method='width' type='DATA' ></bind>
+	<bind element='Snippet' method='Snippet' type='EMPTY' ></bind>
+	<bind element='tessellate' method='tessellate' type='DATA' ></bind>
+	<bind element='LineString' method='LineString' type='CONTAINER' ></bind>
+	<bind element='StyleMap' method='StyleMap' type='CONTAINER' ></bind>
+	<bind element='LabelStyle' method='LabelStyle' type='CONTAINER' ></bind>
+	<bind element='IconStyle' method='IconStyle' type='CONTAINER' ></bind>
+	<bind element='Placemark' method='Placemark' type='CONTAINER' ></bind>
+	<bind element='Icon' method='Icon' type='CONTAINER' ></bind>
+</SAX-bindings>

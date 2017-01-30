@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<response>
+    <info>
+        <statusCode>0</statusCode>
+        <messages />
+        <copyright>
+            <imageUrl>http://api.mqcdn.com/res/mqlogo.gif</imageUrl>
+            <imageAltText>© 2012 MapQuest, Inc.</imageAltText>
+            <text>© 2012 MapQuest, Inc.</text>
+        </copyright>
+    </info>
+    <route>
+        <sessionId>4f67032a-0097-0001-02b7-4ff8-0026557e2d0a</sessionId>
+        <options>
+            <shapeFormat>raw</shapeFormat>
+            <generalize>10.0</generalize>
+            <maxLinkId>0</maxLinkId>
+            <narrativeType>text</narrativeType>
+            <stateBoundaryDisplay>true</stateBoundaryDisplay>
+            <countryBoundaryDisplay>true</countryBoundaryDisplay>
+            <sideOfStreetDisplay>true</sideOfStreetDisplay>
+            <destinationManeuverDisplay>true</destinationManeuverDisplay>
+            <avoidTimedConditions>false</avoidTimedConditions>
+            <enhancedNarrative>false</enhancedNarrative>
+            <returnLinkDirections>false</returnLinkDirections>
+            <timeType>1</timeType>
+            <routeType>BICYCLE</routeType>
+            <locale>en_US</locale>
+            <unit>K</unit>
+            <tryAvoidLinkIds />
+            <mustAvoidLinkIds />
+            <manmaps>true</manmaps>
+            <drivingStyle>2</drivingStyle>
+            <highwayEfficiency>22.0</highwayEfficiency>
+            <useTraffic>false</useTraffic>
+            <isCollapseOrigNarrEnabled>true</isCollapseOrigNarrEnabled>
+            <isCollapseDestNarrEnabled>false</isCollapseDestNarrEnabled>
+        </options>
+        <boundingBox>
+            <ul>
+                <lat>38.899192</lat>
+                <lng>-77.077941</lng>
+            </ul>
+            <lr>
+                <lat>38.841021999999995</lat>
+                <lng>-77.03804</lng>
+            </lr>
+        </boundingBox>
+        <distance>12.4273</distance>
+        <time>1959</time>
+        <realTime>-1</realTime>
+        <fuelUsed>0.587014</fuelUsed>
+        <formattedTime>00:32:39</formattedTime>
+        <legs>
+            <leg>
+                <distance>12.4273</distance>
+                <time>1959</time>
+                <formattedTime>00:32:39</formattedTime>
+                <index>0</index>
+                <maneuvers>
+                    <maneuver>
+                        <startPoint>
+                            <lat>38.8937</lat>
+                            <lng>-77.0755</lng>
+                        </startPoint>
+                        <maneuverNotes />
+                        <distance>0.1819</distance>
+                        <time>35</time>
+                        <formattedTime>00:00:35</formattedTime>
+                        <attributes>0</attributes>
+                        <turnType>0</turnType>
+                        <direction>3</direction>
+                        <narrative>Start out going northeast on N Clarendon Blvd toward 17th St N.</narrative>
+                        <directionName>Northeast</directionName>
+                        <index>0</index>
+                        <streets>
+                            <street>N Clarendon Blvd</street>
+                        </streets>
+                        <signs />
+                        <iconUrl>
+ <![CDATA[ http://content.mapquest.com/mqsite/turnsigns/rs_straight_sm.gif
+  ]]>
+                        </iconUrl>
+                        <linkIds />
+                        <mapUrl>
+ <![CDATA[ http://open.mapquestapi.com/staticmap/v3/getmap?type=map&size=225,160&pois=purple-2,38.893661,-77.07547699999999,0,0|purple-3,38.894515,-77.073791,0,0|&center=38.894087999999996,-77.074634&zoom=14&key=Kmjtd%7Cluu7n162n1%2C22%3Do5-h61wh&rand=-696704180&session=4f67032a-0097-0001-02b7-4ff8-0026557e2d0a
+  ]]>
+                        </mapUrl>
+                    </maneuver>
+                    <maneuver>
+                        <startPoint>
+                            <lat>38.8945</lat>
+                            <lng>-77.0738</lng>
+                        </startPoint>
+                        <maneuverNotes />
+                        <distance>0.2076</distance>
+                        <time>52</time>
+                        <formattedTime>00:00:52</formattedTime>
+                        <attributes>0</attributes>
+                        <turnType>6</turnType>
+                        <direction>1</direction>
+                        <narrative>Turn left onto N Oak St.</narrative>
+                        <directionName>North</directionName>
+                        <index>1</index>
+                        <streets>
+                            <street>N Oak St</street>
+                        </streets>
+                        <signs />
+                        <iconUrl>
+ <![CDATA[ http://content.mapquest.com/mqsite/turnsigns/rs_left_sm.gif
+  ]]>
+                        </iconUrl>
+                        <linkIds />
+                        <mapUrl>
+ <![CDATA[ http://open.mapquestapi.com/staticmap/v3/getmap?type=map&size=225,160&pois=purple-3,38.894515,-77.073791,0,0|purple-4,38.896366,-77.074089,0,0|&center=38.8954405,-77.07394&zoom=12&key=Kmjtd%7Cluu7n162n1%2C22%3Do5-h61wh&rand=-696704180&session=4f67032a-0097-0001-02b7-4ff8-0026557e2d0a
+  ]]>
+                        </mapUrl>
+                    </maneuver>
+                </maneuvers>
+                <hasTollRoad>false</hasTollRoad>
+                <hasFerry>false</hasFerry>
+                <hasHighway>true</hasHighway>
+                <hasSeasonalClosure>false</hasSeasonalClosure>
+                <hasUnpaved>false</hasUnpaved>
+                <hasCountryCross>false</hasCountryCross>
+            </leg>
+        </legs>
+        <hasTollRoad>false</hasTollRoad>
+        <hasFerry>false</hasFerry>
+        <hasHighway>true</hasHighway>
+        <hasSeasonalClosure>false</hasSeasonalClosure>
+        <hasUnpaved>false</hasUnpaved>
+        <hasCountryCross>false</hasCountryCross>
+        <locations>
+            <location>
+                <street>N Wilson Blvd</street>
+                <adminArea5 type="City" />
+                <adminArea3 type="State">Virginia</adminArea3>
+                <adminArea4 type="County">Fairfax (city)</adminArea4>
+                <postalCode />
+                <adminArea1 type="Country">us</adminArea1>
+                <geocodeQuality>LATLNG</geocodeQuality>
+                <geocodeQualityCode>XXXXX</geocodeQualityCode>
+                <dragPoint>false</dragPoint>
+                <sideOfStreet>N</sideOfStreet>
+                <displayLatLng>
+                    <latLng>
+                        <lat>38.894031</lat>
+                        <lng>-77.075553</lng>
+                    </latLng>
+                </displayLatLng>
+                <linkId>25705764</linkId>
+                <type>s</type>
+                <latLng>
+                    <lat>38.89403</lat>
+                    <lng>-77.075555</lng>
+                </latLng>
+            </location>
+            <location>
+                <street />
+                <adminArea5 type="City" />
+                <adminArea3 type="State" />
+                <adminArea4 type="County" />
+                <postalCode />
+                <adminArea1 type="Country" />
+                <geocodeQuality>LATLNG</geocodeQuality>
+                <geocodeQualityCode>XXXXX</geocodeQualityCode>
+                <dragPoint>false</dragPoint>
+                <sideOfStreet>N</sideOfStreet>
+                <displayLatLng>
+                    <latLng>
+                        <lat>38.84457</lat>
+                        <lng>-77.078224</lng>
+                    </latLng>
+                </displayLatLng>
+                <linkId>2375237</linkId>
+                <type>s</type>
+                <latLng>
+                    <lat>38.84457</lat>
+                    <lng>-77.078222</lng>
+                </latLng>
+            </location>
+        </locations>
+        <locationSequence>0,1</locationSequence>
+        <computedWaypoints />
+        <shape>
+            <shapePoints>
+                <latLng>
+                    <lat>38.893661</lat>
+                    <lng>-77.075477</lng>
+                </latLng>
+                <latLng>
+                    <lat>38.893848</lat>
+                    <lng>-77.074554</lng>
+                </latLng>
+                <latLng>
+                    <lat>38.894515</lat>
+                    <lng>-77.073791</lng>
+                </latLng>
+-
+                <latLng>
+                    <lat>38.844783</lat>
+                    <lng>-77.077941</lng>
+                </latLng>
+            </shapePoints>
+-
+            <legIndexes>
+                <index>0</index>
+            </legIndexes>
+-
+            <maneuverIndexes>
+                <index>0</index>
+                <index>3</index>
+                <index>92</index>
+            </maneuverIndexes>
+        </shape>
+    </route>
+</response>

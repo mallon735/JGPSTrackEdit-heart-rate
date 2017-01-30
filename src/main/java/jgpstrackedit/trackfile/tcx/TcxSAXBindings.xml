@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE SAX-bindings PUBLIC "-//XML Module//DTD SAX Bindings 1.0//EN" "">
+<SAX-bindings version='1'>
+	<bind element='LangID' method='LangID' type='DATA' ></bind>
+	<bind element='TriggerMethod' method='TriggerMethod' type='DATA' ></bind>
+	<bind element='Calories' method='Calories' type='DATA' ></bind>
+	<bind element='Type' method='Type' type='DATA' ></bind>
+	<bind element='BuildMinor' method='BuildMinor' type='DATA' ></bind>
+	<bind element='MaximumSpeed' method='MaximumSpeed' type='DATA' ></bind>
+	<bind element='BuildMajor' method='BuildMajor' type='DATA' ></bind>
+	<bind element='Author' method='Author' type='MIXED' ></bind>
+	<bind element='ProductID' method='ProductID' type='DATA' ></bind>
+	<bind element='PartNumber' method='PartNumber' type='DATA' ></bind>
+	<bind element='TotalTimeSeconds' method='TotalTimeSeconds' type='DATA' ></bind>
+	<bind element='Time' method='Time' type='DATA' ></bind>
+	<bind element='HeartRateBpm' method='HeartRateBpm' type='CONTAINER' ></bind>
+	<bind element='Build' method='Build' type='MIXED' ></bind>
+	<bind element='DistanceMeters' method='DistanceMeters' type='DATA' ></bind>
+	<bind element='VersionMajor' method='VersionMajor' type='DATA' ></bind>
+	<bind element='Version' method='Version' type='CONTAINER' ></bind>
+	<bind element='UnitId' method='UnitId' type='DATA' ></bind>
+	<bind element='Cadence' method='Cadence' type='DATA' ></bind>
+	<bind element='Trackpoint' method='Trackpoint' type='MIXED' ></bind>
+	<bind element='LongitudeDegrees' method='LongitudeDegrees' type='DATA' ></bind>
+	<bind element='Value' method='Value' type='DATA' ></bind>
+	<bind element='Creator' method='Creator' type='MIXED' ></bind>
+	<bind element='Lap' method='Lap' type='MIXED' ></bind>
+	<bind element='Track' method='Track' type='MIXED' ></bind>
+	<bind element='AltitudeMeters' method='AltitudeMeters' type='DATA' ></bind>
+	<bind element='Name' method='Name' type='DATA' ></bind>
+	<bind element='TrainingCenterDatabase' method='TrainingCenterDatabase' type='MIXED' ></bind>
+	<bind element='Activity' method='Activity' type='MIXED' ></bind>
+	<bind element='VersionMinor' method='VersionMinor' type='DATA' ></bind>
+	<bind element='LatitudeDegrees' method='LatitudeDegrees' type='DATA' ></bind>
+	<bind element='Intensity' method='Intensity' type='DATA' ></bind>
+	<bind element='AverageHeartRateBpm' method='AverageHeartRateBpm' type='CONTAINER' ></bind>
+	<bind element='Position' method='Position' type='CONTAINER' ></bind>
+	<bind element='Id' method='Id' type='DATA' ></bind>
+	<bind element='SensorState' method='SensorState' type='DATA' ></bind>
+	<bind element='MaximumHeartRateBpm' method='MaximumHeartRateBpm' type='CONTAINER' ></bind>
+	<bind element='Activities' method='Activities' type='MIXED' ></bind>
+</SAX-bindings>

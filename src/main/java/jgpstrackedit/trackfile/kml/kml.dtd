@@ -1,0 +1,121 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!--
+    TODO define vocabulary identification
+    PUBLIC ID: -//vendor//vocabulary//EN
+    SYSTEM ID: http://server/path/kml.dtd
+
+-->
+
+<!--
+    An example how to use this DTD from your XML document:
+
+    <?xml version="1.0"?>
+
+    <!DOCTYPE kml SYSTEM "kml.dtd">
+
+    <kml>
+    ...
+    </kml>
+-->
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT kml (Document)*>
+<!ATTLIST kml
+    xsi:schemaLocation CDATA #IMPLIED
+    xmlns:xsi CDATA #IMPLIED
+    xmlns CDATA #IMPLIED
+  >
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT Document (Placemark|StyleMap|Style|description|name)*>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT name (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT description (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT Style (BalloonStyle|LabelStyle|IconStyle|LineStyle)*>
+<!ATTLIST Style
+    id CDATA #IMPLIED
+  >
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT LineStyle (width|colorMode)*>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT colorMode (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT width (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT IconStyle (Icon|scale)*>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT scale (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT Icon (href)*>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT href (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT LabelStyle (scale)*>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT BalloonStyle (text)*>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT text (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT StyleMap (Pair)*>
+<!ATTLIST StyleMap
+    id CDATA #IMPLIED
+  >
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT Pair (styleUrl|key)*>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT key (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT styleUrl (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT Placemark (MultiGeometry|Snippet|open|visibility|Point|styleUrl|description|name)*>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT Point (coordinates)*>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT coordinates (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT visibility (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT open (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT Snippet EMPTY>
+<!ATTLIST Snippet
+    maxLines CDATA #IMPLIED
+  >
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT MultiGeometry (LineString)*>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT LineString (coordinates|tessellate|extrude)*>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT extrude (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT tessellate (#PCDATA)>
