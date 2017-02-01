@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<TrainingCenterDatabase xmlns="http://www.garmin.com/xmlschemas/TrainingCenterDatabase/v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/TrainingCenterDatabase/v2 http://www.garmin.com/xmlschemas/TrainingCenterDatabasev2.xsd">
+  <Courses>
+    <Course>
+      <Name>Jaegerbaek-Hbf</Name>
+      <Lap>
+        <TotalTimeSeconds>1614</TotalTimeSeconds>
+        <DistanceMeters>6726.480136</DistanceMeters>
+        <BeginPosition>
+          <LatitudeDegrees>54.115310</LatitudeDegrees>
+          <LongitudeDegrees>12.071430</LongitudeDegrees>
+        </BeginPosition>
+        <EndPosition>
+          <LatitudeDegrees>54.078230</LatitudeDegrees>
+          <LongitudeDegrees>12.130730</LongitudeDegrees>
+        </EndPosition>
+        <AverageHeartRateBpm xsi:type="HeartRateInBeatsPerMinute_t">
+          <Value>100</Value>
+        </AverageHeartRateBpm>
+        <MaximumHeartRateBpm xsi:type="HeartRateInBeatsPerMinute_t">
+          <Value>200</Value>
+        </MaximumHeartRateBpm>
+        <Intensity>Active</Intensity>
+      </Lap>
+      <Track>
+        <Trackpoint>
+          <Time>2016-06-20T23:32:51Z</Time>
+          <Position>
+            <LatitudeDegrees>54.115310</LatitudeDegrees>
+            <LongitudeDegrees>12.071430</LongitudeDegrees>
+          </Position>
+          <AltitudeMeters>7.000000</AltitudeMeters>
+        </Trackpoint>
+        <Trackpoint>
+          <Time>2016-06-20T23:33:16Z</Time>
+          <Position>
+            <LatitudeDegrees>54.114350</LatitudeDegrees>
+            <LongitudeDegrees>12.071280</LongitudeDegrees>
+          </Position>
+          <AltitudeMeters>9.000000</AltitudeMeters>
+        </Trackpoint>
+        <Trackpoint>
+          <Time>2016-06-20T23:33:32Z</Time>
+          <Position>
+            <LatitudeDegrees>54.113750</LatitudeDegrees>
+            <LongitudeDegrees>12.071210</LongitudeDegrees>
+          </Position>
+          <AltitudeMeters>10.000000</AltitudeMeters>
+        </Trackpoint>
+      </Track>
+    </Course>
+  </Courses>
+</TrainingCenterDatabase>
