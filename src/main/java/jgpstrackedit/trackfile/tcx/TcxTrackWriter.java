@@ -9,7 +9,9 @@ import jgpstrackedit.data.Point;
 import jgpstrackedit.data.Track;
 
 /**
- * @author Hubert
+ * Writer for Garmin TrainingCenterDatabase (TCX).
+ * 
+ * @author gerdba
  * 
  */
 public class TcxTrackWriter {

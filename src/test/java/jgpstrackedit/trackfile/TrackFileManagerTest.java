@@ -23,9 +23,10 @@ public class TrackFileManagerTest {
 		TrackFileManager.addTrackFile(new TCX());
 		TrackFileManager.addTrackFile(new ASC());
 
-		//-- final URL fileUrl = this.getClass().getResource("/Jaegerbaek-Hbf.tcx");
-		final URL fileUrl = this.getClass().getResource("/parser_test.tcx");
-		Track track = TrackFileManager.openTrack(new File(fileUrl.getFile()));
+		final URL fileUrl = this.getClass().getResource("/Jaegerbaek-Hbf.tcx");
+		final Track track = TrackFileManager.openTrack(new File(fileUrl.getFile()));
+		
 		Assert.assertThat(track, CoreMatchers.is(CoreMatchers.notNullValue()));
+		Assert.assertThat(track.isValid(), CoreMatchers.is(true));
 	}
 }

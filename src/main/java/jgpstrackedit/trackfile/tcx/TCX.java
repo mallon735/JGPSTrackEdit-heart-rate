@@ -18,12 +18,13 @@ import javax.xml.parsers.ParserConfigurationException;
 import jgpstrackedit.data.Track;
 import jgpstrackedit.trackfile.TrackFile;
 import jgpstrackedit.trackfile.XmlParser;
-import jgpstrackedit.trackfile.gpxtrack.GPXTrackWriter;
 
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 /**
+ * TCX Track file support.
+ *  
  * @author Hubert
  *
  */

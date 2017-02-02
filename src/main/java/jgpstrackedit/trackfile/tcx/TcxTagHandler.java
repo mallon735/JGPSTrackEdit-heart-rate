@@ -4,6 +4,14 @@ import jgpstrackedit.data.Point;
 import jgpstrackedit.trackfile.ParserContext;
 import jgpstrackedit.trackfile.TagHandler;
 
+/**
+ * Tag handler is used by the xml parser. Handle tcx tags and build a track.
+ * Note: All track points belongs to the same track after parsing. Multiple tracks
+ * per single file currently not supported. 
+ * 
+ * @author gerdba
+ *
+ */
 public class TcxTagHandler implements TagHandler {
 
 	@Override
