@@ -79,6 +79,10 @@
                           <addClasspath>true</addClasspath>
                           <mainClass>jgpstrackedit.view.JGPSTrackEdit</mainClass>
                       </manifest>
+                      <manifestEntries>
+                        <Build-Time>${maven.build.timestamp}</Build-Time>
+                        <Build-Label>${project.version}</Build-Label>
+                      </manifestEntries>
                   </archive>
                   <descriptorRefs>
                       <descriptorRef>jar-with-dependencies</descriptorRef>

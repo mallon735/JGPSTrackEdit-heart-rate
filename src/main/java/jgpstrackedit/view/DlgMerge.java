@@ -22,7 +22,7 @@ import jgpstrackedit.international.International;
 import net.miginfocom.swing.MigLayout;
 
 public class DlgMerge extends JDialog {
-
+	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
 	private JComboBox<String> comboBox;
 	private JCheckBox chckbxMergeDirectwithout;
@@ -61,7 +61,6 @@ public class DlgMerge extends JDialog {
 		addItemsToComboBox(trackName);
 		comboBox.setMinimumSize(new Dimension(240, comboBox.getSize().height));
 		contentPanel.add(comboBox, "cell 1 1,alignx left");
-		addItemsToComboBox(trackName);
 		
 		chckbxMergeDirectwithout = new JCheckBox(
 				International.getText("dlgMerge.merge_no_direction"));

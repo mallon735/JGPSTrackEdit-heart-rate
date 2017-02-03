@@ -2,40 +2,69 @@ package jgpstrackedit.view;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.Optional;
+import java.util.jar.Manifest;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import javax.swing.JTextArea;
-import java.awt.Font;
-import java.awt.Color;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
+
 import jgpstrackedit.international.International;
 
+/**
+ * About Dialog
+ *
+ */
 public class DlgAbout extends JDialog {
-
+	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
-
 
 	/**
 	 * Create the dialog.
 	 */
 	public DlgAbout() {
+		final Manifest manifest = getManifest();
+		final String buildTime = 
+				Optional.ofNullable(manifest.getMainAttributes().getValue("Build-Time")).orElse("");
+		final String buildVersion =
+				Optional.ofNullable(manifest.getMainAttributes().getValue("Build-Label")).orElse("");
+		
 		setTitle("JGPSTrackEdit - "+International.getText("dlgabout.About"));
-		setBounds(100, 100, 498, 470);
+		setBounds(100, 100, 530, 470);
 		getContentPane().setLayout(new BorderLayout());
-		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
+		contentPanel.setBorder(new EmptyBorder(10,10, 10,10));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
-		contentPanel.setLayout(null);
+		contentPanel.setLayout(new GridLayout(1, 1));
 		{
-			JTextArea txtrJgpstrackeditc = new JTextArea();
-			txtrJgpstrackeditc.setBounds(0, 0, 490, 403);
-			txtrJgpstrackeditc.setBackground(new Color(211, 211, 211));
-			txtrJgpstrackeditc.setFont(new Font("Arial", Font.PLAIN, 12));
-			txtrJgpstrackeditc.setEditable(false);
-			txtrJgpstrackeditc.setText("JGPSTrackEdit (c) 2012...2016 by Hubert Lutnik   (hubert.lutnik@htl-klu.at)\r\n\r\nRelease 1.6.1   15.02.2016\r\n\r\nUsage for non commercial purposes only.\r\nNo guaranties!\r\n\r\nThanks to GPSPrune for some ideas: \r\nhttp://activityworkshop.net/software/gpsprune/index.html\r\n\r\nThanks to Mark James for licensing the icons\r\nhttp://www.famfamfam.com/lab/icons/silk/\r\n\r\nSee also:\r\nhttp://www.gpsies.com\r\nhttp://hikebikemap.de/\r\nhttp://www.openstreetmap.org/\r\nhttp://hikebikemap.de/\r\nhttp://www.mapquest.com/\r\nhttp://maps.google.com/\r\nhttp://wiki.openstreetmap.org/wiki/Slippy_map_tilenames\r\nhttp://code.google.com/intl/de/apis/maps/documentation/staticmaps/\r\nhttp://code.google.com/intl/de/apis/maps/documentation/elevation/\r\nhttp://open.mapquestapi.com/directions/\r\nhttp://open.mapquestapi.com/staticmap/\r\n\r\n\r\n\r\n");
+			JLabel txtrJgpstrackeditc = new JLabel();
+			txtrJgpstrackeditc.setText(
+					"<html>JGPSTrackEdit (c) 2012-2017 by Hubert Lutnik (hubert.lutnik@htl-klu.at)<br/>"
+					+ String.format("Release %s (%s)<br/><br/>", buildVersion, buildTime )
+					+ "Usage for non commercial purposes only.<br/>"
+					+ "No guaranties!<br/><br/>"
+					+ "Thanks to GPSPrune for some ideas:<br/>"
+					+ "http://activityworkshop.net/software/gpsprune/index.html<br/><br/>"
+					+ "Thanks to Mark James for licensing the icons<br/>"
+					+ "http://www.famfamfam.com/lab/icons/silk/<br/><br/>"
+					+ "See also:<br/>"
+					+ "http://www.gpsies.com<br/>"
+					+ "http://hikebikemap.de/<br/>"
+					+ "http://www.openstreetmap.org/<br/>"
+					+ "http://hikebikemap.de/<br/>"
+					+ "http://www.mapquest.com/<br/>"
+					+ "http://maps.google.com/<br/>"
+					+ "http://wiki.openstreetmap.org/wiki/Slippy_map_tilenames<br/>"
+					+ "http://code.google.com/intl/de/apis/maps/documentation/staticmaps/<br/>"
+					+ "http://code.google.com/intl/de/apis/maps/documentation/elevation/<br/>"
+					+ "http://open.mapquestapi.com/directions/<br/>"
+					+ "http://open.mapquestapi.com/staticmap/<br/>");
 			contentPanel.add(txtrJgpstrackeditc);
 		}
 		{
@@ -55,5 +84,22 @@ public class DlgAbout extends JDialog {
 			}
 		}
 	}
+	
+	/**
+	 * Read the manifest file from the executable jar file.
+	 * 
+	 * @return Manifest-Object of the given META-INF/MANIFEST.MF file
+	 */
+	private Manifest getManifest() {
+		String resource = "/" + this.getClass().getName().replace(".", "/") + ".class";
+		String fullPath = this.getClass().getResource(resource).toString();
+		String archivePath = fullPath.substring(0, fullPath.length() - resource.length());
+		String manifestFileName = archivePath = archivePath	+ "/META-INF/MANIFEST.MF";
 
+		try (InputStream input = new URL(manifestFileName).openStream()) {
+			return new Manifest(input);
+		} catch (Throwable t) {
+			return new Manifest();
+		}
+	}
 }

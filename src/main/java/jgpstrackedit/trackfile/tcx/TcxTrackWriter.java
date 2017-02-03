@@ -1,6 +1,3 @@
-/**
- * 
- */
 package jgpstrackedit.trackfile.tcx;
 
 import java.io.PrintWriter;
@@ -19,31 +16,31 @@ public class TcxTrackWriter {
 	public void print(Track track, PrintWriter out) {
 		out.println("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\" ?>");
 		out.println("<TrainingCenterDatabase xmlns=\"http://www.garmin.com/xmlschemas/TrainingCenterDatabase/v2\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.garmin.com/xmlschemas/TrainingCenterDatabase/v2 http://www.garmin.com/xmlschemas/TrainingCenterDatabasev2.xsd\">");
-		out.println("\t<Courses>");
-		out.println("\t\t<Course>");
-		out.println("\t\t\t<Name>" + track.getName() + "</Name>");
-		out.println("\t\t\t<Track>");
+		out.println("  <Courses>");
+		out.println("    <Course>");
+		out.println("      <Name>" + track.getName() + "</Name>");
+		out.println("      <Track>");
 				
 		for (Point p : track.getPoints()) {
-			out.println("\t\t\t\t<Trackpoint>");
+			out.println("        <Trackpoint>");
 			
 			if (p.getTime() != null) {
-				out.println("\t\t\t\t\t<Time>" + p.getTime() + "</Time>");
+				out.println("          <Time>" + p.getTime() + "</Time>");
 			}
 			
-			out.println("\t\t\t\t\t<Position>");
-			out.println("\t\t\t\t\t\t<LatitudeDegrees>" + p.getLatitudeAsString() + "</LatitudeDegrees>"); 
-			out.println("\t\t\t\t\t\t<LongitudeDegrees>" + p.getLongitudeAsString() + "</LongitudeDegrees>");
-			out.println("\t\t\t\t\t</Position>");
+			out.println("          <Position>");
+			out.println("            <LatitudeDegrees>" + p.getLatitudeAsString() + "</LatitudeDegrees>"); 
+			out.println("            <LongitudeDegrees>" + p.getLongitudeAsString() + "</LongitudeDegrees>");
+			out.println("          </Position>");
 
-			out.println("\t\t\t\t\t<AltitudeMeters>" + p.getElevationAsString() + "</AltitudeMeters>");
+			out.println("          <AltitudeMeters>" + p.getElevationAsString() + "</AltitudeMeters>");
 
-			out.println("\t\t\t\t</Trackpoint>");
+			out.println("        </Trackpoint>");
 		}
 		
-		out.println("\t\t\t</Track>");
-		out.println("\t\t</Course>");
-		out.println("\t</Courses>");
+		out.println("      </Track>");
+		out.println("    </Course>");
+		out.println("  </Courses>");
 		out.println("</TrainingCenterDatabase>");
 	}
 }
