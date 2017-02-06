@@ -1,6 +1,7 @@
 package jgpstrackedit.trackfile.tcx;
 
 import java.io.PrintWriter;
+import java.util.Optional;
 
 import jgpstrackedit.data.Point;
 import jgpstrackedit.data.Track;
@@ -18,7 +19,7 @@ public class TcxTrackWriter {
 		out.println("<TrainingCenterDatabase xmlns=\"http://www.garmin.com/xmlschemas/TrainingCenterDatabase/v2\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.garmin.com/xmlschemas/TrainingCenterDatabase/v2 http://www.garmin.com/xmlschemas/TrainingCenterDatabasev2.xsd\">");
 		out.println("  <Courses>");
 		out.println("    <Course>");
-		out.println("      <Name>" + track.getName() + "</Name>");
+		out.println("      <Name>" + getTrackName(track) + "</Name>");
 		out.println("      <Track>");
 				
 		for (Point p : track.getPoints()) {
@@ -42,5 +43,10 @@ public class TcxTrackWriter {
 		out.println("    </Course>");
 		out.println("  </Courses>");
 		out.println("</TrainingCenterDatabase>");
+	}
+	
+	private String getTrackName(final Track track) {
+		String trackName = Optional.of(track.getName()).orElse("");
+		return trackName.length() > 15 ? trackName.substring(0, 15) : trackName;
 	}
 }

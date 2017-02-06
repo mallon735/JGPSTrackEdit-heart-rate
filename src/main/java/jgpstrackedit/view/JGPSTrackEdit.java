@@ -31,9 +31,11 @@ import java.awt.event.MouseWheelListener;
 import java.awt.event.WindowEvent;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URL;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
+import javax.imageio.ImageIO;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultCellEditor;
 import javax.swing.ImageIcon;
@@ -67,6 +69,7 @@ import jgpstrackedit.data.Point;
 import jgpstrackedit.data.Track;
 import jgpstrackedit.data.util.TourPlaner;
 import jgpstrackedit.data.util.UnDoManager;
+import jgpstrackedit.international.International;
 import jgpstrackedit.map.TileManager;
 import jgpstrackedit.map.tiledownload.DlgProcessingTileDownload;
 import jgpstrackedit.map.tiledownload.DlgStartTiledownloadMode;
@@ -75,10 +78,9 @@ import jgpstrackedit.map.tiledownload.TileDownload;
 import jgpstrackedit.map.util.MapExtract;
 import jgpstrackedit.map.util.MapExtractManager;
 import jgpstrackedit.map.util.TileNumber;
+import jgpstrackedit.util.Parser;
 import jgpstrackedit.view.util.ColorEditor;
 import jgpstrackedit.view.util.ColorRenderer;
-import jgpstrackedit.international.International;
-import jgpstrackedit.util.Parser;
 
 /* TODO:
  * AltitudeProfil, Sync selected Point to Map
@@ -501,6 +503,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 			}
 		});
 		setTitle("JGPSTrackEdit");
+		setIconImage();
 
 		// jPanelToolbar.setLayout(new java.awt.FlowLayout(
 		// java.awt.FlowLayout.LEFT, 0, 0));
@@ -1882,6 +1885,17 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 
 		pack();
 	}// </editor-fold>//GEN-END:initComponents
+
+	/**
+	 * Set the icon image for the application.
+	 */
+	private void setIconImage() {
+		try {
+			this.setIconImage(ImageIO.read(this.getClass().getResource("/jgpstrackedit/view/icon/Radweg.png")));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 	protected void chckbxmntmScaleActionPerformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub

@@ -31,21 +31,21 @@ public class ASC implements TrackFile {
 	@Override
 	public Track openTrack(File file) throws FileNotFoundException,
 			SAXException, ParserConfigurationException, IOException {
-		Track track = new Track();
-		String[] elements;
-		Point point;
-		BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
-		String line = in.readLine();
-		while (line != null) {
-			elements = line.split(",");
-			if (elements.length != 3) {
-				throw new SAXException("Illegal ASC-Format");
+		final Track track = new Track();
+		try(BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(file)))) {
+			String line = in.readLine();
+			while (line != null) {
+				String[] elements = line.split(",");
+				if (elements.length != 3) {
+					throw new SAXException("Illegal ASC-Format");
+				}
+				Point point = new Point(elements[0],elements[1]);
+				point.setInformation(elements[2]);
+				track.add(point);
+				line = in.readLine();
 			}
-			point = new Point(elements[0],elements[1]);
-			point.setInformation(elements[2]);
-			track.add(point);
-			line = in.readLine();
 		}
+		
 		return track;
 	}
 
