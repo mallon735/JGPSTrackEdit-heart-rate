@@ -47,8 +47,10 @@ public class TrackFileManager {
 			try {
 				System.out.println("\nTrackFileManager: trying to import "+trackFile.getTypeDescription());
 				track = trackFile.openTrack(file);
-				if (track != null && track.isValid())
+				if (track != null && track.isValid()) {
+					updateFileAndType(track, trackFile, file.getAbsolutePath());
 					break forloop;
+				}
 				setLastMessage(trackFile.getOpenReadyMessage());
 			} catch (FileNotFoundException e) {
 				throw new TrackFileException("Trackfile "
@@ -104,7 +106,7 @@ public class TrackFileManager {
 				file = new File(fileName);
 			}
 			
-			updateFileAndType(track, trackFile, fileName);
+			updateFileAndType(track, trackFile, file.getAbsolutePath());
 			System.out.println("                            " + file.getAbsolutePath());
 			trackFile.saveTrack(track, file);
 		} catch (FileNotFoundException e) {

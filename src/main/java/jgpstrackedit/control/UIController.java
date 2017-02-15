@@ -124,7 +124,6 @@ public class UIController implements Runnable {
 		Track track;
 		try {
 			track = TrackFileManager.openTrack(file);
-			track.setTrackFileName(file.getAbsolutePath());
 			track.setModified(false);
 			db.addTrack(track);
 			db.getTrackTableModel().setSelectedTrack(track);
@@ -192,6 +191,7 @@ public class UIController implements Runnable {
 			url = new URL(urlString);
 			KML kml = new KML();
 			track = kml.openTrack(url);
+			track.setTrackFileType(kml.getTypeDescription());
 			track.setModified(false);
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
@@ -287,6 +287,9 @@ public class UIController implements Runnable {
 					form.getTracksTable().getSelectedRow());
 			
 			this.preselectFileFilterInFileSaveChooser(saveTrack);
+			if(saveTrack.getTrackFilePath() != null) {
+				fileSaveChooser.setCurrentDirectory(saveTrack.getTrackFilePath().toFile());
+			}
 			
 			int returnVal = fileSaveChooser.showSaveDialog(form);
 			if (returnVal == JFileChooser.APPROVE_OPTION) {

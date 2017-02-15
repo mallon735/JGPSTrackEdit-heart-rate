@@ -37,7 +37,6 @@ public class GPXTrack implements TrackFile{
 				file)));
 		parser.parse(in);
 		Track track = handler.getTrack();
-		track.setTrackFileType(getTypeDescription());
 		return track;
 	}
 

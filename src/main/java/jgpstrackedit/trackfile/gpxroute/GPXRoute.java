@@ -38,7 +38,6 @@ public class GPXRoute implements TrackFile {
 				file)));
 		parser.parse(in);
 		Track track = handler.getTrack();
-		track.setTrackFileType(getTypeDescription());
 		return track;
 	}
 

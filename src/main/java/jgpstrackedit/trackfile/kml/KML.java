@@ -39,7 +39,6 @@ public class KML implements TrackFile {
 		in = new InputSource(new InputStreamReader(new FileInputStream(file)));
 		parser.parse(in);
 		Track track = handler.getTrack();
-		track.setTrackFileType(getTypeDescription());
 		return track;
 	}
 
@@ -49,9 +48,7 @@ public class KML implements TrackFile {
 		KmlHandlerImpl handler = new KmlHandlerImpl();
 		KmlParser parser = new KmlParser(handler, null);
 		parser.parse(url);
-		Track track = handler.getTrack();
-		track.setTrackFileType(getTypeDescription());
-		return track;
+		return handler.getTrack();
 	}
 
 	@Override

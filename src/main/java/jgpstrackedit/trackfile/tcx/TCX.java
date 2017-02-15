@@ -39,7 +39,6 @@ public class TCX implements TrackFile
 		parser.parse(in);
 		
 		Track track = parser.getTrack();
-		track.setTrackFileType(getTypeDescription());
 		
 		if (track.getNumberPoints() == 0) {
 			track = null;

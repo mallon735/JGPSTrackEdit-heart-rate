@@ -5,6 +5,8 @@
 package jgpstrackedit.data;
 
 import java.awt.Color;
+import java.io.File;
+import java.nio.file.Path;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -32,6 +34,7 @@ public class Track {
 	private String linkText;
 
 	private String trackFileType;
+	private Path trackFilePath;
 	private String trackFileName;
 
 	private boolean valid = false;
@@ -82,11 +85,37 @@ public class Track {
 	}
 
 	/**
+	 * Set the track file name and the path to file.
+	 * 
 	 * @param trackFileName
 	 *            the trackFileName to set
 	 */
 	public void setTrackFileName(String trackFileName) {
+		Path path = null;
+		
 		this.trackFileName = trackFileName;
+		if(trackFileName != null && trackFileName.length() > 0) {
+			path = new File(trackFileName).getParentFile().toPath();
+		}
+		
+		// Don't overwrite a valid path with null!
+		if(path != null) {
+			this.trackFilePath = path;
+		}
+	}
+	
+	/**
+	 * Set the file path. Note: Ignore it, if a valid track file name is already given.
+	 * @param path
+	 */
+	public void setTrackFilePath(Path path) {
+		if(trackFileName == null || trackFileName.length() == 0) {
+			this.trackFilePath = path;
+		}
+	}
+	
+	public Path getTrackFilePath() {
+		return this.trackFilePath;
 	}
 
 	/**
@@ -665,6 +694,7 @@ public class Track {
 		secondTrack.setGpxAttributes(this.getGpxAttributes());
 		secondTrack.setCopyright(this.getCopyright());
 		secondTrack.add(splitPoint);
+		secondTrack.setTrackFilePath(this.getTrackFilePath());
 		secondTrack.setTrackFileType(this.getTrackFileType());
 		
 		for (int i = splitIndex + 1; i < points.size(); i++)
@@ -672,6 +702,7 @@ public class Track {
 		for (int i = points.size() - 1; i > splitIndex; i--)
 			points.remove(i);
 		this.setName(name + "_1");
+		this.setTrackFileName(null);
 		this.checkBoundaries();
 		secondTrack.checkBoundaries();
 		notifyTrackObservers();
@@ -903,7 +934,7 @@ public class Track {
 		cloneTrack.setLinkText(getLinkText());
 		cloneTrack.setName(getName());
 		cloneTrack.setTime(getTime());
-		// cloneTrack.setTrackFileName(getTrackFileName());
+		cloneTrack.setTrackFilePath(getTrackFilePath());
 		cloneTrack.setTrackFileType(getTrackFileType());
 		return cloneTrack;
 	}
