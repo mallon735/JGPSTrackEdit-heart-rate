@@ -310,7 +310,7 @@ public class GPSiesComDialog extends JDialog implements Runnable {
 					.append(Parser.formatLatitude((getUpperLeftBoundary
 							.getLatitude() + getLowerRightBoundary
 							.getLatitude()) / 2.0));
-			urlString.append("&lat=");
+			urlString.append("&lon=");
 			urlString
 					.append(Parser.formatLongitude((getUpperLeftBoundary
 							.getLongitude() + getLowerRightBoundary

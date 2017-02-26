@@ -17,7 +17,9 @@ import java.util.TreeMap;
 import jgpstrackedit.data.Point;
 import jgpstrackedit.util.Parser;
 
-/** Manages map extracts.
+/** 
+ * Manages map extracts.
+ * 
  * @author Hubert
  *
  */
@@ -145,11 +147,7 @@ public class MapExtractManager {
 		                mapExtract.getUpperLeftBoundary().getLatitudeAsString());*/
 			}
 			out.close();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

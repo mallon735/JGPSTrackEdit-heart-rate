@@ -12,7 +12,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.TreeSet;
+import java.util.concurrent.SynchronousQueue;
 
 import jgpstrackedit.data.util.Geometry;
 import jgpstrackedit.data.util.TrackUtil;
@@ -39,8 +41,12 @@ public class Track {
 
 	private boolean valid = false;
 	private boolean modified = false;
+	
+	private Color color;
+	private List<TrackObserver> trackObservers = Collections.synchronizedList(new ArrayList<TrackObserver>());
 
-	private transient TreeSet<Integer> compressedTrackIndizes; 
+	private transient TreeSet<Integer> compressedTrackIndizes;
+	
 	/**
 	 * Indicates whether the track has been modified by editing.
 	 * 
@@ -133,9 +139,6 @@ public class Track {
 		this.trackFileType = trackFileType;
 	}
 
-	private Color color;
-	private ArrayList<TrackObserver> trackObservers = new ArrayList<TrackObserver>();
-
 	/**
 	 * Creates a new Track.
 	 * 
@@ -159,9 +162,11 @@ public class Track {
 	}
 
 	protected void notifyTrackObservers() {
-		for (TrackObserver observer : (ArrayList<TrackObserver>) trackObservers
-				.clone()) {
-			observer.trackModified(this);
+		if(trackObservers.size() > 0) {
+			TrackObserver[] observers = trackObservers.toArray(new TrackObserver[trackObservers.size()]);
+			for (TrackObserver observer : observers) {
+				observer.trackModified(this);
+			}
 		}
 		modified = true;
 	}
@@ -696,11 +701,15 @@ public class Track {
 		secondTrack.add(splitPoint);
 		secondTrack.setTrackFilePath(this.getTrackFilePath());
 		secondTrack.setTrackFileType(this.getTrackFileType());
+		secondTrack.setColor(this.getColor());
 		
-		for (int i = splitIndex + 1; i < points.size(); i++)
+		for (int i = splitIndex + 1; i < points.size(); i++) {
 			secondTrack.add(points.get(i));
-		for (int i = points.size() - 1; i > splitIndex; i--)
+		}
+		for (int i = points.size() - 1; i > splitIndex; i--) {
 			points.remove(i);
+		}
+		
 		this.setName(name + "_1");
 		this.setTrackFileName(null);
 		this.checkBoundaries();

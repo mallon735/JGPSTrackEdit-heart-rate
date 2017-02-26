@@ -2,35 +2,34 @@ package jgpstrackedit.gpsies;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
-
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
-import javax.swing.JComboBox;
-
-import jgpstrackedit.data.Track;
-import jgpstrackedit.international.International;
-import javax.swing.JTextArea;
-import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JPasswordField;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
+
+import jgpstrackedit.data.Track;
+import jgpstrackedit.international.International;
 
 import org.apache.commons.httpclient.HttpException;
 
 public class GPSiesSaveDlg extends JDialog {
-
+	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
 	private JLabel lblTrackName;
 	private JTextField textFieldTrackName;
 	private JLabel lblTrackType;
-	private JComboBox comboBoxTrackTypes;
+	private JComboBox<String> comboBoxTrackTypes;
 	private Track saveTrack;
 	private JLabel lblErrorlog;
 	private JTextArea textAreaErrorLog;
@@ -76,8 +75,8 @@ public class GPSiesSaveDlg extends JDialog {
 		lblTrackType.setBounds(10, 36, 94, 14);
 		contentPanel.add(lblTrackType);
 		
-		comboBoxTrackTypes = new JComboBox();
-		comboBoxTrackTypes.setModel(new DefaultComboBoxModel(new String[] {
+		comboBoxTrackTypes = new JComboBox<String>();
+		comboBoxTrackTypes.setModel(new DefaultComboBoxModel<String>(new String[] {
 				"biking", "boating", "canoeing", "car", "climbing",
 				"crossskating", "flying", "geocaching", "jogging",
 				"miscellaneous", "motorbiking", "mountainbiking", "racingbike",
@@ -147,18 +146,16 @@ public class GPSiesSaveDlg extends JDialog {
 						(String) comboBoxTrackTypes.getSelectedItem(),
 						importFile, 
 						textFieldUsername.getText(),
-						passwordField.getText());
+						new String(passwordField.getPassword()));
 				textAreaErrorLog.setText("Response status code: " + result);
 				System.out.println("Response status code: " + result);
 				if (result == 200) {
 				    this.setVisible(false);
 				}
 			} catch (HttpException e) {
-				// TODO Auto-generated catch block
 				textAreaErrorLog.setText(e.getMessage());
 				e.printStackTrace();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 				textAreaErrorLog.setText(e.getMessage());
 			}
