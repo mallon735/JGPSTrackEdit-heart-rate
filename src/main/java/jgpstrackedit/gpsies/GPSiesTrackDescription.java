@@ -23,7 +23,7 @@ public class GPSiesTrackDescription {
 	 * @return the title
 	 */
 	public String getTitle() {
-		return title;
+		return title != null ? title : "";
 	}
 	/**
 	 * @param title the title to set
@@ -47,7 +47,7 @@ public class GPSiesTrackDescription {
 	 * @return the description
 	 */
 	public String getDescription() {
-		return description;
+		return description != null ? description : "";
 	}
 	/**
 	 * @param description the description to set

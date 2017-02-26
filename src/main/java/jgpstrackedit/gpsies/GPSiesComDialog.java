@@ -39,7 +39,7 @@ import jgpstrackedit.international.International;
 import org.xml.sax.SAXException;
 
 public class GPSiesComDialog extends JDialog implements Runnable {
-
+	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
 	private JTextField textFieldUser;
 	private JTextField textFieldPerimeter;
@@ -55,16 +55,19 @@ public class GPSiesComDialog extends JDialog implements Runnable {
 	private JRadioButton rdbtnZip;
 	private JRadioButton rdbtnCity;
 	private JCheckBox chckbxCountry;
-	private JComboBox comboBoxCountry;
+	private JComboBox<String> comboBoxCountry;
 	private JCheckBox chckbxTrackProperty;
-	private JComboBox comboBoxTrackProperty;
+	private JComboBox<String> comboBoxTrackProperty;
 	private JCheckBox chckbxTrackTypes;
-	private JComboBox comboBoxTrackTypes;
+	private JComboBox<String> comboBoxTrackTypes;
 	private JButton btnStoppLoading;
 
 	private boolean stoppLoading = false;
 	private UIController uiController;
 	private JProgressBar progressBarLoading;
+	
+	private String lastSearchUrl;
+	private int loadedPage = 1;
 
 	/**
 	 * Create the dialog.
@@ -135,8 +138,8 @@ public class GPSiesComDialog extends JDialog implements Runnable {
 		chckbxCountry.setBounds(6, 164, 109, 23);
 		panelParameter.add(chckbxCountry);
 
-		comboBoxCountry = new JComboBox();
-		comboBoxCountry.setModel(new DefaultComboBoxModel(International.getCountries()));
+		comboBoxCountry = new JComboBox<>();
+		comboBoxCountry.setModel(new DefaultComboBoxModel<String>(International.getCountries()));
 		comboBoxCountry.setBounds(122, 165, 118, 20);
 		panelParameter.add(comboBoxCountry);
 
@@ -144,8 +147,8 @@ public class GPSiesComDialog extends JDialog implements Runnable {
 		chckbxTrackProperty.setBounds(6, 190, 116, 23);
 		panelParameter.add(chckbxTrackProperty);
 
-		comboBoxTrackProperty = new JComboBox();
-		comboBoxTrackProperty.setModel(new DefaultComboBoxModel(new String[] {
+		comboBoxTrackProperty = new JComboBox<>();
+		comboBoxTrackProperty.setModel(new DefaultComboBoxModel<>(new String[] {
 				"onewaytrip", "roundtrip" }));
 		comboBoxTrackProperty.setBounds(122, 191, 118, 20);
 		panelParameter.add(comboBoxTrackProperty);
@@ -154,8 +157,8 @@ public class GPSiesComDialog extends JDialog implements Runnable {
 		chckbxTrackTypes.setBounds(6, 216, 109, 23);
 		panelParameter.add(chckbxTrackTypes);
 
-		comboBoxTrackTypes = new JComboBox();
-		comboBoxTrackTypes.setModel(new DefaultComboBoxModel(new String[] {
+		comboBoxTrackTypes = new JComboBox<>();
+		comboBoxTrackTypes.setModel(new DefaultComboBoxModel<>(new String[] {
 				"biking", "boating", "canoeing", "car", "climbing",
 				"crossskating", "flying", "geocaching", "jogging",
 				"miscellaneous", "motorbiking", "mountainbiking", "racingbike",
@@ -223,6 +226,23 @@ public class GPSiesComDialog extends JDialog implements Runnable {
 			buttonPane.add(textFieldLimit);
 			textFieldLimit.setColumns(4);
 			{
+				JButton prevButton = new JButton("<");
+				prevButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent arg0) {
+						searchPrevTracks();
+					}
+				});
+				buttonPane.add(prevButton);
+				
+				JButton nextButton = new JButton(">");
+				nextButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent arg0) {
+						searchNextTracks();
+					}
+				});
+				buttonPane.add(nextButton);
+				
+				
 				JButton okButton = new JButton(International.getText("dlgGPSies.Search_Tracks"));
 				okButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0) {
@@ -339,31 +359,52 @@ public class GPSiesComDialog extends JDialog implements Runnable {
 		urlString.append("&limit=");
 		urlString.append(Parser.parseInt(textFieldLimit.getText()));
 		urlString.append("&filetype=kml");
-		System.out.println("GPSIES: " + urlString);
-		gpsiesResult = gpsiesGetResults(urlString.toString());
+		
+		this.lastSearchUrl = urlString.toString();
+		this.loadedPage = 1;
+		System.out.println("GPSIES: " + this.lastSearchUrl);
+		gpsiesResult = gpsiesGetResults(this.lastSearchUrl);
 		tableGPSiesResult.setModel(gpsiesResult);
-
+	}
+	
+	/**
+	 * Get the previous result page.
+	 */
+	protected void searchPrevTracks() {
+		if(this.lastSearchUrl != null) {
+			if(this.loadedPage > 1) {
+				this.loadedPage -= 1;
+				gpsiesResult = gpsiesGetResults(this.lastSearchUrl + String.format("&resultPage=%d", this.loadedPage));
+				tableGPSiesResult.setModel(gpsiesResult);
+			}
+		}
+	}
+	
+	/**
+	 * Get the next result page.
+	 */
+	protected void searchNextTracks() {
+		if(this.lastSearchUrl != null) {
+			this.loadedPage += 1;
+			gpsiesResult = gpsiesGetResults(this.lastSearchUrl + String.format("&resultPage=%d", this.loadedPage));
+			tableGPSiesResult.setModel(gpsiesResult);
+		}
 	}
 
+	/**
+	 * Get the GPSies results an parse.
+	 * 
+	 * @param urlString GPSies-API URL
+	 * @return Results og the query
+	 */
 	protected GPSiesResult gpsiesGetResults(String urlString) {
-		// TODO Auto-generated method stub
 		GPSiesResultHandlerImpl handler = new GPSiesResultHandlerImpl();
 		GPSiesResultParser parser = new GPSiesResultParser(handler, null);
 		URL url;
 		try {
 			url = new URL(urlString);
 			parser.parse(url);
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SAXException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ParserConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+		} catch (Throwable e) {
 			e.printStackTrace();
 		}
 		return handler.getResult();
