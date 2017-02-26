@@ -6,9 +6,9 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
-import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultCellEditor;
@@ -28,15 +28,14 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
-import javax.xml.parsers.ParserConfigurationException;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableColumn;
 
 import jgpstrackedit.control.UIController;
 import jgpstrackedit.data.Point;
+import jgpstrackedit.international.International;
 import jgpstrackedit.util.Parser;
 import jgpstrackedit.view.Transform;
-import jgpstrackedit.international.International;
-
-import org.xml.sax.SAXException;
 
 public class GPSiesComDialog extends JDialog implements Runnable {
 	private static final long serialVersionUID = 1L;
@@ -182,10 +181,11 @@ public class GPSiesComDialog extends JDialog implements Runnable {
 		panelParameter.add(lblPerimeter);
 		splitPaneTable.setRightComponent(scrollPaneTable);
 
-		//tableGPSiesResult = new JTable(gpsiesResult);
 		
 		tableGPSiesResult = new JTable() {    
-		    //Implement table cell tool tips.
+			private static final long serialVersionUID = 1L;
+
+			//Implement table cell tool tips.
 		    public String getToolTipText(MouseEvent e) {
 		        String tip = null;
 		        java.awt.Point p = e.getPoint();
@@ -364,7 +364,32 @@ public class GPSiesComDialog extends JDialog implements Runnable {
 		this.loadedPage = 1;
 		System.out.println("GPSIES: " + this.lastSearchUrl);
 		gpsiesResult = gpsiesGetResults(this.lastSearchUrl);
-		tableGPSiesResult.setModel(gpsiesResult);
+		this.setTableModel(tableGPSiesResult, gpsiesResult);
+	}
+	
+	/**
+	 * Set the the table columns content. Preserve the column width.
+	 *  
+	 * @param table
+	 * @param newTableModel
+	 */
+	private void setTableModel(JTable table, AbstractTableModel newTableModel) {
+		List<Integer> columnWidthList = new ArrayList<>(table.getColumnCount());
+		
+		for(int i=0; i<table.getColumnCount(); i++) {
+			TableColumn column = table.getColumnModel().getColumn(i);
+			columnWidthList.add(column.getWidth());
+		}
+		
+		table.setModel(newTableModel);
+		
+		if(columnWidthList.size() == table.getColumnCount()) {
+			for(int i=0; i<table.getColumnCount(); i++) {
+				TableColumn column = table.getColumnModel().getColumn(i);
+				column.setWidth(columnWidthList.get(i));
+				table.getTableHeader().setResizingColumn(column);
+			}
+		}
 	}
 	
 	/**
@@ -375,7 +400,7 @@ public class GPSiesComDialog extends JDialog implements Runnable {
 			if(this.loadedPage > 1) {
 				this.loadedPage -= 1;
 				gpsiesResult = gpsiesGetResults(this.lastSearchUrl + String.format("&resultPage=%d", this.loadedPage));
-				tableGPSiesResult.setModel(gpsiesResult);
+				this.setTableModel(tableGPSiesResult, gpsiesResult);
 			}
 		}
 	}
@@ -387,7 +412,7 @@ public class GPSiesComDialog extends JDialog implements Runnable {
 		if(this.lastSearchUrl != null) {
 			this.loadedPage += 1;
 			gpsiesResult = gpsiesGetResults(this.lastSearchUrl + String.format("&resultPage=%d", this.loadedPage));
-			tableGPSiesResult.setModel(gpsiesResult);
+			this.setTableModel(tableGPSiesResult, gpsiesResult);
 		}
 	}
 
