@@ -410,9 +410,12 @@ public class GPSiesComDialog extends JDialog implements Runnable {
 	 */
 	protected void searchNextTracks() {
 		if(this.lastSearchUrl != null) {
-			this.loadedPage += 1;
-			gpsiesResult = gpsiesGetResults(this.lastSearchUrl + String.format("&resultPage=%d", this.loadedPage));
-			this.setTableModel(tableGPSiesResult, gpsiesResult);
+			GPSiesResult gpsiesResultNextPage = gpsiesGetResults(this.lastSearchUrl + String.format("&resultPage=%d", this.loadedPage+1));
+			if(gpsiesResultNextPage.getRowCount() > 0) {
+				this.loadedPage += 1;
+				gpsiesResult = gpsiesResultNextPage;
+				this.setTableModel(tableGPSiesResult, gpsiesResult);
+			}
 		}
 	}
 
