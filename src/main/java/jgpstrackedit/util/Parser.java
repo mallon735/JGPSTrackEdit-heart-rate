@@ -104,9 +104,9 @@ public class Parser {
 	 * @return a proper string representation of the given longitude
 	 */
 	public static String formatLongitude(double longitude) {
-		Formatter format = new Formatter(Locale.US);
-        return (format.format("%10.6f", longitude).toString()).trim();
-		
+		try(Formatter format = new Formatter(Locale.US)) {
+			return (format.format("%10.6f", longitude).toString()).trim();
+		}
 	}
 	
 	/** Formats the given latitude double value into "%9.6f", Locale.US.
@@ -115,9 +115,9 @@ public class Parser {
 	 * @return a proper string representation of the given latitude
 	 */
 	public static String formatLatitude(double latitude) {
-		Formatter format = new Formatter(Locale.US);
-        return (format.format("%9.6f", latitude).toString()).trim();
-		
+		try(Formatter format = new Formatter(Locale.US)) {
+			return (format.format("%9.6f", latitude).toString()).trim();
+		}
 	}
 
 	/** Formats the given elevation double value into "%9.5f", Locale.US.
@@ -126,9 +126,9 @@ public class Parser {
 	 * @return a proper string representation of the given elevation
 	 */
 	public static String formatElevation(double elevation) {
-		Formatter format = new Formatter(Locale.US);
-        return (format.format("%9.5f", elevation).toString()).trim();
-		
+		try(Formatter format = new Formatter(Locale.US);) {
+			return (format.format("%9.5f", elevation).toString()).trim();
+		}
 	}
 
 	/**
@@ -137,21 +137,21 @@ public class Parser {
 	 * @return a proper string representation of the given length
 	 */
 	public static String formatLength(double length) {
-		Formatter format = new Formatter(Locale.US);
-        return (format.format("%8.3f", length).toString()).trim();
-		
+		try(Formatter format = new Formatter(Locale.US)) {
+			return (format.format("%8.3f", length).toString()).trim();
+		}
 	}
 	
 	public static String formatAltProfile(double length) {
-		Formatter format = new Formatter(Locale.US);
-        return (format.format("%4.0f", length).toString()).trim();
-		
+		try(Formatter format = new Formatter(Locale.US)) {
+			return (format.format("%4.0f", length).toString()).trim();
+		}
 	}
 	
 	public static String formatLengthProfile(double length) {
-		Formatter format = new Formatter(Locale.US);
-        return (format.format("%5.1f", length).toString()).trim();
-		
+		try(Formatter format = new Formatter(Locale.US)) {
+			return (format.format("%5.1f", length).toString()).trim();
+		}
 	}
 
 	/** Returns true if the given value equals 0.0
@@ -161,7 +161,6 @@ public class Parser {
 	 */
 	public static boolean equals0 (double value) {
 		return Math.abs(value) < 0.0000001;
-		
 	}
 
 }

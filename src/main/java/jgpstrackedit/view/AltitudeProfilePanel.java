@@ -12,6 +12,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.swing.JPanel;
 
@@ -228,7 +229,10 @@ public class AltitudeProfilePanel extends JPanel implements TrackObserver,
 				g2D.drawLine(mouseX, 0, mouseX, getHeight());
 				double lengthAtCursor = trackLength * (mouseX - ALT_WIDTH) / width;
 				g2D.drawString(Parser.formatLengthProfile(lengthAtCursor), mouseX - ALT_WIDTH+3, getHeight()-4);
-				g2D.drawString(Parser.formatAltProfile(track.getPoint(lengthAtCursor).getElevation()), mouseX - ALT_WIDTH+3, BORDER_HEIGHT-4);
+				Optional<Point> pointOptional = track.getPoint(lengthAtCursor);
+				pointOptional.ifPresent(point -> {
+					g2D.drawString(Parser.formatAltProfile(point.getElevation()), mouseX - ALT_WIDTH+3, BORDER_HEIGHT-4);
+				});
 			}
 		}
 
@@ -302,7 +306,10 @@ public class AltitudeProfilePanel extends JPanel implements TrackObserver,
 	public void mouseClicked(MouseEvent arg0) {
 		double trackLength = track.getLength();
 		double lengthAtCursor = trackLength * (mouseX - ALT_WIDTH) / (getWidth() - ALT_WIDTH);
-		UIController.getUIController().selectPoint(track, track.getPoint(lengthAtCursor), true);
+		Optional<Point> point = track.getPoint(lengthAtCursor);
+		point.ifPresent(p -> {
+			UIController.getUIController().selectPoint(track, p, true);
+		});
 	}
 
 	@Override

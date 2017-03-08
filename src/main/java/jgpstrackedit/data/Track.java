@@ -13,8 +13,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.TreeSet;
-import java.util.concurrent.SynchronousQueue;
 
 import jgpstrackedit.data.util.Geometry;
 import jgpstrackedit.data.util.TrackUtil;
@@ -101,7 +101,10 @@ public class Track {
 		
 		this.trackFileName = trackFileName;
 		if(trackFileName != null && trackFileName.length() > 0) {
-			path = new File(trackFileName).getParentFile().toPath();
+			File parentFile = new File(trackFileName).getParentFile();
+			if(parentFile != null) {
+				path = parentFile.toPath();
+			}
 		}
 		
 		// Don't overwrite a valid path with null!
@@ -337,16 +340,16 @@ public class Track {
 	 *            the length [km]
 	 * @return the point with distance length from start point
 	 */
-	public Point getPoint(double length) {
+	public Optional<Point> getPoint(double length) {
 		double currentLength = 0.0;
 		Point first = getFirstPoint();
 		for (int i = 1; i < points.size(); i++) {
 			currentLength += first.distance(points.get(i));
 			if (currentLength > length)
-				return first;
+				return Optional.of(first);
 			first = points.get(i);
 		}
-		return null;
+		return Optional.empty();
 	}
 
 	/**

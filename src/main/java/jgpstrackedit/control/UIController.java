@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Optional;
 
 import javax.imageio.ImageIO;
 import javax.swing.JDialog;
@@ -423,15 +424,16 @@ public class UIController implements Runnable {
 	protected void splitLength(Track track, String trackName, double splitLength) {
 		String c = "a";
 		Track firstTrack = track;
-		Track secondTrack;
 		while (firstTrack.getLength() > splitLength) {
-			secondTrack = firstTrack.split(firstTrack.getPoint(splitLength),
-					trackName + c);
-			c = c + "a";
-			db.addTrack(secondTrack);
-			firstTrack = secondTrack;
+			Optional<Point> splitPoint = firstTrack.getPoint(splitLength);
+			if(splitPoint.isPresent()) {
+				Track secondTrack = firstTrack.split(splitPoint.get(),
+						trackName + c);
+				c = c + "a";
+				db.addTrack(secondTrack);
+				firstTrack = secondTrack;
+			}
 		}
-
 	}
 
 	public void merge(int mergeOption, Track track, Track mergeTrack,
