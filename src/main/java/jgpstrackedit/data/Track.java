@@ -615,6 +615,9 @@ public class Track {
 	 *            point to be checked
 	 */
 	protected void checkBoundaries(Point point) {
+		if(point == null) {
+			return;
+		}
 		if (leftUpperBoundary == null) {
 			leftUpperBoundary = point.clone();
 			rightLowerBoundary = point.clone();

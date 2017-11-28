@@ -36,15 +36,19 @@ public class ASC implements TrackFile {
 			String line = in.readLine();
 			while (line != null) {
 				String[] elements = line.split(",");
-				if (elements.length != 3) {
+				if (elements.length < 2) {
 					throw new SAXException("Illegal ASC-Format");
 				}
 				Point point = new Point(elements[0],elements[1]);
-				point.setInformation(elements[2]);
+				if((elements.length > 2) && (elements[2].trim().length() > 0)) {
+					point.setInformation(elements[2].trim());
+				}
 				track.add(point);
 				line = in.readLine();
 			}
 		}
+		
+		track.setValid(true);
 		
 		return track;
 	}

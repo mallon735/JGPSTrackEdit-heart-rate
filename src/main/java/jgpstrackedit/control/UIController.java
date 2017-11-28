@@ -404,8 +404,13 @@ public class UIController implements Runnable {
 		case Constants.SPLIT_NONE:
 			break;
 		case Constants.SPLIT_SELECTED_POINT:
-			secondTrack = track.split(form.getSelectedPoint(), trackName);
-			db.addTrack(secondTrack);
+			if(form.getSelectedPoint() != null 
+				&& form.getSelectedPoint() != track.getFirstPoint() 
+				&& form.getSelectedPoint() != track.getLastPoint()) 
+			{
+				secondTrack = track.split(form.getSelectedPoint(), trackName);
+				db.addTrack(secondTrack);
+			}
 			break;
 		case Constants.SPLIT_NUMBER_TRACKS:
 			splitNrPoints(track, trackName, track.getNumberPoints()
