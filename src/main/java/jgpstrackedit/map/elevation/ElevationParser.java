@@ -12,9 +12,20 @@
 package jgpstrackedit.map.elevation;
 
 import java.io.IOException;
+import java.util.AbstractMap;
+import java.util.Map;
 import java.util.Stack;
+
 import javax.xml.parsers.ParserConfigurationException;
-import org.xml.sax.*;
+
+import org.xml.sax.Attributes;
+import org.xml.sax.ContentHandler;
+import org.xml.sax.EntityResolver;
+import org.xml.sax.ErrorHandler;
+import org.xml.sax.Locator;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
+import org.xml.sax.XMLReader;
 
 /**
  *
@@ -22,7 +33,7 @@ import org.xml.sax.*;
  */
 public class ElevationParser implements ContentHandler {
     private ElevationHandler handler;
-    private Stack context;
+    private Stack<Map.Entry<String, org.xml.sax.Attributes>> context;
     private StringBuffer buffer;
     private EntityResolver resolver;
 
@@ -37,7 +48,7 @@ public class ElevationParser implements ContentHandler {
         this.handler = handler;
         this.resolver = resolver;
         buffer = new StringBuffer(111);
-        context = new java.util.Stack();
+        context = new Stack<Map.Entry<String, org.xml.sax.Attributes>>();
     }
 
     /**
@@ -67,7 +78,7 @@ public class ElevationParser implements ContentHandler {
      */
     public final void startElement(java.lang.String ns, java.lang.String name, java.lang.String qname, org.xml.sax.Attributes attrs) throws org.xml.sax.SAXException {
         dispatch(true);
-        context.push(new Object[]{qname, new org.xml.sax.helpers.AttributesImpl(attrs)});
+        context.push(new AbstractMap.SimpleEntry<String, Attributes>(qname, attrs));
         if ("result".equals(qname)) {
             handler.start_result(attrs);
         } else if ("location".equals(qname)) {
@@ -128,9 +139,9 @@ public class ElevationParser implements ContentHandler {
         if (fireOnlyIfMixed && buffer.length() == 0) {
             return; //skip it
         }
-        Object[] ctx = (Object[]) context.peek();
-        String here = (String) ctx[0];
-        org.xml.sax.Attributes attrs = (org.xml.sax.Attributes) ctx[1];
+        Map.Entry<String, org.xml.sax.Attributes> ctx = context.peek();
+        String here = ctx.getKey();
+        org.xml.sax.Attributes attrs = ctx.getValue();
         if ("status".equals(here)) {
             if (fireOnlyIfMixed) {
                 throw new IllegalStateException("Unexpected characters() event! (Missing DTD?)");

@@ -3,18 +3,12 @@
  */
 package jgpstrackedit.map.elevation;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.HashMap;
-
-import javax.xml.parsers.ParserConfigurationException;
+import java.util.ArrayList;
 
 import jgpstrackedit.data.Point;
 import jgpstrackedit.data.Track;
 import jgpstrackedit.util.Parser;
-
-import org.xml.sax.SAXException;
 
 /**
  * Facade of the google elevation api, see
@@ -24,10 +18,9 @@ import org.xml.sax.SAXException;
  * 
  */
 public class ElevationAPI {
-
 	private StringBuilder elevationURL;
 	private boolean firstPoint;
-	private HashMap<String,Point> points;
+	private ArrayList<Point> points;
 
 	/**
 	 * Updates the elevation of the given track using google elevation api
@@ -67,7 +60,7 @@ public class ElevationAPI {
 		elevationURL = new StringBuilder(
 				"http://maps.googleapis.com/maps/api/elevation/xml?locations=");
 		firstPoint = true;
-		points = new HashMap<String,Point>();
+		points = new ArrayList<Point>(50);
 	}
 
 	/**
@@ -87,7 +80,7 @@ public class ElevationAPI {
 		}
 		String location = Parser.trim_0(point.getLatitudeAsString())+","+Parser.trim_0(point.getLongitudeAsString());
 		elevationURL.append(location);
-		points.put(location,point);
+		points.add(point);
 	}
 
 	/**
@@ -99,7 +92,6 @@ public class ElevationAPI {
 	 * 
 	 */
 	protected void issueElevationRequest() throws ElevationException {
-
 		elevationURL.append("&sensor=false");
 		System.out.println(elevationURL.toString());
 		URL url;
@@ -112,27 +104,18 @@ public class ElevationAPI {
 			if (!elevationResponse.getState().equals("OK")) {
 				throw new ElevationException(elevationResponse.getState());
 			}
-			for (ElevationResult elevationResult:elevationResponse.getResults()) {
-				System.out.println(elevationResult);
-				Point point = points.get(elevationResult.getLocation());
-				if (point == null) {
-					// No match, what went wrong?
-					System.out.println("ElevationAPI: no match for "+elevationResult.getLocation());
-				} else {
-				    point.setElevation(elevationResult.getElevation());
-				}
+			
+			if(elevationResponse.getResults().size() != points.size())  {
+				throw new ElevationException("Different number of input and output points! Cannot correct elevation!");
 			}
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SAXException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ParserConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			
+			for(int i=0; i<elevationResponse.getResults().size(); i++) {
+				ElevationResult elevationResult = elevationResponse.getResults().get(i);
+				Point point = points.get(i);
+				System.out.println(elevationResult);
+				point.setElevation(elevationResult.getElevation());
+			}
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
