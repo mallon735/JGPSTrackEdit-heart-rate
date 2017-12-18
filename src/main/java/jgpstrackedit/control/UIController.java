@@ -40,8 +40,10 @@ import jgpstrackedit.map.MapQuestTileManager;
 import jgpstrackedit.map.OCMTileManager;
 import jgpstrackedit.map.OSMTileManager;
 import jgpstrackedit.map.TileManager;
-import jgpstrackedit.map.elevation.ElevationAPI;
+import jgpstrackedit.map.elevation.ElevationCorrectionFactory;
 import jgpstrackedit.map.elevation.ElevationException;
+import jgpstrackedit.map.elevation.IElevationCorrection;
+import jgpstrackedit.map.elevation.google.GoogleElevationCorrection;
 import jgpstrackedit.map.util.MapExtract;
 import jgpstrackedit.map.util.MapExtractManager;
 import jgpstrackedit.routing.MapQuestRouting;
@@ -67,7 +69,9 @@ import org.xml.sax.SAXException;
  * @author Hubert
  */
 public class UIController implements Runnable {
-
+	private static final String ELEVATION_CORRECTION_API_GOOGLE = "google";
+	private static final String ELEVATION_CORRECTION_API_MAPQUEST = "mapquest";
+	
 	private Database db;
 	private JGPSTrackEdit form;
 	private JFileChooser fileSaveChooser;
@@ -621,26 +625,34 @@ public class UIController implements Runnable {
 		initTileManager(new MapQuestHybrideTileManager());
 
 	}
-
+	
 	public void updateElevation() {
-		// TODO Auto-generated method stub
-		if (isGoogleElevationAPIEnabled()) {
-			int[] selectedRows = form.getTracksTable().getSelectedRows();
-			ElevationAPI elevationAPI = new ElevationAPI();
-			for (int i = 0; i < selectedRows.length; i++) {
-				try {
-					elevationAPI.updateElevation(db.getTrack(selectedRows[i]));
-				} catch (ElevationException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-					if (e.getMessage().equals("OVER_QUERY_LIMIT")) {
-						JOptionPane.showMessageDialog(form, "The Google-API query limit was reached. Try another day to update elevations!",
-								"Google-API-Error", JOptionPane.ERROR_MESSAGE);
-					}
-				}
-				form.setStateMessage("Elevation of track "
-						+ db.getTracks().get(i).getName() + " updated");
+		updateElevation(ELEVATION_CORRECTION_API_MAPQUEST);
+	}
+
+	private void updateElevation(String elevationCorrectionName) {
+		final IElevationCorrection elevationCorrection = ElevationCorrectionFactory
+				.create(elevationCorrectionName);
+
+		if (elevationCorrectionName.equals(ELEVATION_CORRECTION_API_GOOGLE)) {
+			if (!isGoogleElevationAPIEnabled()) {
+				return;
 			}
+		}
+
+		int[] selectedRows = form.getTracksTable().getSelectedRows();
+		for (int i = 0; i < selectedRows.length; i++) {
+			try {
+				elevationCorrection.updateElevation(db.getTrack(selectedRows[i]));
+			} catch (ElevationException e) {
+				e.printStackTrace();
+				if (e.getMessage().equals("OVER_QUERY_LIMIT")) {
+					JOptionPane.showMessageDialog(form,
+							"The Google-API query limit was reached. Try another day to update elevations!",
+							"Google-API-Error", JOptionPane.ERROR_MESSAGE);
+				}
+			}
+			form.setStateMessage("Elevation of track " + db.getTracks().get(i).getName() + " updated");
 		}
 
 	}

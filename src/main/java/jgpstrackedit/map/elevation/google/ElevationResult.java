@@ -2,10 +2,13 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package jgpstrackedit.map.elevation;
+package jgpstrackedit.map.elevation.google;
+
+import java.util.Optional;
 
 /**
- *
+ * Class ElevationResult.
+ * 
  * @author hlutnik
  */
 public class ElevationResult {
@@ -28,15 +31,9 @@ public class ElevationResult {
         this.location = location;
     }
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
 	@Override
 	public String toString() {
-		// TODO Auto-generated method stub
-		return location + ":"+elevation;
+		return Optional.ofNullable(location).orElse("") + ":" + Optional.ofNullable(elevation).orElse("");
 	}
-    
-    
     
 }

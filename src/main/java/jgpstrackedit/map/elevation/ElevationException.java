@@ -1,16 +1,14 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package jgpstrackedit.map.elevation;
 
 /**
- *
+ * Exception during update the elevation.
+ * 
  * @author hlutnik
  */
 public class ElevationException extends Exception {
+	private static final long serialVersionUID = 1L;
 
-    /**
+	/**
      * Creates a new instance of <code>ElevationException</code> without detail message.
      */
     public ElevationException() {
