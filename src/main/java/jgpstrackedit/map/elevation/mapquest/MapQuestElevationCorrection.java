@@ -3,7 +3,15 @@
  */
 package jgpstrackedit.map.elevation.mapquest;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jgpstrackedit.data.Point;
 import jgpstrackedit.data.Track;
@@ -21,9 +29,11 @@ import jgpstrackedit.map.elevation.IElevationCorrection;
  */
 public class MapQuestElevationCorrection implements IElevationCorrection 
 {
+	private static final String BASE_URL = "http://open.mapquestapi.com/elevation/v1/profile?key=Fmjtd%7Cluubn96ynu%2C2s%3Do5-907guw&shapeFormat=cmp&outShapeFormat=none&latLngCollection=";
+	private static final int NUMBER_OF_POINTS_PER_REQUEST = 240;
 
 	/**
-	 * Updates the elevation of the given track using mapquest elevation api
+	 * Updates the elevation of the given track using mapquest elevation api.
 	 * 
 	 * @param track
 	 *            track to be updated
@@ -32,6 +42,76 @@ public class MapQuestElevationCorrection implements IElevationCorrection
 	 */
 	@Override
 	public void updateElevation(Track track) throws ElevationException {
+		try {
+			updateElevationThrow(track);
+		} catch(ElevationException ee) {
+			throw ee;
+		} catch (Exception e) {
+			throw new ElevationException(e.getMessage());
+		}
+	}
+	
+	void updateElevationThrow(Track track) throws Exception {
+		List<List<Point>> splittedList = splitUpTrack(track);
+		ObjectMapper mapper = new ObjectMapper();
+		
+		for(List<Point> list : splittedList) {
+			try(InputStream istream = openUrlStream(this.getRequest(list))) {
+				ElevationResponse elevationResponse = mapper.readValue(istream, ElevationResponse.class);
+				updatePoints(elevationResponse, list, track);
+			}
+		}
+	}
+	
+	InputStream openUrlStream(String request) throws IOException {
+		URL url = new URL(request);
+		return url.openStream();
+	}
+	
+	void updatePoints(ElevationResponse elevationResponse, List<Point> list, Track track) throws ElevationException {
+		if(elevationResponse.getInfo() != null && elevationResponse.getInfo().getStatuscode() != null && elevationResponse.getInfo().getStatuscode() > 0) {
+			throw new ElevationException(String.format("HTTP response is %d", elevationResponse.getInfo().getStatuscode())); 
+		}
+		
+		if(elevationResponse.getElevationProfile() != null && elevationResponse.getElevationProfile().size() == list.size()) {
+			int idx = 0;
+			for(ElevationProfile elevationProfile : elevationResponse.getElevationProfile()) {
+				list.get(idx).setElevation(Optional.ofNullable(elevationProfile.getHeight()).orElse(0));
+				idx += 1;
+			}
+			track.hasBeenModified();
+		} else {
+			System.err.println("The elevation correction response is null or has a wrong size!");
+		}
+	}
+
+	List<List<Point>> splitUpTrack(Track track) {
+		
+		List<List<Point>> splittedList = new LinkedList<List<Point>>();
+		List<Point> pointList = new ArrayList<Point>(NUMBER_OF_POINTS_PER_REQUEST + 1);
+		
+		for (int i = 0; i < track.getNumberPoints(); i++) {
+			pointList.add(track.getPoint(i));
+			if((i > 0) && (i % NUMBER_OF_POINTS_PER_REQUEST == 0)) {
+				splittedList.add(pointList);
+				pointList = new ArrayList<Point>(NUMBER_OF_POINTS_PER_REQUEST + 1);
+			}
+		}
+		
+		splittedList.add(pointList);
+		return splittedList;
+	}
+	
+	/**
+	 * Get the request url.
+	 *  
+	 * @param points List of points
+	 * @return Request URL
+	 */
+	String getRequest(List<Point> points) {
+		StringBuilder urlBuilder = new StringBuilder(BASE_URL);
+		urlBuilder.append(compress(points));
+		return urlBuilder.toString();
 	}
 
 	/**

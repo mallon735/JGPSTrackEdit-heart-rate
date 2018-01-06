@@ -1,6 +1,11 @@
 package jgpstrackedit.map.elevation.mapquest;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -8,7 +13,7 @@ import org.junit.Test;
 
 import jgpstrackedit.data.Point;
 import jgpstrackedit.data.Track;
-import jgpstrackedit.map.elevation.google.GoogleElevationCorrection;
+import jgpstrackedit.map.elevation.ElevationException;
 
 /**
  * Unit-Test for {@link MapQuestElevationCorrection}
@@ -43,5 +48,28 @@ public class MapQuestElevationCorrectionTest
 	public void testCompress() {
 		MapQuestElevationCorrection eapi = new MapQuestElevationCorrection();
 		Assert.assertThat(eapi.compress(track.getPoints()), is("{rcxHgpojAFc@Fe@??Gd@Gb@"));
+	}
+	
+	@Test
+	public void testUpdateElevation() throws ElevationException {
+		MapQuestElevationCorrection mapQuestElevationCorrection = new TestMapQuestElevationCorrection();
+		mapQuestElevationCorrection.updateElevation(track);
+		
+		int idx = 0;
+		for(Point point : track.getPoints()) {
+			String msg = String.format("Wrong elevation on point with index %d. Elevation is %f", idx, point.getElevation());
+			assertThat(msg, point.getElevation(), is(119D));
+			idx += 1;
+		}
+	}
+	
+	private static class TestMapQuestElevationCorrection extends MapQuestElevationCorrection 
+	{
+		private static final String RESPONSE = "{\"elevationProfile\":[{\"distance\":0,\"height\":119},{\"distance\":0.0133,\"height\":119},{\"distance\":0.0273,\"height\":119},{\"distance\":0.0273,\"height\":119},{\"distance\":0.0413,\"height\":119},{\"distance\":0.0546,\"height\":119}],\"info\":{\"statuscode\":0,\"copyright\":{\"imageAltText\":\"© 2017 MapQuest, Inc.\",\"imageUrl\":\"http://api.mqcdn.com/res/mqlogo.gif\",\"text\":\"© 2017 MapQuest, Inc.\"},\"messages\":[]}}";
+
+		@Override
+		InputStream openUrlStream(String request) throws IOException {
+			return new ByteArrayInputStream(RESPONSE.getBytes());
+		}
 	}
 }

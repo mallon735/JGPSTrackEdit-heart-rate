@@ -47,8 +47,8 @@ public class GPXTrackWriter {
 	}
 
 	private void writeLink(Track track, PrintWriter out) {
-		if(track.getLink() != null) {
-			out.println("    <link href=\"" + track.getLink() + "\" />");
+		if(track.getLink() != null && track.getLink().trim().length() > 0) {
+			out.println("    <link href=\"" + track.getLink().trim() + "\" />");
 		}
 	}
 
