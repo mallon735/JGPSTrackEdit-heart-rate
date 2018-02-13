@@ -31,7 +31,6 @@ import java.awt.event.MouseWheelListener;
 import java.awt.event.WindowEvent;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.URL;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 

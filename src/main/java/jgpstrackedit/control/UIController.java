@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import javax.imageio.ImageIO;
@@ -41,9 +42,7 @@ import jgpstrackedit.map.OCMTileManager;
 import jgpstrackedit.map.OSMTileManager;
 import jgpstrackedit.map.TileManager;
 import jgpstrackedit.map.elevation.ElevationCorrectionFactory;
-import jgpstrackedit.map.elevation.ElevationException;
 import jgpstrackedit.map.elevation.IElevationCorrection;
-import jgpstrackedit.map.elevation.google.GoogleElevationCorrection;
 import jgpstrackedit.map.util.MapExtract;
 import jgpstrackedit.map.util.MapExtractManager;
 import jgpstrackedit.routing.MapQuestRouting;
@@ -59,6 +58,7 @@ import jgpstrackedit.util.DirectoryFilter;
 import jgpstrackedit.util.Parser;
 import jgpstrackedit.view.DlgCompressOptions;
 import jgpstrackedit.view.DlgSelectMapExtract;
+import jgpstrackedit.view.ElevationCorrectionAction;
 import jgpstrackedit.view.JGPSTrackEdit;
 import jgpstrackedit.view.Transform;
 
@@ -640,21 +640,13 @@ public class UIController implements Runnable {
 			}
 		}
 
+		final List<Track> selectedTracks = new ArrayList<Track>();
 		int[] selectedRows = form.getTracksTable().getSelectedRows();
 		for (int i = 0; i < selectedRows.length; i++) {
-			try {
-				elevationCorrection.updateElevation(db.getTrack(selectedRows[i]));
-			} catch (ElevationException e) {
-				e.printStackTrace();
-				if (e.getMessage().equals("OVER_QUERY_LIMIT")) {
-					JOptionPane.showMessageDialog(form,
-							"The Google-API query limit was reached. Try another day to update elevations!",
-							"Google-API-Error", JOptionPane.ERROR_MESSAGE);
-				}
-			}
-			form.setStateMessage("Elevation of track " + db.getTracks().get(i).getName() + " updated");
+			selectedTracks.add(db.getTrack(selectedRows[i]));
 		}
-
+		
+		new ElevationCorrectionAction().elevationCorrectionPerformed(elevationCorrection, selectedTracks, this.form);
 	}
 
 	public Track newTrack() {

@@ -17,6 +17,7 @@ import jgpstrackedit.data.Point;
 import jgpstrackedit.data.Track;
 import jgpstrackedit.map.elevation.ElevationException;
 import jgpstrackedit.map.elevation.IElevationCorrection;
+import jgpstrackedit.map.elevation.IProgressDetector;
 
 /**
  * Implementation of the interface {@link IElevationCorrection}.
@@ -41,7 +42,7 @@ public class MapQuestElevationCorrection implements IElevationCorrection
 	 *             indicates an error
 	 */
 	@Override
-	public void updateElevation(Track track) throws ElevationException {
+	public void updateElevation(Track track, IProgressDetector progressDetector) throws ElevationException {
 		try {
 			updateElevationThrow(track);
 		} catch(ElevationException ee) {

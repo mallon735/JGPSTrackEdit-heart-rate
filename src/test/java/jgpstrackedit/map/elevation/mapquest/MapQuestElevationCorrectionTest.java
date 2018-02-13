@@ -14,6 +14,7 @@ import org.junit.Test;
 import jgpstrackedit.data.Point;
 import jgpstrackedit.data.Track;
 import jgpstrackedit.map.elevation.ElevationException;
+import jgpstrackedit.map.elevation.IProgressDetector;
 
 /**
  * Unit-Test for {@link MapQuestElevationCorrection}
@@ -53,7 +54,10 @@ public class MapQuestElevationCorrectionTest
 	@Test
 	public void testUpdateElevation() throws ElevationException {
 		MapQuestElevationCorrection mapQuestElevationCorrection = new TestMapQuestElevationCorrection();
-		mapQuestElevationCorrection.updateElevation(track);
+		mapQuestElevationCorrection.updateElevation(track, new IProgressDetector() {
+			@Override
+			public void setProgress(int progress) {				
+			}});
 		
 		int idx = 0;
 		for(Point point : track.getPoints()) {

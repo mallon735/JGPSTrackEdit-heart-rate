@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!--
+    TODO define vocabulary identification
+    PUBLIC ID: -//vendor//vocabulary//EN
+    SYSTEM ID: http://server/path/elevation.dtd
+
+-->
+
+<!--
+    An example how to use this DTD from your XML document:
+
+    <?xml version="1.0"?>
+
+    <!DOCTYPE ElevationResponse SYSTEM "elevation.dtd">
+
+    <ElevationResponse>
+    ...
+    </ElevationResponse>
+-->
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT ElevationResponse (result|status)*>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT status (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT result (resolution|elevation|location)*>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT location (lng|lat)*>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT lat (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT lng (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT elevation (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT resolution (#PCDATA)>

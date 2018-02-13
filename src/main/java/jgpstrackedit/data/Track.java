@@ -158,6 +158,7 @@ public class Track {
 
 	public void addTrackObserver(TrackObserver observer) {
 		trackObservers.add(observer);
+		// System.out.println(String.format("#track observers %d", trackObservers.size()));
 	}
 
 	public void removeTrackObserver(TrackObserver observer) {

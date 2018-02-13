@@ -17,5 +17,5 @@ public interface IElevationCorrection {
 	 * @throws ElevationException
 	 *             indicates an error
 	 */
-	void updateElevation(Track track) throws ElevationException;
+	void updateElevation(Track track, IProgressDetector progressDetector) throws ElevationException;
 }

@@ -5,12 +5,9 @@
 package jgpstrackedit.view;
 
 import java.util.ArrayList;
-
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 
 import jgpstrackedit.data.DBObserver;
 import jgpstrackedit.data.Database;
@@ -18,25 +15,36 @@ import jgpstrackedit.data.Point;
 import jgpstrackedit.data.Track;
 
 /**
+ * Class TracksView - Manage the views of the tracks. 
  * 
  * @author Hubert
  */
-public class TracksView implements DBObserver {
-
-	private Database db;
+public class TracksView implements DBObserver 
+{
+	private final Database db;
 	private Point leftUpperBoundary = null;
 	private Point rightLowerBoundary = null;
-	private List<TrackView> tracksView;
-	private ArrayList<ZoomObserver> zoomObservers = new ArrayList<ZoomObserver>();
+	private final List<TrackView> tracksView;
+	private final List<ZoomObserver> zoomObservers;
 
 	public TracksView(Database db) {
 		this.db = db;
-		db.addDBObserver(this);
-		tracksView = new ArrayList<TrackView>();
+		this.tracksView = new LinkedList<>();
+		this.zoomObservers = new ArrayList<>();
+		
+		this.db.addDBObserver(this);
 	}
 
+	/**
+	 * Get a list of track views.
+	 * 
+	 * Potential problem: the track can be unsubscribed from a view. 
+	 * What happens when using the published list and access the view without a track?
+	 * 
+	 * @return list of views
+	 */
 	public List<TrackView> getTracksView() {
-		return tracksView;
+		return Collections.unmodifiableList(tracksView);
 	}
 
 	public Point getLeftUpperBoundary() {
@@ -56,11 +64,18 @@ public class TracksView implements DBObserver {
 	}
 
 	protected void createTrackViews() {
-		tracksView = new LinkedList<TrackView>();
+		cleanUpTrackViews();
 		for (Track track : db.getTracks()) {
 			TrackView trackView = new TrackView(track);
 			tracksView.add(trackView);
 		}
+	}
+	
+	private void cleanUpTrackViews() {
+		tracksView.forEach(view -> {
+			view.getTrack().removeTrackObserver(view);
+		});
+		tracksView.clear();
 	}
 
 	public void setView(Point leftUpperBoundary, Point rightLowerBoundary) {

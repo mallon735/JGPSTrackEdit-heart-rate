@@ -15,9 +15,9 @@ import jgpstrackedit.international.International;
  * 
  */
 public class TrackTableModel extends AbstractTableModel 
-                             implements TrackObserver {
-
-	private Track currentTrack = null;;
+                             implements TrackObserver 
+{
+	private Track currentTrack = null;
 
 	/**
 	 * @return the currentTrack
@@ -40,13 +40,11 @@ public class TrackTableModel extends AbstractTableModel
 
 	@Override
 	public int getColumnCount() {
-		// TODO Auto-generated method stub
 		return 5;
 	}
 
 	@Override
 	public int getRowCount() {
-		// TODO Auto-generated method stub
 		if (currentTrack != null)
 			return currentTrack.getNumberPoints();
 		else
@@ -55,7 +53,6 @@ public class TrackTableModel extends AbstractTableModel
 
 	@Override
 	public Object getValueAt(int row, int column) {
-		// TODO Auto-generated method stub
 		switch (column) {
 		case 0:
 			return row;
@@ -67,16 +64,16 @@ public class TrackTableModel extends AbstractTableModel
 			return currentTrack.getPoint(row).getElevationAsString();
 		case 4:
 			return currentTrack.getPoint(row).getTime();
+		default:
+			return null;
 		}
-		return null;
 	}
 
-	/* (non-Javadoc)
-	 * @see javax.swing.table.AbstractTableModel#getColumnClass(int)
+	/**
+	 * @see javax.swing.table.AbstractTableModel#getColumnClass
 	 */
 	@Override
 	public Class<?> getColumnClass(int arg0) {
-		// TODO Auto-generated method stub
 		switch (arg0) {
 		case 0:
 			return Integer.class;
@@ -88,16 +85,16 @@ public class TrackTableModel extends AbstractTableModel
 			return String.class;
 		case 4:
 			return String.class;
+		default:
+			return Object.class;
 		}
-		return Object.class;
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see javax.swing.table.AbstractTableModel#getColumnName(int)
 	 */
 	@Override
 	public String getColumnName(int arg0) {
-		// TODO Auto-generated method stub
 		switch (arg0) {
 		case 0:
 			return International.getText("pointtbl.Index");
@@ -109,16 +106,16 @@ public class TrackTableModel extends AbstractTableModel
 			return International.getText("pointtbl.Elevation");
 		case 4:
 			return International.getText("pointtbl.Timestamp");
+		default:
+			return "Unknown";
 		}
-		return "Unknown";
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see javax.swing.table.AbstractTableModel#isCellEditable(int, int)
 	 */
 	@Override
 	public boolean isCellEditable(int rowIndex, int columnIndex) {
-		// TODO Auto-generated method stub
 		switch (columnIndex) {
 		case 0:
 			return false;
@@ -130,37 +127,38 @@ public class TrackTableModel extends AbstractTableModel
 			return true;
 		case 4:
 			return true;
+		default:
+			return false;
 		}
-		return false;
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see javax.swing.table.AbstractTableModel#setValueAt(java.lang.Object, int, int)
 	 */
 	@Override
 	public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-		// TODO Auto-generated method stub
 		switch (columnIndex) {
 		case 0:
 			break;
 		case 1:
 			currentTrack.getPoint(rowIndex).setLatitude((String)aValue);
+			break;
 		case 2:
 			currentTrack.getPoint(rowIndex).setLongitude((String)aValue);
+			break;
 		case 3:
 			currentTrack.getPoint(rowIndex).setElevation((String)aValue);
+			break;
 		case 4:
 			currentTrack.getPoint(rowIndex).setTime((String)aValue);
+			break;
+		default:
+			break;
 		}
 	}
 
 	@Override
 	public void trackModified(Track track) {
-		// TODO Auto-generated method stub
 		this.fireTableDataChanged();
-		
 	}
-	
-	
-
 }

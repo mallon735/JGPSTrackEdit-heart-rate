@@ -10,6 +10,7 @@ import jgpstrackedit.data.Point;
 import jgpstrackedit.data.Track;
 import jgpstrackedit.map.elevation.ElevationException;
 import jgpstrackedit.map.elevation.IElevationCorrection;
+import jgpstrackedit.map.elevation.IProgressDetector;
 import jgpstrackedit.util.Parser;
 
 /**
@@ -35,7 +36,7 @@ public class GoogleElevationCorrection implements IElevationCorrection {
 	 *             for details.
 	 */
 	@Override
-	public void updateElevation(Track track) throws ElevationException {
+	public void updateElevation(Track track, IProgressDetector progressDetector) throws ElevationException {
 		initElevationRequest();
 		int pointCounter = 0;
 		for (int i = 0; i < track.getNumberPoints(); i++) {
@@ -51,7 +52,6 @@ public class GoogleElevationCorrection implements IElevationCorrection {
 			issueElevationRequest();
 		}
 		track.hasBeenModified();
-
 	}
 
 	/**
