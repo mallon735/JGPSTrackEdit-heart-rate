@@ -8,4 +8,5 @@ package jgpstrackedit.map.elevation;
  */
 public interface IProgressDetector {
 	void setProgress(int progress);
+	boolean isCanceled();
 }

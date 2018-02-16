@@ -646,11 +646,11 @@ public class UIController implements Runnable {
 			selectedTracks.add(db.getTrack(selectedRows[i]));
 		}
 		
+		// Run the elevation correction for all selected tracks.
 		new ElevationCorrectionAction().elevationCorrectionPerformed(elevationCorrection, selectedTracks, this.form);
 	}
 
 	public Track newTrack() {
-		// TODO Auto-generated method stub
 		String trackName = JOptionPane.showInputDialog("Name of new track:");
 		if (trackName == null)
 			return null;
@@ -663,7 +663,6 @@ public class UIController implements Runnable {
 	}
 
 	public void correctSelectedTrack() {
-		// TODO Auto-generated method stub
 		String epsilon = JOptionPane
 				.showInputDialog("Correction epsilon perimeter in km:");
 		if (epsilon == null)
@@ -676,7 +675,6 @@ public class UIController implements Runnable {
 	}
 
 	public void openGPSies() {
-		// TODO Auto-generated method stub
 		try {
 			GPSiesComDialog dialog = new GPSiesComDialog(this);
 			dialog.setModal(true);

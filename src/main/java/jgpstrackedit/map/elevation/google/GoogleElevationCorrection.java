@@ -45,6 +45,7 @@ public class GoogleElevationCorrection implements IElevationCorrection {
 			if (pointCounter == 50) {
 				pointCounter = 0;
 				issueElevationRequest();
+				setProgress(i, track.getNumberPoints(), progressDetector);
 				initElevationRequest();
 			}
 		}
@@ -52,6 +53,12 @@ public class GoogleElevationCorrection implements IElevationCorrection {
 			issueElevationRequest();
 		}
 		track.hasBeenModified();
+	}
+	
+	private void setProgress(int index, int numberOfPoints, IProgressDetector progressDetector) {
+		if(numberOfPoints > 0) {
+			progressDetector.setProgress(Math.round((100F) * ((float)index/(float)numberOfPoints)));
+		}
 	}
 
 	/**
@@ -115,7 +122,7 @@ public class GoogleElevationCorrection implements IElevationCorrection {
 			for (int i = 0; i < elevationResponse.getResults().size(); i++) {
 				ElevationResult elevationResult = elevationResponse.getResults().get(i);
 				Point point = points.get(i);
-				System.out.println(elevationResult);
+				// System.out.println(elevationResult);
 				point.setElevation(elevationResult.getElevation());
 			}
 		} catch (ElevationException e) {

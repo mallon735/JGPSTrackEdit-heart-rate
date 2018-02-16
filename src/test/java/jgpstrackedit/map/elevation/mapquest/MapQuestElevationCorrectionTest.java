@@ -60,6 +60,11 @@ public class MapQuestElevationCorrectionTest
 		mapQuestElevationCorrection.updateElevation(track, new IProgressDetector() {
 			@Override
 			public void setProgress(int progress) {				
+			}
+
+			@Override
+			public boolean isCanceled() {
+				return false;
 			}});
 		
 		int idx = 0;

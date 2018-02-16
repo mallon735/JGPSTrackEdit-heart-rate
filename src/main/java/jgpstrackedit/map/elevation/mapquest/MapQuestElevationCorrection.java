@@ -13,7 +13,6 @@ import java.util.Optional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import jgpstrackedit.data.Point;
 import jgpstrackedit.data.Track;
 import jgpstrackedit.map.elevation.ElevationException;
 import jgpstrackedit.map.elevation.IElevationCorrection;
@@ -59,6 +58,10 @@ public class MapQuestElevationCorrection implements IElevationCorrection
 		
 		for(List<PointWrapper> list : splittedList) {
 			try(InputStream istream = openUrlStream(this.getRequest(list))) {
+				if(progressDetector.isCanceled()) {
+					return;
+				}
+				
 				ElevationResponse elevationResponse = mapper.readValue(istream, ElevationResponse.class);
 				updatePoints(elevationResponse, list, track);
 				setProgress(track, progressDetector, list);
@@ -69,7 +72,6 @@ public class MapQuestElevationCorrection implements IElevationCorrection
 	private void setProgress(Track track, IProgressDetector progressDetector, List<PointWrapper> list) {
 		if(list.size() > 0) {
 			int index = list.get(list.size()-1).getIndex();
-			System.out.println(Math.round((100F) * ((float)index/(float)track.getNumberPoints())));
 			progressDetector.setProgress(Math.round((100F) * ((float)index/(float)track.getNumberPoints())));
 		}
 	}

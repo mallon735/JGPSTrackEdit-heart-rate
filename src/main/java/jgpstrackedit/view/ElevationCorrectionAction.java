@@ -2,13 +2,10 @@ package jgpstrackedit.view;
 
 import java.awt.Component;
 import java.awt.Frame;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.List;
 
 import javax.swing.JOptionPane;
 import javax.swing.ProgressMonitor;
-import javax.swing.SwingWorker;
 
 import jgpstrackedit.data.Track;
 import jgpstrackedit.international.International;
@@ -16,7 +13,17 @@ import jgpstrackedit.map.elevation.ElevationException;
 import jgpstrackedit.map.elevation.IElevationCorrection;
 import jgpstrackedit.map.elevation.IProgressDetector;
 
-public class ElevationCorrectionAction implements PropertyChangeListener {
+/**
+ * Elevation correction action. In this class the {@link IElevationCorrection} impl. is combined with the progress bar an a thread running 
+ * asynchron the correction task. 
+ *  
+ * @author gerdba
+ *
+ */
+public class ElevationCorrectionAction 
+{
+	private static final String PROGRESS_BAR_TEXT_KEY = "menu.Track.Update_Elevation";
+	
 	private ProgressMonitor progressMonitor;
 	private ElevationCorrectionTask task;
 
@@ -24,63 +31,38 @@ public class ElevationCorrectionAction implements PropertyChangeListener {
 			Frame parentComponent) 
 	{
 		progressMonitor = new ProgressMonitorWithProgressNote(parentComponent,
-				International.getText("menu.Track.Update_Elevation"), 0, 100);
+				International.getText(PROGRESS_BAR_TEXT_KEY), 0, 100);
 		progressMonitor.setMillisToDecideToPopup(0);
 		progressMonitor.setMillisToPopup(0);
 		progressMonitor.setProgress(0);
 
-		task = new ElevationCorrectionTask(elevationCorrection, tracks, parentComponent);
-		task.addPropertyChangeListener(this);
-		task.execute();
+		task = new ElevationCorrectionTask(elevationCorrection, tracks, parentComponent, progressMonitor);
+		new Thread(task).start();
 	}
 
 	/**
-	 * Invoked when task's progress property changes. Update the progress monitor.
-	 */
-	public void propertyChange(PropertyChangeEvent evt) {
-		if ("progress" == evt.getPropertyName() && evt.getNewValue() != null) {
-			int progress = Integer.class.cast(evt.getNewValue());
-			progressMonitor.setProgress(progress);
-		}
-
-		if (progressMonitor.isCanceled()) {
-			task.cancel(true);
-		}
-
-		if (task.isDone()) {
-			System.out.println("propertyChange task is done");
-			progressMonitor.close();
-		}
-	}
-
-	/**
-	 * The elevation correction task as {@link SwingWorker} thread.
+	 * The elevation correction task as {@link Runnable}
 	 * 
 	 * @author gerdba
 	 *
 	 */
-	private static class ElevationCorrectionTask extends SwingWorker<Void, Void> {
+	private static class ElevationCorrectionTask implements Runnable {
 		private final IElevationCorrection elevationCorrection;
 		private final List<Track> tracks;
 		private final Frame parentComponent;
-		private Thread thread;
+		private final ProgressMonitor progressMonitor;
 		
-		private ElevationCorrectionTask(IElevationCorrection elevationCorrection, List<Track> tracks, Frame parentComponent) {
+		private ElevationCorrectionTask(IElevationCorrection elevationCorrection, List<Track> tracks, Frame parentComponent, ProgressMonitor progressMonitor) {
 			this.elevationCorrection = elevationCorrection;
 			this.tracks = tracks;
 			this.parentComponent = parentComponent;
+			this.progressMonitor = progressMonitor;
 		}
 		
-		private void progagateProgress(int progress) {
-			this.setProgress(progress);
-		}
-		
-		@Override
-		public Void doInBackground() {
-			setProgress(0);
+		private void workOnTracks() {
 			for(Track track : tracks) {
 				try {
-					this.elevationCorrection.updateElevation(track, new ProgressDetector(this));
+					this.elevationCorrection.updateElevation(track, new ProgressDetector(progressMonitor));
 				} catch (ElevationException e) {
 					e.printStackTrace();
 					if (e.getMessage().equals("OVER_QUERY_LIMIT")) {
@@ -90,20 +72,39 @@ public class ElevationCorrectionAction implements PropertyChangeListener {
 					}
 				}
 			}
-			return null;
+		}
+		
+		@Override
+		public void run() {
+			try {
+				this.workOnTracks();
+			} finally {
+				this.progressMonitor.close();
+			}
 		}
 	}
 	
+	/**
+	 * Progress detector. Additional check if the user canceled the request. 
+	 * 
+	 * @author gerdba
+	 *
+	 */
 	private static class ProgressDetector implements IProgressDetector {
-		private final ElevationCorrectionTask elevationCorrectionTask;
+		private final ProgressMonitor progressMonitor;
 		
-		private ProgressDetector(ElevationCorrectionTask elevationCorrectionTask) {
-			this.elevationCorrectionTask = elevationCorrectionTask;
+		private ProgressDetector(ProgressMonitor progressMonitor) {
+			this.progressMonitor = progressMonitor;
 		}
 		
 		@Override
 		public void setProgress(int progress) {
-			elevationCorrectionTask.progagateProgress(progress);
+			progressMonitor.setProgress(progress);
+		}
+		
+		@Override
+		public boolean isCanceled() {
+			return progressMonitor.isCanceled();
 		}
 	}
 
