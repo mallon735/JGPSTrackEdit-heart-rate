@@ -6,6 +6,8 @@ import static org.junit.Assert.assertThat;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -15,6 +17,7 @@ import jgpstrackedit.data.Point;
 import jgpstrackedit.data.Track;
 import jgpstrackedit.map.elevation.ElevationException;
 import jgpstrackedit.map.elevation.IProgressDetector;
+import jgpstrackedit.map.elevation.PointWrapper;
 
 /**
  * Unit-Test for {@link MapQuestElevationCorrection}
@@ -48,7 +51,7 @@ public class MapQuestElevationCorrectionTest
 	@Test
 	public void testCompress() {
 		MapQuestElevationCorrection eapi = new MapQuestElevationCorrection();
-		Assert.assertThat(eapi.compress(track.getPoints()), is("{rcxHgpojAFc@Fe@??Gd@Gb@"));
+		Assert.assertThat(eapi.compress(getPoints(track)), is("{rcxHgpojAFc@Fe@??Gd@Gb@"));
 	}
 	
 	@Test
@@ -75,5 +78,13 @@ public class MapQuestElevationCorrectionTest
 		InputStream openUrlStream(String request) throws IOException {
 			return new ByteArrayInputStream(RESPONSE.getBytes());
 		}
+	}
+	
+	private List<PointWrapper> getPoints(Track track) {
+		List<PointWrapper> list = new LinkedList<>();
+		for(int i=0; i<track.getNumberPoints(); i++) {
+			list.add(new PointWrapper(track.getPoint(i), i));
+		}
+		return list;
 	}
 }

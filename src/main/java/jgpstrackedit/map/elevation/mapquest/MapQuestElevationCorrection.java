@@ -18,6 +18,7 @@ import jgpstrackedit.data.Track;
 import jgpstrackedit.map.elevation.ElevationException;
 import jgpstrackedit.map.elevation.IElevationCorrection;
 import jgpstrackedit.map.elevation.IProgressDetector;
+import jgpstrackedit.map.elevation.PointWrapper;
 
 /**
  * Implementation of the interface {@link IElevationCorrection}.
@@ -44,7 +45,7 @@ public class MapQuestElevationCorrection implements IElevationCorrection
 	@Override
 	public void updateElevation(Track track, IProgressDetector progressDetector) throws ElevationException {
 		try {
-			updateElevationThrow(track);
+			updateElevationThrow(track, progressDetector);
 		} catch(ElevationException ee) {
 			throw ee;
 		} catch (Exception e) {
@@ -52,15 +53,24 @@ public class MapQuestElevationCorrection implements IElevationCorrection
 		}
 	}
 	
-	void updateElevationThrow(Track track) throws Exception {
-		List<List<Point>> splittedList = splitUpTrack(track);
+	void updateElevationThrow(Track track, IProgressDetector progressDetector) throws Exception {
+		List<List<PointWrapper>> splittedList = splitUpTrack(track);
 		ObjectMapper mapper = new ObjectMapper();
 		
-		for(List<Point> list : splittedList) {
+		for(List<PointWrapper> list : splittedList) {
 			try(InputStream istream = openUrlStream(this.getRequest(list))) {
 				ElevationResponse elevationResponse = mapper.readValue(istream, ElevationResponse.class);
 				updatePoints(elevationResponse, list, track);
+				setProgress(track, progressDetector, list);
 			}
+		}
+	}
+
+	private void setProgress(Track track, IProgressDetector progressDetector, List<PointWrapper> list) {
+		if(list.size() > 0) {
+			int index = list.get(list.size()-1).getIndex();
+			System.out.println(Math.round((100F) * ((float)index/(float)track.getNumberPoints())));
+			progressDetector.setProgress(Math.round((100F) * ((float)index/(float)track.getNumberPoints())));
 		}
 	}
 	
@@ -69,7 +79,7 @@ public class MapQuestElevationCorrection implements IElevationCorrection
 		return url.openStream();
 	}
 	
-	void updatePoints(ElevationResponse elevationResponse, List<Point> list, Track track) throws ElevationException {
+	void updatePoints(ElevationResponse elevationResponse, List<PointWrapper> list, Track track) throws ElevationException {
 		if(elevationResponse.getInfo() != null && elevationResponse.getInfo().getStatuscode() != null && elevationResponse.getInfo().getStatuscode() > 0) {
 			throw new ElevationException(String.format("HTTP response is %d", elevationResponse.getInfo().getStatuscode())); 
 		}
@@ -77,7 +87,7 @@ public class MapQuestElevationCorrection implements IElevationCorrection
 		if(elevationResponse.getElevationProfile() != null && elevationResponse.getElevationProfile().size() == list.size()) {
 			int idx = 0;
 			for(ElevationProfile elevationProfile : elevationResponse.getElevationProfile()) {
-				list.get(idx).setElevation(Optional.ofNullable(elevationProfile.getHeight()).orElse(0));
+				list.get(idx).getPoint().setElevation(Optional.ofNullable(elevationProfile.getHeight()).orElse(0));
 				idx += 1;
 			}
 			track.hasBeenModified();
@@ -86,16 +96,15 @@ public class MapQuestElevationCorrection implements IElevationCorrection
 		}
 	}
 
-	List<List<Point>> splitUpTrack(Track track) {
-		
-		List<List<Point>> splittedList = new LinkedList<List<Point>>();
-		List<Point> pointList = new ArrayList<Point>(NUMBER_OF_POINTS_PER_REQUEST + 1);
+	List<List<PointWrapper>> splitUpTrack(Track track) {
+		List<List<PointWrapper>> splittedList = new LinkedList<List<PointWrapper>>();
+		List<PointWrapper> pointList = new ArrayList<PointWrapper>(NUMBER_OF_POINTS_PER_REQUEST + 1);
 		
 		for (int i = 0; i < track.getNumberPoints(); i++) {
-			pointList.add(track.getPoint(i));
+			pointList.add(new PointWrapper(track.getPoint(i), i));
 			if((i > 0) && (i % NUMBER_OF_POINTS_PER_REQUEST == 0)) {
 				splittedList.add(pointList);
-				pointList = new ArrayList<Point>(NUMBER_OF_POINTS_PER_REQUEST + 1);
+				pointList = new ArrayList<PointWrapper>(NUMBER_OF_POINTS_PER_REQUEST + 1);
 			}
 		}
 		
@@ -109,7 +118,7 @@ public class MapQuestElevationCorrection implements IElevationCorrection
 	 * @param points List of points
 	 * @return Request URL
 	 */
-	String getRequest(List<Point> points) {
+	String getRequest(List<PointWrapper> points) {
 		StringBuilder urlBuilder = new StringBuilder(BASE_URL);
 		urlBuilder.append(compress(points));
 		return urlBuilder.toString();
@@ -121,7 +130,7 @@ public class MapQuestElevationCorrection implements IElevationCorrection
 	 * See: https://developer.mapquest.com/documentation/common/encode-decode/
 	 * compress 
 	 */
-	String compress(List<Point> points) {
+	String compress(List<PointWrapper> points) {
 		return compress(points, 5);
 	}
 
@@ -131,7 +140,7 @@ public class MapQuestElevationCorrection implements IElevationCorrection
 	 * See: https://developer.mapquest.com/documentation/common/encode-decode/
 	 * compress 
 	 */
-	private String compress(List<Point> points, int pointPrecision) {
+	private String compress(List<PointWrapper> points, int pointPrecision) {
 		long oldLat = 0;
 		long oldLng = 0;
 		int len = points.size();
@@ -141,8 +150,8 @@ public class MapQuestElevationCorrection implements IElevationCorrection
 		double precision = Math.pow(10, pointPrecision);
 		while (index < len) {
 			// Round to N decimal places
-			long lat = Math.round(points.get(index).getLatitude() * precision);
-			long lng = Math.round(points.get(index).getLongitude() * precision);
+			long lat = Math.round(points.get(index).getPoint().getLatitude() * precision);
+			long lng = Math.round(points.get(index).getPoint().getLongitude() * precision);
 			index += 1;
 
 			// Encode the differences between the points

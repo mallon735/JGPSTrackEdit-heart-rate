@@ -27,6 +27,7 @@ public class ElevationCorrectionAction implements PropertyChangeListener {
 				International.getText("menu.Track.Update_Elevation"), 0, 100);
 		progressMonitor.setMillisToDecideToPopup(0);
 		progressMonitor.setMillisToPopup(0);
+		progressMonitor.setProgress(0);
 
 		task = new ElevationCorrectionTask(elevationCorrection, tracks, parentComponent);
 		task.addPropertyChangeListener(this);
@@ -47,6 +48,7 @@ public class ElevationCorrectionAction implements PropertyChangeListener {
 		}
 
 		if (task.isDone()) {
+			System.out.println("propertyChange task is done");
 			progressMonitor.close();
 		}
 	}
@@ -61,6 +63,7 @@ public class ElevationCorrectionAction implements PropertyChangeListener {
 		private final IElevationCorrection elevationCorrection;
 		private final List<Track> tracks;
 		private final Frame parentComponent;
+		private Thread thread;
 		
 		private ElevationCorrectionTask(IElevationCorrection elevationCorrection, List<Track> tracks, Frame parentComponent) {
 			this.elevationCorrection = elevationCorrection;
@@ -102,7 +105,6 @@ public class ElevationCorrectionAction implements PropertyChangeListener {
 		public void setProgress(int progress) {
 			elevationCorrectionTask.progagateProgress(progress);
 		}
-		
 	}
 
 	/**
@@ -112,7 +114,7 @@ public class ElevationCorrectionAction implements PropertyChangeListener {
 	 *
 	 */
 	private static class ProgressMonitorWithProgressNote extends ProgressMonitor {
-		public ProgressMonitorWithProgressNote(Component parentComponent, Object message, int min, int max) {
+		public ProgressMonitorWithProgressNote(Component parentComponent, String message, int min, int max) {
 			super(parentComponent, message, getProgressNote(0), min, max);
 		}
 

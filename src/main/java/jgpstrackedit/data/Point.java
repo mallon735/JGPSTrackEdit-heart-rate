@@ -4,31 +4,24 @@
  */
 package jgpstrackedit.data;
 
-import java.util.Formatter;
-
-import java.util.Locale;
-import jgpstrackedit.util.Parser;
 import jgpstrackedit.data.util.Geometry;
+import jgpstrackedit.util.Parser;
 
 
 /**
- *
+ * Single point of a track.
+ * 
  * @author hlutnik
  */
 public class Point {
-
-
-	private double longitude;
-    private double latitude;
-    private double elevation;
-    private String time;
+	private double longitude = 0D;
+    private double latitude = 0D;
+    private double elevation = 0D;
+    private String time = null;
     private String information = null;
     private transient double length;
 
-
-
     public Point() {
-
     }
 
     public Point(String longitude, String latitude, String elevation, String time, String information) {
@@ -203,16 +196,17 @@ public class Point {
     	return point.getElevation() - this.getElevation();
     	
     }
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
+	
+    /**
+     * Custom toString method.
+     */
 	@Override
 	public String toString() {
-		// TODO Auto-generated method stub
 		return "["+getLongitudeAsString()+";"+getLatitudeAsString()+"]";
 	}
 
-	/** Indicates wether the longitude and latitude coordinates are equals to 0.0
+	/** 
+	 * Indicates wether the longitude and latitude coordinates are equals to 0.0
 	 *  
 	 * @return true if coordinates are the longitude and latitude coordinates are equals to 0.0 
 	 */
