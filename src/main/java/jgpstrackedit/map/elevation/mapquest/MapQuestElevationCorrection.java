@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -32,6 +33,9 @@ public class MapQuestElevationCorrection implements IElevationCorrection
 {
 	private static final String BASE_URL = "http://open.mapquestapi.com/elevation/v1/profile?key=Fmjtd%7Cluubn96ynu%2C2s%3Do5-907guw&shapeFormat=cmp&outShapeFormat=none&latLngCollection=";
 	private static final int NUMBER_OF_POINTS_PER_REQUEST = 240;
+	private static int NO_DATA_ERROR = 601;
+	private static int PARTIAL_SUCCESS = 602;
+	private static int NO_HEIGHT_DATA = -32768;
 
 	/**
 	 * Updates the elevation of the given track using mapquest elevation api.
@@ -81,21 +85,69 @@ public class MapQuestElevationCorrection implements IElevationCorrection
 		return url.openStream();
 	}
 	
+	/**
+	 * Update points use the {@link ElevationResponse}. There are two errors to ignore. Status 601 and status 602.
+	 * 
+	 * @param elevationResponse mapquest elevation profile response 
+	 * @param list list of points
+	 * @param track track to correct the elevation
+	 * @throws ElevationException 
+	 */
 	void updatePoints(ElevationResponse elevationResponse, List<PointWrapper> list, Track track) throws ElevationException {
-		if(elevationResponse.getInfo() != null && elevationResponse.getInfo().getStatuscode() != null && elevationResponse.getInfo().getStatuscode() > 0) {
-			throw new ElevationException(String.format("HTTP response is %d", elevationResponse.getInfo().getStatuscode())); 
+		int status = getStatus(elevationResponse);
+		
+		if(status == NO_DATA_ERROR) {
+			return;
+		}
+		
+		if(status > 0 && status != PARTIAL_SUCCESS) {
+			throw new ElevationException(
+					String.format("Mapquest response: [%d] %s", status, getErrorInfo(elevationResponse)));
 		}
 		
 		if(elevationResponse.getElevationProfile() != null && elevationResponse.getElevationProfile().size() == list.size()) {
 			int idx = 0;
 			for(ElevationProfile elevationProfile : elevationResponse.getElevationProfile()) {
-				list.get(idx).getPoint().setElevation(Optional.ofNullable(elevationProfile.getHeight()).orElse(0));
+				if(hasHeight(elevationProfile)) {
+					list.get(idx).getPoint().setElevation(elevationProfile.getHeight());
+				}
 				idx += 1;
 			}
 			track.hasBeenModified();
 		} else {
 			System.err.println("The elevation correction response is null or has a wrong size!");
 		}
+	}
+	
+	private boolean hasHeight(ElevationProfile elevationProfile) {
+		if(elevationProfile.getHeight() == null) {
+			return false;
+		}
+		
+		if(elevationProfile.getHeight().intValue() == NO_HEIGHT_DATA) {
+			return false;
+		}
+		
+		return true;
+	}
+	
+	private int getStatus(ElevationResponse elevationResponse) {
+		if(elevationResponse.getInfo() != null && elevationResponse.getInfo().getStatuscode() != null) {
+			return elevationResponse.getInfo().getStatuscode();
+		}
+		return 0;
+	}
+	
+	private String getErrorInfo(ElevationResponse elevationResponse) {
+		if(elevationResponse.getInfo() != null 
+				&& elevationResponse.getInfo().getMessages() != null 
+				&& elevationResponse.getInfo().getMessages().size() > 0) {
+			return elevationResponse.getInfo().getMessages()
+					.stream()
+					.map(msg -> msg.toString())
+					.collect(Collectors.joining(","));
+		}
+		return "";
 	}
 
 	List<List<PointWrapper>> splitUpTrack(Track track) {
