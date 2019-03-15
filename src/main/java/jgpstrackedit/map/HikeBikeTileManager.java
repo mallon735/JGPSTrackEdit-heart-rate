@@ -11,7 +11,8 @@ public class HikeBikeTileManager extends AbstractOSMTileManager {
 
 	public HikeBikeTileManager() {
 		setMapName("HikeBikeMap");
-		setBaseURL("http://toolserver.org/tiles/hikebike");
+		// old URL: setBaseURL("http://toolserver.org/tiles/hikebike"); 
+		setBaseURL("http://a.tiles.wmflabs.org/hikebike"); 
 		setMaxZoom(18);
 	}
 	

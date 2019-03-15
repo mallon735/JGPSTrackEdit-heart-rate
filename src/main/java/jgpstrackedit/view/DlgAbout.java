@@ -26,7 +26,7 @@ public class DlgAbout extends JDialog {
 	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
 	
-	private static final String BUILDSTRING = "Release 1.7.0 20190313";
+	private static final String BUILDSTRING = "Release 1.6.4 Beta 20190315";
 
 	/**
 	 * Create the dialog.
@@ -48,8 +48,8 @@ public class DlgAbout extends JDialog {
 			JLabel txtrJgpstrackeditc = new JLabel();
 			txtrJgpstrackeditc.setText(
 					"<html>JGPSTrackEdit (c) 2012-2019 by Hubert Lutnik (hubert.lutnik@htl-klu.at)<br/>"
-					+ String.format("Release %s (%s)<br/><br/>", buildVersion, buildTime )
-					+ BUILDSTRING + "<br/><br/>"
+					//+ String.format("Release %s (%s)<br/><br/>", buildVersion, buildTime )
+					+ (buildVersion.equals("")?BUILDSTRING + "<br/><br/>":String.format("Release %s (%s)<br/><br/>", buildVersion, buildTime ))
 					+ "Usage for non commercial purposes only.<br/>"
 					+ "No guaranties!<br/><br/>"
 					+ "Thanks to GPSPrune for some ideas:<br/>"
