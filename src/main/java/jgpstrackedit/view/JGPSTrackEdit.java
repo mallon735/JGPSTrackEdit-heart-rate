@@ -1662,6 +1662,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 		mnMaps.add(rdbtnmntmMapquesthybride);
 		mapRadioButtons.add(rdbtnmntmMapquesthybride);
 
+		/*
 		mnMaps.addSeparator();
 		mnMaps.add(rdbtnmntmGooglemap);
 
@@ -1694,6 +1695,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 			}
 		});
 		mnMaps.add(rdbtnmntmGooglemapterrain);
+		*/
 		mnView.addSeparator();
 
 		chckbxmntmShowDayTour = new JCheckBoxMenuItem(
