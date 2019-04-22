@@ -145,6 +145,7 @@ public class Database extends AbstractTableModel implements TrackObserver {
 
 	public void reverseTrack(int index) {
 		tracks.get(index).reverse();
+		notifyDBObservers();
 	}
 
 	// TableModel Methods
@@ -248,6 +249,12 @@ public class Database extends AbstractTableModel implements TrackObserver {
 		// TODO Auto-generated method stub
 		notifyDBObservers();
 		fireTableDataChanged();
+	}
+
+	public void smoothTrackElevation(int index) {
+		tracks.get(index).smoothElevation();;
+		notifyDBObservers();
+		fireTableDataChanged();		
 	}
 
 }

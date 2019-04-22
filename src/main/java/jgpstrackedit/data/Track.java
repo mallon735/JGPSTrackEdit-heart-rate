@@ -1010,4 +1010,27 @@ public class Track {
 			return point;
 	}
 
+	/**
+	 * Performs a smoothing operation on elevations using weighted moving average algorithm.
+	 */
+	public void smoothElevation() {
+		if (points.size() > 5) {
+			for (int i=2; i< points.size()-2;i++) {
+				points.get(i).setElevation(weigthedMovingAverage(i));
+			}
+		}
+		
+	}
+
+	/**
+	 * Calculates the weighted average elevation of given point
+	 * @param pointIndex
+	 * @return weighted average elevation of given point
+	 */
+	private double weigthedMovingAverage(int pointIndex) {
+		return (points.get(pointIndex-2).getElevation() + points.get(pointIndex-1).getElevation() 
+				 + points.get(pointIndex).getElevation() + points.get(pointIndex+1).getElevation() + points.get(pointIndex+2).getElevation())/5.0;
+		//return (points.get(pointIndex-2).getElevation() + points.get(pointIndex-1).getElevation()*2 
+		//		 + points.get(pointIndex).getElevation()*3 + points.get(pointIndex+1).getElevation()*2 + points.get(pointIndex+2).getElevation())/9.0;
+	}
 }

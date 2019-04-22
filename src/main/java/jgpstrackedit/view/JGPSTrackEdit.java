@@ -468,6 +468,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 		exitMenuItem = new javax.swing.JMenuItem();
 		trackMenu = new javax.swing.JMenu();
 		jMenuItemReverse = new javax.swing.JMenuItem();
+		jMenuItemSmoothing = new javax.swing.JMenuItem();
 		helpMenu = new javax.swing.JMenu();
 		contentsMenuItem = new javax.swing.JMenuItem();
 		contentsMenuItem.addActionListener(new ActionListener() {
@@ -1300,6 +1301,12 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 				uiController.updateElevation();
 			}
 		});
+		jMenuItemSmoothing.setText(International.getText("menu.Track.Smoothing"));
+		jMenuItemSmoothing.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				jMenuItemSmoothingActionPerformed(evt);
+			}
+		});
 
 		mntmCompress = new JMenuItem(
 				International.getText("menu.Track.Compress") + "...");
@@ -1310,6 +1317,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 		});
 		trackMenu.add(mntmCompress);
 		trackMenu.add(mntmUpdateElevation);
+		trackMenu.add(jMenuItemSmoothing);
 
 		JMenuItem mntmCorrectPoints = new JMenuItem(
 				International.getText("menu.Track.Correct_points"));
@@ -2041,6 +2049,11 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 		uiController.reverseTrack();
 	}// GEN-LAST:event_jMenuItemReverseActionPerformed
 
+	private void jMenuItemSmoothingActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jMenuItemSmoothingActionPerformed
+		// TODO add your handling code here:
+		uiController.smoothTrackElevation();;
+	}// GEN-LAST:event_jMenuItemSmoothingActionPerformed
+
 	private void saveAsMenuItemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_saveAsMenuItemActionPerformed
 		// TODO add your handling code here:
 		uiController.saveAs();
@@ -2138,6 +2151,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 	private javax.swing.JButton jButtonSouth;
 	private javax.swing.JButton jButtonWest;
 	private javax.swing.JMenuItem jMenuItemReverse;
+	private javax.swing.JMenuItem jMenuItemSmoothing;
 	private javax.swing.JPanel jPanelstatusBar;
 	private javax.swing.JPanel jPanelMap;
 	private javax.swing.JScrollPane jScrollPaneTracksTable;

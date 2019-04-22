@@ -915,5 +915,14 @@ public class UIController implements Runnable {
 		
 	}
 
+	public void smoothTrackElevation() {
+		int[] selectedRows = form.getTracksTable().getSelectedRows();
+		for (int i = 0; i < selectedRows.length; i++) {
+			db.smoothTrackElevation(selectedRows[i]); 
+			form.setStateMessage("Track "
+					+ db.getTracks().get(selectedRows[i]).getName()
+					+ " smoothed");
+		}
+	}
 
 }

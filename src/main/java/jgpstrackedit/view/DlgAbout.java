@@ -26,7 +26,7 @@ public class DlgAbout extends JDialog {
 	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
 	
-	private static final String BUILDSTRING = "Release 1.6.4 Beta 20190315";
+	private static final String BUILDSTRING = "Release 1.6.5 20190416";
 
 	/**
 	 * Create the dialog.
