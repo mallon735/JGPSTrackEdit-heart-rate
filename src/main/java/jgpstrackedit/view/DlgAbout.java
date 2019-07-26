@@ -1,7 +1,9 @@
 package jgpstrackedit.view;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -46,6 +48,8 @@ public class DlgAbout extends JDialog {
 		contentPanel.setLayout(new GridLayout(1, 1));
 		{
 			JLabel txtrJgpstrackeditc = new JLabel();
+			txtrJgpstrackeditc.setBackground(new Color(211, 211, 211));
+ 			txtrJgpstrackeditc.setFont(new Font("Arial", Font.PLAIN, 12));
 			txtrJgpstrackeditc.setText(
 					"<html>JGPSTrackEdit (c) 2012-2019 by Hubert Lutnik (hubert.lutnik@htl-klu.at)<br/>"
 					//+ String.format("Release %s (%s)<br/><br/>", buildVersion, buildTime )

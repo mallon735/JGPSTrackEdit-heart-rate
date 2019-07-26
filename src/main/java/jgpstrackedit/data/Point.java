@@ -32,6 +32,14 @@ public class Point {
         setInformation(information);
     }
 
+    public Point(double longitude, double latitude, double elevation, String time, String information) {
+    	this.longitude = longitude;
+        this.latitude = latitude;
+        this.elevation = elevation;
+        setTime(time);
+        setInformation(information);
+    }
+    
     public Point(String longitude, String latitude, String elevation, String time) {
         setLongitude(longitude);
         setLatitude(latitude);
@@ -148,9 +156,9 @@ public class Point {
 
 	@Override
     public Point clone()  {
-        return new Point(getLongitudeAsString(),
-                              getLatitudeAsString(),
-                              getElevationAsString(),
+        return new Point(getLongitude(),
+                              getLatitude(),
+                              getElevation(),
                               getTime(),
                               getInformation());
     }
@@ -179,7 +187,7 @@ public class Point {
 
     }
 
-    /** Calculates the approximate distance (without proper consideration of the evaluation) to the given point
+    /** Calculates the approximate distance (without proper consideration of the evalation) to the given point
      * @param point point to which the distance is calculated
      * @return distance to the given point in km
      */

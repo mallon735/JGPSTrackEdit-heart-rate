@@ -31,6 +31,9 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableColumn;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import jgpstrackedit.control.UIController;
 import jgpstrackedit.data.Point;
 import jgpstrackedit.international.International;
@@ -38,6 +41,8 @@ import jgpstrackedit.util.Parser;
 import jgpstrackedit.view.Transform;
 
 public class GPSiesComDialog extends JDialog implements Runnable {
+	private static Logger logger = LoggerFactory.getLogger(GPSiesComDialog.class);
+	
 	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
 	private JTextField textFieldUser;
@@ -289,7 +294,6 @@ public class GPSiesComDialog extends JDialog implements Runnable {
 	}
 
 	protected void startLoading() {
-		// TODO Auto-generated method stub
 		progressBarLoading.setValue(0);
 		new Thread(this).start();
 
@@ -362,7 +366,7 @@ public class GPSiesComDialog extends JDialog implements Runnable {
 		
 		this.lastSearchUrl = urlString.toString();
 		this.loadedPage = 1;
-		System.out.println("GPSIES: " + this.lastSearchUrl);
+		logger.info("GPSIES: " + this.lastSearchUrl);
 		gpsiesResult = gpsiesGetResults(this.lastSearchUrl);
 		this.setTableModel(tableGPSiesResult, gpsiesResult);
 	}
@@ -433,13 +437,12 @@ public class GPSiesComDialog extends JDialog implements Runnable {
 			url = new URL(urlString);
 			parser.parse(url);
 		} catch (Throwable e) {
-			e.printStackTrace();
+			logger.error("Error while getting gpsies results!", e);
 		}
 		return handler.getResult();
 	}
 
 	protected void appendCountry(StringBuilder urlString) {
-		// TODO Auto-generated method stub
 		if (chckbxCountry.isSelected()) {
 			urlString.append("&country=");
 			urlString.append(comboBoxCountry.getSelectedItem());
@@ -461,12 +464,11 @@ public class GPSiesComDialog extends JDialog implements Runnable {
 			try {
 				Thread.sleep(3000);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.warn("Thread interrupted!");
 			}
 			String downloadURL = gpsiesResult.get(selectedRows[i])
 					.getDownloadlink();
-			System.out.println("GPSIES-Download: " + downloadURL);
+			logger.info("GPSIES-Download: " + downloadURL);
 			uiController.openTrack(downloadURL);
 			progressBarLoading.setValue((int)((i+1)*100/selectedRows.length));
 		}

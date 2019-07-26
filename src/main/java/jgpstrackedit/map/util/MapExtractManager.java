@@ -6,13 +6,15 @@ package jgpstrackedit.map.util;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.TreeMap;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import jgpstrackedit.data.Point;
 import jgpstrackedit.util.Parser;
@@ -23,8 +25,9 @@ import jgpstrackedit.util.Parser;
  * @author Hubert
  *
  */
-public class MapExtractManager {
-	
+public class MapExtractManager 
+{
+	private static Logger logger = LoggerFactory.getLogger(MapExtractManager.class);
 	private static TreeMap<String,MapExtract> mapExtracts = new TreeMap<String,MapExtract>();
 	
 	public static void add(MapExtract mapExtract) {
@@ -126,11 +129,8 @@ public class MapExtractManager {
             	mapExtractAsString = in.readLine();
             }
             in.close();
-    	} catch (FileNotFoundException e) {
-			// A MapExtracts.dat file does not exists
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (Exception e) {
+			logger.error("Cannot read map extract manager file!", e);
 		}
     }
     
@@ -142,18 +142,17 @@ public class MapExtractManager {
 				out.println(mapExtract.getName()+";"+mapExtract.getZoomLevel()+";"+
 			                mapExtract.getUpperLeftBoundary().getLongitudeAsString()+";"+
 			                mapExtract.getUpperLeftBoundary().getLatitudeAsString());
-				/*System.out.println(mapExtract.getName()+";"+mapExtract.getZoomLevel()+";"+
+				/*logger.info(mapExtract.getName()+";"+mapExtract.getZoomLevel()+";"+
 		                mapExtract.getUpperLeftBoundary().getLongitudeAsString()+";"+
 		                mapExtract.getUpperLeftBoundary().getLatitudeAsString());*/
 			}
 			out.close();
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error("Cannot save map extract manager file!", e);
 		}
 	}
 
 	public static MapExtract get(String selectedMapExtractName) {
-		// TODO Auto-generated method stub
 		return mapExtracts.get(selectedMapExtractName);
 	}
 

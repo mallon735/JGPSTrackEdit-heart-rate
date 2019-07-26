@@ -34,9 +34,9 @@ public class MapQuestElevationCorrectionStatus602Test
 	
 	@Before
 	public void setup() throws Exception {
-		final URL fileUrl = this.getClass().getResource("/pointlist.txt");
+		final URL fileUrl = this.getClass().getResource("/pointlist602.txt");
 		ASC ascTrackFile = new ASC();
-		track = ascTrackFile.openTrack(new File(fileUrl.getFile()));
+		track = ascTrackFile.openTrack(new File(fileUrl.getFile())).get(0);
 	}
 	
 	
@@ -55,7 +55,9 @@ public class MapQuestElevationCorrectionStatus602Test
 		
 		assertThat(track.getPoint(0).getElevation(), is(626D));
 		assertThat(track.getPoint(1).getElevation(), is(623D));
-		assertThat(track.getPoint(239).getElevation(), is(502D));
+		assertThat(track.getPoint(2).getElevation(), is(0D));
+		assertThat(track.getPoint(3).getElevation(), is(0D));
+		assertThat(track.getPoint(4).getElevation(), is(627D));
 	}
 	
 	private static class TestMapQuestElevationCorrection extends MapQuestElevationCorrection 

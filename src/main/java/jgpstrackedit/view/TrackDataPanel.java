@@ -1,20 +1,19 @@
 package jgpstrackedit.view;
 
-import javax.swing.JPanel;
-import java.awt.GridBagLayout;
-import javax.swing.JLabel;
-import java.awt.GridBagConstraints;
-import javax.swing.JTextField;
-import java.awt.Insets;
-import jgpstrackedit.data.Track;
-import jgpstrackedit.data.util.TourPlaner;
-import jgpstrackedit.util.Parser;
-import jgpstrackedit.data.TrackObserver;
 import java.awt.Dimension;
 import java.text.DecimalFormat;
+
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
 import jgpstrackedit.config.Configuration;
 import jgpstrackedit.config.ConfigurationObserver;
+import jgpstrackedit.data.Track;
+import jgpstrackedit.data.TrackObserver;
+import jgpstrackedit.data.util.TourPlaner;
 import jgpstrackedit.international.International;
+import jgpstrackedit.util.Parser;
 
 public class TrackDataPanel extends JPanel implements TrackObserver,ConfigurationObserver {
 
@@ -47,7 +46,10 @@ public class TrackDataPanel extends JPanel implements TrackObserver,Configuratio
 			this.track.removeTrackObserver(this);
 		}
 		this.track = track;
-		track.addTrackObserver(this);
+		
+		if (this.track != null) {
+			track.addTrackObserver(this);
+		}
 		initializeFields();
 	}
 
@@ -63,13 +65,23 @@ public class TrackDataPanel extends JPanel implements TrackObserver,Configuratio
 			textFieldDown.setText(df.format(track.getDownAltitudeDifference()));
 			textFieldMinElevation.setText(df.format(track.getLowestElevation()));
 			textFieldMaxElevation.setText(df.format(track.getHighestElevation()));
-			textFieldPoints.setText("" + points);
+			textFieldPoints.setText(Integer.toString(points));
 			textFieldDensity.setText(df.format(points / length));
 			textFieldDuration.setText(Parser.formatTimeHHMM(tourPlaner.tourTime()));
 			textFieldDrivingTime.setText(Parser.formatTimeHHMM(tourPlaner
 					.drivingTime()));
+		} else {
+			textFieldName.setText("");
+			textFieldLength.setText("");
+			textFieldUp.setText("");
+			textFieldDown.setText("");
+			textFieldMinElevation.setText("");
+			textFieldMaxElevation.setText("");
+			textFieldPoints.setText("");
+			textFieldDensity.setText("");
+			textFieldDuration.setText("");
+			textFieldDrivingTime.setText("");
 		}
-
 	}
 
 	/**

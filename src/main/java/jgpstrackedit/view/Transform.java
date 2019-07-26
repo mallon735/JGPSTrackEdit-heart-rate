@@ -182,16 +182,6 @@ public class Transform {
 	}
 	
 	/**
-	 * Transforms screen coordinates to the corresponding point of the map
-	 * @param screenX x-coordinate of screen
-	 * @param screenY y-coordinate of screen
-	 * @return A point containing the corresponding screen coordinates (latitude, longiude) of the map
-	 */
-	public static Point mapPoint(int screenX, int screenY) {
-		return new Point(mapLongitude(screenX),mapLatitude(screenY));
-	}
-
-	/**
 	 * Sets the new screen dimension. This method should be called after the
 	 * screen dimensions are changed (by the user). Internally the view
 	 * dimensions are changed. The new lower right point of the boundary

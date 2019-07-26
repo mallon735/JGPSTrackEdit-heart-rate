@@ -6,6 +6,7 @@ package jgpstrackedit.trackfile;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.List;
 
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -32,7 +33,7 @@ public interface TrackFile {
 	 * @throws ParserConfigurationException
 	 * @throws IOException
 	 */
-	public Track openTrack(File file) throws 	FileNotFoundException,
+	public List<Track> openTrack(File file) throws 	FileNotFoundException,
 													SAXException,
 													ParserConfigurationException,
 													IOException;

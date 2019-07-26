@@ -12,8 +12,11 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import jgpstrackedit.data.Point;
 import jgpstrackedit.data.Track;
+import jgpstrackedit.map.elevation.google.GoogleElevationCorrection;
 import jgpstrackedit.util.Parser;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
 /**
@@ -23,8 +26,9 @@ import org.xml.sax.SAXException;
  * @author Hubert
  * 
  */
-public class ElevationAPI {
-
+public class ElevationAPI 
+{
+	private static Logger logger = LoggerFactory.getLogger(ElevationAPI.class);
 	private StringBuilder elevationURL;
 	private boolean firstPoint;
 	private HashMap<String,Point> points;
@@ -99,7 +103,6 @@ public class ElevationAPI {
 	 * 
 	 */
 	protected void issueElevationRequest() throws ElevationException {
-
 		elevationURL.append("&sensor=false");
 		System.out.println(elevationURL.toString());
 		URL url;
@@ -122,18 +125,8 @@ public class ElevationAPI {
 				    point.setElevation(elevationResult.getElevation());
 				}
 			}
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SAXException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ParserConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (Exception e) {
+			logger.error("Cannot perform elevation request!", e);
 		}
 
 	}

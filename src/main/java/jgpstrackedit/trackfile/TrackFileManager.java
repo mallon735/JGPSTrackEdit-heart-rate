@@ -6,15 +6,21 @@ package jgpstrackedit.trackfile;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URL;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.xml.parsers.ParserConfigurationException;
 
-import jgpstrackedit.data.Track;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
+
+import jgpstrackedit.config.Configuration;
+import jgpstrackedit.data.Track;
+import jgpstrackedit.trackfile.kml.KML;
 
 /**
  * Manages opening and saving of trackfiles.
@@ -22,11 +28,41 @@ import org.xml.sax.SAXException;
  * @author Hubert
  * 
  */
-public class TrackFileManager {
-	
-	private static String lastMessage;
+public class TrackFileManager 
+{
+	private static Logger logger = LoggerFactory.getLogger(TrackFileManager.class);
 
+	private static boolean automaticColors = Configuration.getProperty("AUTOMATIC_COLORS").equals("1");
+	private static String lastMessage = null;
 	private static LinkedList<TrackFile> trackFiles = new LinkedList<TrackFile>();
+	
+	/**
+	 * Opens a KML Track from url.
+	 * 
+	 * @param url url to a kml track resource
+	 * @return Track
+	 * @throws IOException 
+	 * @throws ParserConfigurationException 
+	 * @throws SAXException 
+	 * @throws TrackFileException 
+	 */
+	public static List<Track> openKmlTrack(URL url) throws SAXException, ParserConfigurationException, IOException, TrackFileException {
+		setLastMessage(null);
+		final KML kmlImporter = new KML();
+		final List<Track> tracks = kmlImporter.openTrack(url);
+		
+		for(Track track : tracks) {
+			String fileName = "Imported KML File.kml";
+			if(track.getName() != null) {
+				fileName = track.getName() + ".kml";
+			}
+			File file = new File(fileName);
+			updateFileAndType(track, kmlImporter, file.getAbsolutePath());
+			postProcessTrack(track, file);
+		}
+		
+		return tracks;
+	}
 
 	/**
 	 * Opens the given trackfile. The determination of the current trackfile
@@ -37,18 +73,18 @@ public class TrackFileManager {
 	 * @param file
 	 *            trackfile to be opened
 	 * @return track Object containing the track
-	 * @throws FileNotFoundException
-	 * @throws IOException
+	 * @throws TrackFileException
 	 */
-	public static Track openTrack(File file) throws TrackFileException {
-		Track track = null;
-		setLastMessage("");
+	public static List<Track> openTrack(File file) throws TrackFileException {
+		List<Track> tracks = null;
+		setLastMessage(null);
+		
 		forloop: for (TrackFile trackFile : trackFiles) {
 			try {
-				System.out.println("\nTrackFileManager: trying to import "+trackFile.getTypeDescription());
-				track = trackFile.openTrack(file);
-				if (track != null && track.isValid()) {
-					updateFileAndType(track, trackFile, file.getAbsolutePath());
+				logger.info("TrackFileManager: trying to import "+trackFile.getTypeDescription());
+				tracks = trackFile.openTrack(file);
+				if (containsValidTracks(tracks)) {
+					updateFileAndType(tracks, trackFile, file.getAbsolutePath());
 					break forloop;
 				}
 				setLastMessage(trackFile.getOpenReadyMessage());
@@ -56,31 +92,58 @@ public class TrackFileManager {
 				throw new TrackFileException("Trackfile "
 						+ file.getAbsolutePath() + " not found!", e);
 			} catch (SAXException ex) {
-				// DEBUG
-				ex.printStackTrace();
+				logger.warn(String.format("Cannot open track %s", file.toString()), ex);
 			} catch (ParserConfigurationException ex) {
-				// DEBUG
-				ex.printStackTrace();
+				logger.warn(String.format("Cannot open track %s", file.toString()), ex);
 			} catch (IOException e) {
 				throw new TrackFileException("General file error", e);
 			} catch (NullPointerException e) {
-				// DEBUG
-				e.printStackTrace();
+				logger.warn(String.format("Cannot open track %s", file.toString()), e);
 			}
 
 		}
+		
+		for(Track track : tracks) {
+			postProcessTrack(track, file);
+		}
+		
+		return tracks;
+	}
+	
+	private static boolean containsValidTracks(List<Track> tracks) {
+		boolean valid = false;
+		if(tracks.size() > 0) {
+			valid = tracks.stream()
+						.allMatch(track -> track.isValid() == true);
+		}
+		return valid;
+	}
+
+	private static Track postProcessTrack(Track track, File file) throws TrackFileException {
 		if (track == null) {
 			throw new TrackFileException("Unknown trackfile type");
-		} else {
-			System.out.println("TrackFileManager: "+track.getTrackFileType()+" imported.");
+		} 
+		
+		if (track.getPoints() == null) {
+			throw new TrackFileException("Track import failed! No points!");
 		}
+		
+		if (track.getPoints().size() < 2) {
+			throw new TrackFileException(String.format("Track import failed! Current number of points: %d!", track.getPoints().size()));
+		}
+		
+		logger.info(String.format("TrackFileManager: \"%s\" (%s) imported!", file.toString(), track.getTrackFileType()));
 		
 		if(track.getName() == null) {
 			track.setName(file.getName());
 		}
 		
+		if(automaticColors) {
+			track.assignColor();
+		}
+		
+		track.setModified(false);
 		return track;
-
 	}
 	
 	/**
@@ -100,24 +163,35 @@ public class TrackFileManager {
 		
 		try {
 			String fileName = file.getAbsolutePath();
-			System.out.println("TrackFileManager.saveTrack: "+file.getAbsolutePath());
+			logger.info("TrackFileManager.saveTrack: " + file.getAbsolutePath());
 			if (!fileName.endsWith(trackFile.getTrackFileExtension())) {
 				fileName = fileName + "." + trackFile.getTrackFileExtension();
 				file = new File(fileName);
 			}
 			
 			updateFileAndType(track, trackFile, file.getAbsolutePath());
-			System.out.println("                            " + file.getAbsolutePath());
+			logger.info("TrackFileManager: file name and extension updated! " + file.getAbsolutePath());
 			trackFile.saveTrack(track, file);
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			throw new TrackFileException("Trackfile "+file.getAbsolutePath()+" could not be created",e);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			throw new TrackFileException("Error writing to trackfile "+file.getAbsolutePath(),e);
 		}
 	}
 
+	/**
+	 * Update the underlying track file name and the track file type.
+	 *  
+	 * @param tracks All parsed tracks.
+	 * @param trackFile The track file object.
+	 * @param fileName The given file name.
+	 */
+	private static void updateFileAndType(List<Track> tracks, TrackFile trackFile, String fileName) {
+		tracks.stream().forEach(track -> {
+			updateFileAndType(track, trackFile, fileName);
+		});
+	}
+	
 	/**
 	 * Update the underlying track file name and the track file type.
 	 *  
@@ -168,7 +242,7 @@ public class TrackFileManager {
 
 	/**
 	 * Adds a TrackFile object, capable of opening and saving of a dedicated
-	 * trackfile format.
+	 * track file format.
 	 * 
 	 * @param trackFile
 	 *            TrackFile object
@@ -178,10 +252,10 @@ public class TrackFileManager {
 	}
 
 	public static String getLastMessage() {
-		return lastMessage;
+		return Optional.ofNullable(lastMessage).orElse("");
 	}
 
-	public static void setLastMessage(String lastMessage) {
+	private static void setLastMessage(String lastMessage) {
 		TrackFileManager.lastMessage = lastMessage;
 	}
 	

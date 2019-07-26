@@ -27,6 +27,7 @@ public class GPXTrackHandlerImpl implements GPXTrackHandler {
     private Track track;
     private Point point;
     private boolean metadataFlag = false;
+    private boolean extensionsFlag = false;
 
     public void handle_gpsies_totalAscentMeter(final String data, final Attributes meta) throws SAXException {
         if (DEBUG) {
@@ -84,12 +85,20 @@ public class GPXTrackHandlerImpl implements GPXTrackHandler {
         if (DEBUG) {
             System.err.println("start_extensions: " + meta);
         }
+        extensionsFlag=true;
     }
 
     public void end_extensions() throws SAXException {
         if (DEBUG) {
             System.err.println("end_extensions()");
         }
+        extensionsFlag=false;
+    }
+    
+    public void handle_gxxcolor(final String data) throws SAXException{
+    	if (extensionsFlag){
+            track.setExtensionsColor(data);
+    	}
     }
 
     public void handle_time(final String data, final Attributes meta) throws SAXException {

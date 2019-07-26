@@ -1,16 +1,12 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/*
+/**
+ * 
  * JGPSTrackEdit.java
  *
  * Created on 08.06.2010, 20:32:46
  */
 package jgpstrackedit.view;
 
-/*
+/**
  * This software is copyright Hubert Lutnik 2012 and made available through the GNU GPL version 3,
  * see also http://www.gnu.org/copyleft/gpl.html.
  * Usage only for non commercial purposes.
@@ -29,10 +25,14 @@ import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.event.WindowEvent;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Properties;
 
 import javax.imageio.ImageIO;
 import javax.swing.ButtonGroup;
@@ -53,10 +53,12 @@ import javax.swing.JTextField;
 import javax.swing.JToolBar;
 import javax.swing.ListSelectionModel;
 import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.LineBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import jgpstrackedit.config.Configuration;
 import jgpstrackedit.config.ConfigurationObserver;
@@ -80,17 +82,17 @@ import jgpstrackedit.map.util.TileNumber;
 import jgpstrackedit.util.Parser;
 import jgpstrackedit.view.util.ColorEditor;
 import jgpstrackedit.view.util.ColorRenderer;
+import jgpstrackedit.view.util.FileDrop;
 
-/* TODO:
+/** 
+ * TODO:
  * AltitudeProfil, Sync selected Point to Map
- - Internationalisierung (Deutsch)
-
+ * Internationalisierung (Deutsch)
  */
-
 /**
  * JGPSTrackEdit is a tool for editing (gps) tracks and planing (multiple days)
  * tours. This class represent the main class, providing the main method.<br>
- * This software is copyright Hubert Lutnik 2012,2013,2014 and made available through the
+ * This software is copyright Hubert Lutnik 2012 and made available through the
  * GNU GPL version 3, see also http://www.gnu.org/copyleft/gpl.html. Usage only
  * for non commercial purposes.
  * 
@@ -98,12 +100,11 @@ import jgpstrackedit.view.util.ColorRenderer;
  */
 public class JGPSTrackEdit extends javax.swing.JFrame implements
 		ListSelectionListener, MouseListener, MouseMotionListener,
-		MouseWheelListener, ConfigurationObserver, KeyListener {
-
-	/**
-	 * 
-	 */
+		MouseWheelListener, ConfigurationObserver, KeyListener 
+{
+	private static Logger logger = LoggerFactory.getLogger(JGPSTrackEdit.class);
 	private static final long serialVersionUID = 1L;
+	
 	private TracksPanel tracksPanel;
 	private TrackPanel trackPanel;
 	private TrackDataPanel trackDataPanel;
@@ -146,7 +147,9 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 	private UnDoManager appendUnDo = null;
 	private JCheckBoxMenuItem chckbxmntmScale;
 	private boolean showScale = true;
-
+	private int selectedStartPointIndex;
+	private Track selectedTrack;
+	private int selectedEndPointIndex;
 	/**
 	 * Sets the variant of JGPSTrackEdit
 	 */
@@ -217,19 +220,16 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 				UIManager.setLookAndFeel(UIManager
 						.getCrossPlatformLookAndFeelClassName());
 			}
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (UnsupportedLookAndFeelException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (Exception e) {
+			logger.error("Exception while setting look and feel!", e);
 		}
+		
+		if(Configuration.getProperty("PROXY") != null && Configuration.getProperty("PROXYPORT") != null) {
+			Properties systemProperties = System.getProperties();
+			systemProperties.setProperty("http.proxyHost", Configuration.getProperty("PROXY"));
+			systemProperties.setProperty("http.proxyPort", Configuration.getProperty("PROXYPORT"));
+		}
+
 		TourPlaner.initConfig();
 		initComponents();
 		initGPSViews();
@@ -239,6 +239,12 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 		tracksPanel.addKeyListener(this);
 	}
 
+	
+	public UIController getUIController()
+	{
+		return uiController;
+	}
+	
 	/**
 	 * @return the appendUnDo
 	 */
@@ -260,7 +266,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 		jTablePoints.setDefaultEditor(String.class, new DefaultCellEditor(
 				new JTextField()));
 		jTablePoints.getSelectionModel().addListSelectionListener(this);
-		uiController = UIController.newUIController(db, this);
+		uiController = new UIController(db, this);
 		tracksPanel = new TracksPanel(tracksView);
 		tracksPanel.setPreferredSize(new Dimension(600, 450));
 		tracksPanel.addMouseListener(this);
@@ -278,7 +284,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 		Transform.setScreenDimension(getTracksPanel().getWidth(),
 				getTracksPanel().getHeight());
 		getTracksPanel()
-				.zoom(new MapExtract("XY", 9, "13.336978", "47.038977"));
+				.zoom(new MapExtract("XY", 9, "1.336978", "4.038977"));
 		if (Configuration.getBooleanProperty("SHOW_MAP_ON_STARTUP")) {
 			Transform.setScreenDimension(getTracksPanel().getWidth(),
 					getTracksPanel().getHeight());
@@ -312,6 +318,20 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 		popupTracksView.add(chckbxmntmMoveselectedpointmodeP);
 		popupTracksView.add(mntmEditPointP);
 		popupTracksView.addSeparator();
+		popupTracksView.add(mntmMarkTrackStartP);
+		popupTracksView.add(mntmMarkTrackEndP);
+		popupTracksView.add(mntmPrependTrackPartP);
+		popupTracksView.add(mntmInsertTrackPartP);
+		popupTracksView.add(mntmAppendTrackPartP);
+		popupTracksView.add(mntmDeleteTrackPartP);
+		popupTracksView.addSeparator();
+		popupTracksView.add(mntmMarkTrackStartP);
+		popupTracksView.add(mntmMarkTrackEndP);
+		popupTracksView.add(mntmPrependTrackPartP);
+		popupTracksView.add(mntmInsertTrackPartP);
+		popupTracksView.add(mntmAppendTrackPartP);
+		popupTracksView.add(mntmDeleteTrackPartP);
+		popupTracksView.addSeparator();
 		popupTracksView.add(chckbxmntmAppendModeP);
 		popupTracksView.add(chckbxmntmAppendRoutingModeP);
 		popupTracksView.add(mntmUndoAppendP);
@@ -335,8 +355,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 	protected void handleAppendModeChange() {
 		if (!appendMode && chckbxmntmAppendMode.isSelected()) {
 			if (appendUnDo == null)
-				appendUnDo = new UnDoManager(db.getTrackTableModel()
-						.getSelectedTrack());
+				appendUnDo = new UnDoManager();
 			chckbxmntmAppendRoutingMode.setSelected(false);
 			chckbxmntmAppendRoutingModeP.setSelected(false);
 			handleAppendRoutingModeChange();
@@ -368,8 +387,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 			tracksPanel.setCursor(Cursor
 					.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
 			if (appendUnDo == null)
-				appendUnDo = new UnDoManager(db.getTrackTableModel()
-						.getSelectedTrack());
+				appendUnDo = new UnDoManager();
 		}
 		if (appendRoutingMode && !chckbxmntmAppendRoutingMode.isSelected()) {
 			tracksPanel.setCursorText("", Color.BLUE);
@@ -1224,6 +1242,20 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 			}
 		});
 
+		mntmDelete_All= new JMenuItem(International.getText("menu.File.CloseAll"));
+		mntmDelete_All.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				uiController.deleteAll();
+			}
+		});
+
+		mntmDelete_All= new JMenuItem(International.getText("menu.File.CloseAll"));
+		mntmDelete_All.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				uiController.deleteAll();
+			}
+		});
+
 		mntmSaveToGpsiescom = new JMenuItem(International.getText("menu.File.Save_GPSies.com") + "...");
 		mntmSaveToGpsiescom.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -1232,6 +1264,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 		});
 		fileMenu.add(mntmSaveToGpsiescom);
 		fileMenu.add(mntmDelete_1);
+		fileMenu.add(mntmDelete_All);
 		fileMenu.addSeparator();
 		
 		mntmSaveMapView = new JMenuItem(International.getText("menu.File.Save_Map_View_as_Image") + "...");
@@ -1297,21 +1330,34 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 		trackMenu.add(mntmMerge);
 		trackMenu.addSeparator();
 
-		JMenuItem mntmUpdateElevation = new JMenuItem(
+		final JMenuItem mntmUpdateElevation = new JMenuItem(
 				International.getText("menu.Track.Update_Elevation"));
 		mntmUpdateElevation.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				uiController.updateElevation();
 			}
 		});
+		trackMenu.add(mntmUpdateElevation);
+		
 		jMenuItemSmoothing.setText(International.getText("menu.Track.Smoothing"));
 		jMenuItemSmoothing.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				jMenuItemSmoothingActionPerformed(evt);
 			}
 		});
+		trackMenu.add(jMenuItemSmoothing);
 
-		mntmCompress = new JMenuItem(
+		final JMenuItem mntmUpdateTimeStamps = new JMenuItem(
+				International.getText("menu.Track.Update_TimeStamps"));
+		mntmUpdateTimeStamps.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				uiController.updateTimeStamps();
+			}
+		});
+		trackMenu.add(mntmUpdateTimeStamps);
+
+
+		final JMenuItem  mntmCompress = new JMenuItem(
 				International.getText("menu.Track.Compress") + "...");
 		mntmCompress.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -1319,8 +1365,6 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 			}
 		});
 		trackMenu.add(mntmCompress);
-		trackMenu.add(mntmUpdateElevation);
-		trackMenu.add(jMenuItemSmoothing);
 
 		JMenuItem mntmCorrectPoints = new JMenuItem(
 				International.getText("menu.Track.Correct_points"));
@@ -1468,6 +1512,108 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 		mnPoints.add(mntmUndoAppend);
 		mnPoints.add(mntmInsertAdjacentPoints);
 		mnPoints.addSeparator();
+
+		mntmMarkTrackStart = new JMenuItem(International.getText("menu.Point.Start_Point"));
+		mntmMarkTrackStart.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				mntmStartPointActionPerformed(e);
+			}
+		});
+		mntmMarkTrackStartP = new JMenuItem(International.getText("menu.Point.Start_Point"));
+		mntmMarkTrackStartP.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				mntmStartPointActionPerformed(e);
+			}
+		});
+
+		mntmMarkTrackEnd = new JMenuItem(International.getText("menu.Point.End_Point"));
+		mntmMarkTrackEnd.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				mntmEndPointActionPerformed(e);
+			}
+		});
+		mntmMarkTrackEnd.setEnabled(false);
+		mntmMarkTrackEndP = new JMenuItem(International.getText("menu.Point.End_Point"));
+		mntmMarkTrackEndP.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				mntmEndPointActionPerformed(e);
+			}
+		});
+		mntmMarkTrackEndP.setEnabled(false);
+
+		mntmPrependTrackPart = new JMenuItem(International.getText("menu.Point.Prepend_Track_Part"));
+		mntmPrependTrackPart.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				mntmPrependTrackActionPerformed(e);
+			}
+		});
+		mntmPrependTrackPart.setEnabled(false);
+
+		mntmPrependTrackPartP = new JMenuItem(International.getText("menu.Point.Prepend_Track_Part"));
+		mntmPrependTrackPartP.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				mntmPrependTrackActionPerformed(e);
+			}
+		});
+		mntmPrependTrackPartP.setEnabled(false);
+
+		mntmInsertTrackPart = new JMenuItem(International.getText("menu.Point.Insert_Track_Part"));
+		mntmInsertTrackPart.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				mntmInsertTrackActionPerformed(e);
+			}
+		});
+		mntmInsertTrackPart.setEnabled(false);
+
+		mntmInsertTrackPartP = new JMenuItem(International.getText("menu.Point.Insert_Track_Part"));
+		mntmInsertTrackPartP.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				mntmInsertTrackActionPerformed(e);
+			}
+		});
+		mntmInsertTrackPartP.setEnabled(false);
+
+		mntmAppendTrackPart = new JMenuItem(International.getText("menu.Point.Append_Track_Part"));
+		mntmAppendTrackPart.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				mntmAppendTrackActionPerformed(e);
+			}
+		});
+		mntmAppendTrackPart.setEnabled(false);
+
+		mntmAppendTrackPartP = new JMenuItem(International.getText("menu.Point.Append_Track_Part"));
+		mntmAppendTrackPartP.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				mntmAppendTrackActionPerformed(e);
+			}
+		});
+		mntmAppendTrackPartP.setEnabled(false);
+
+		mntmDeleteTrackPart = new JMenuItem(International.getText("menu.Point.Delete_Track_Part"));
+		mntmDeleteTrackPart.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				mntmDeleteTrackActionPerformed(e);
+			}
+		});
+		mntmDeleteTrackPart.setEnabled(false);
+
+		mntmDeleteTrackPartP = new JMenuItem(International.getText("menu.Point.Delete_Track_Part"));
+		mntmDeleteTrackPartP.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				mntmDeleteTrackActionPerformed(e);
+			}
+		});
+		mntmDeleteTrackPartP.setEnabled(false);
+
+		mnPoints.add(mntmMarkTrackStart);
+		mnPoints.add(mntmMarkTrackEnd);
+		mnPoints.add(mntmPrependTrackPart);
+		mnPoints.add(mntmInsertTrackPart);
+		mnPoints.add(mntmAppendTrackPart);
+		mnPoints.add(mntmDeleteTrackPart);
+		mnPoints.addSeparator();
+
+
 		mnPoints.add(mntmDelete);
 
 		chckbxmntmDeleteMode = new JCheckBoxMenuItem(
@@ -1503,6 +1649,8 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 				mntmEditPointActionPerformed(e);
 			}
 		});
+
+
 
 		mntmEditPoint = new JMenuItem("Edit Point");
 		mntmEditPoint.addActionListener(new ActionListener() {
@@ -1914,7 +2062,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 		try {
 			this.setIconImage(ImageIO.read(this.getClass().getResource("/jgpstrackedit/view/icon/Radweg.png")));
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("Exception while setting icon image!", e);
 		}
 	}
 
@@ -1972,7 +2120,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 					dialog.getMergeTrack(), dialog.getTrackName());
 
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error("Exception while merging trakcs!", ex);
 		}
 
 	}
@@ -1990,7 +2138,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 					dialog.getNumberPoints(), dialog.getSplitLength());
 
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error("Exception while splitting track!", ex);
 		}
 
 	}
@@ -2112,14 +2260,43 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 	}
 
 	/**
+	 * MAIN program start
+	 * 
 	 * @param args
 	 *            the command line arguments
 	 */
 	public static void main(String args[]) {
 		java.awt.EventQueue.invokeLater(new Runnable() {
-
 			public void run() {
 				JGPSTrackEdit w = new JGPSTrackEdit();
+				new FileDrop(w, true, new FileDrop.Listener() {
+					public void filesDropped(File[] files) {
+						for (int i = 0; i < files.length; i++) {
+							w.getUIController().openTrack(files[i]);
+							try {
+								// thread to sleep for 1000 milliseconds
+								Thread.sleep(400);
+							} catch (Exception e) {
+							}
+							w.repaint();
+						} // end for: through each dropped file
+					} // end filesDropped
+				}); // end FileDrop.Listener
+
+				Arrays.asList(args)
+					.stream()
+					.map(arg -> new File(arg))
+					.filter(file -> file.exists() && file.canRead())
+					.forEach(file -> {
+						w.getUIController().openTrack(file);
+						try {
+							// thread to sleep for 1000 milliseconds
+							Thread.sleep(400);
+						} catch (Exception e) {
+						}
+						w.repaint();
+					});
+				
 				w.setVisible(true);
 				if (Configuration.getBooleanProperty("SHOW_HELP_ON_STARTUP")) {
 					w.handleHelp();
@@ -2131,7 +2308,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 
 	protected void handleUpdateRequest() {
 		// Warning: month are counted from 0! (February == 1)
-		GregorianCalendar updateDay = new GregorianCalendar(2016, 6, 27);
+		GregorianCalendar updateDay = new GregorianCalendar(2014, 5, 18);
 		GregorianCalendar today = new GregorianCalendar();
 		if (!Configuration.getBooleanProperty("NOUPDATEREQUEST")
 				&& updateDay.get(Calendar.YEAR) <= today.get(Calendar.YEAR)
@@ -2191,6 +2368,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 	private JMenuItem mntmSplit;
 	private JMenuItem mntmMerge;
 	private JMenuItem mntmDelete_1;
+	private JMenuItem mntmDelete_All;
 	private JMenu mnMaps;
 	private JRadioButtonMenuItem rdbtnmntmNone;
 	private JRadioButtonMenuItem rdbtnmntmOpenstreetmapmapnik;
@@ -2222,7 +2400,6 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 	private JMenuItem mntmShortCut;
 	private JMenuItem mntmShortCutP;
 	private JMenuItem mntmRemoveInvalidPoints;
-	private JMenuItem mntmCompress;
 	private JButton btnNewTrack;
 	private JButton btnReverseTrack;
 	private JButton btnSplitTrack;
@@ -2261,6 +2438,18 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 	private JMenuItem mntmSaveToGpsiescom;
 	private JMenuItem mntmSaveMapView;
 	private JMenuItem mntmSaveAltitudeProfile;
+	private JMenuItem mntmMarkTrackStart;
+	private JMenuItem mntmMarkTrackEnd;
+	private JMenuItem mntmAppendTrackPart;
+	private JMenuItem mntmPrependTrackPart;
+	private JMenuItem mntmInsertTrackPart;
+	private JMenuItem mntmDeleteTrackPart;
+	private JMenuItem mntmMarkTrackStartP;
+	private JMenuItem mntmMarkTrackEndP;
+	private JMenuItem mntmDeleteTrackPartP;
+	private JMenuItem mntmAppendTrackPartP;
+	private JMenuItem mntmPrependTrackPartP;
+	private JMenuItem mntmInsertTrackPartP;
 
 	// End of variables declaration//GEN-END:variables
 
@@ -2296,8 +2485,12 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 				selectedRowTracksTable = selectedRow;
 				tracksPanel.repaint();
 			} else if (selectedRowTracksTable != -1) {
-				jTableTracks.addRowSelectionInterval(selectedRowTracksTable,
+				if(db.getTrackNumber() > 0 && db.getTrack(selectedRowTracksTable) != null) {
+					jTableTracks.addRowSelectionInterval(selectedRowTracksTable,
 						selectedRowTracksTable);
+				} else {
+					selectedRowTracksTable = -1;
+				}
 			}
 		}
 		if (e.getSource() == jTablePoints.getSelectionModel()) {
@@ -2323,7 +2516,6 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 		currentScreenY = screenY;
 		tracksPanel.setMousePosition(screenX, screenY);
 		int selectedPointIndex = -1;
-		if (e.getClickCount() == 1) {
 		if (tracksView.getSelectedTrackView() != null) {
 			PointView selectedPoint = tracksView.getSelectedTrackView()
 					.getPointAt(screenX, screenY);
@@ -2341,8 +2533,8 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 		 */
 		if (selectedPointIndex != -1) {
 			// Set Row Selection Intervall of jTablePoints....
-			jTablePoints.setRowSelectionInterval(selectedPointIndex,
-					selectedPointIndex);
+			jTablePoints.getSelectionModel().setSelectionInterval(selectedPointIndex,selectedPointIndex);
+			jTablePoints.scrollRectToVisible(jTablePoints.getCellRect(selectedPointIndex, 0, true));
 			if (moveSelectedPointMode) {
 				handleMoveSelectedPoint();
 				moveSelectedPointModeStarted = true;
@@ -2385,8 +2577,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 			if (tileSelectionMode == MODE_WAIT_FIRST_POINT) {
 				tileSelectionMode = MODE_WAIT_SECOND_POINT;
 				tracksPanel.setCursorText("Define lower right", Color.RED);
-				System.out
-						.println("tileSelectionMode = MODE_WAIT_SECOND_POINT");
+				logger.info("tileSelectionMode = MODE_WAIT_SECOND_POINT");
 				tileSelectFirstPoint = new Point(longitude, latitude);
 				tracksPanel.setRectanglePoint(tileSelectFirstPoint);
 			} else if (tileSelectionMode == MODE_WAIT_SECOND_POINT) {
@@ -2410,15 +2601,6 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 			tracksPanel.addBondPoint(distanceMeasurementFirstPoint);
 			tracksPanel.setCursorText("0.000km", Color.BLUE);
 			repaint();
-		}
-		} else if (e.getClickCount() == 2) {
-			// Double Click, select track
-			Track selTrack = db.getTrack(Transform.mapPoint(screenX, screenY));
-			if (selTrack != null) {
-				setSelectedTrack(selTrack);
-				int index = db.getTrack(selTrack);
-				jTableTracks.setRowSelectionInterval(index, index);
-			}
 		}
 
 		lastScreenX = screenX;
@@ -2484,7 +2666,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 		int screenX = e.getX();
 		int screenY = e.getY();
 		/*
-		 * System.out.println("JGPSTRackEdit: mouseDragged screenX=" + screenX +
+		 * logger.info("JGPSTRackEdit: mouseDragged screenX=" + screenX +
 		 * " screenY=" + screenY + " lastDraggedX=" + lastDraggedX +
 		 * " lastDraggedY=" + lastDraggedY);
 		 */
@@ -2532,7 +2714,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 	public void mouseWheelMoved(MouseWheelEvent e) {
 		// TODO Auto-generated method stub
 		/*
-		 * System.out.println("JGPSTRackEdit: mouseWheelMoved=" +
+		 * logger.info("JGPSTRackEdit: mouseWheelMoved=" +
 		 * e.getWheelRotation());
 		 */
 		if (e.getWheelRotation() < 0) {
@@ -2562,7 +2744,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 	@Override
 	public void keyPressed(KeyEvent key) {
 		// TODO Auto-generated method stub
-		// System.out.println("Key Pressed: " + key.getKeyCode());
+		// logger.info("Key Pressed: " + key.getKeyCode());
 		if (key.getKeyCode() == KeyEvent.VK_ESCAPE) {
 			if (pointDeleteMode) {
 				chckbxmntmDeleteModeP.setState(false);
@@ -2664,8 +2846,8 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 						.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
 
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.error("Exception while loading tiles!", e);
+				
 				JOptionPane.showMessageDialog(this, "Error opening file" + " "
 						+ dialog.getFilePath(), "File Open Error",
 						JOptionPane.ERROR_MESSAGE);
@@ -2707,9 +2889,9 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 					tileDownload.saveToFile(fileSaveChooser.getSelectedFile()
 							.getPath());
 
-				} catch (FileNotFoundException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+				} catch (FileNotFoundException exc) {
+					logger.error("Exception while saving tiles!", exc);
+					
 					JOptionPane.showMessageDialog(this,
 							"Error writing to file"
 									+ " "
@@ -2719,7 +2901,6 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 				}
 			}
 		}
-
 	}
 
 	protected void mntmStopAndSaveActionPerformed(ActionEvent arg0) {
@@ -2760,9 +2941,9 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 						t.start();
 
 					}
-				} catch (FileNotFoundException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+				} catch (FileNotFoundException exc) {
+					logger.error("Exception while saving files!", exc);
+					
 					JOptionPane.showMessageDialog(this,
 							"Error writing to file"
 									+ " "
@@ -2779,10 +2960,9 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 				Transform.getLowerRightBoundary());
 	}
 
-	@SuppressWarnings("deprecation")
 	protected void mntmAddAreaActionPerformed(ActionEvent arg0) {
 		tileSelectionMode = MODE_WAIT_FIRST_POINT;
-		System.out.println("tileSelectionMode = MODE_WAIT_FIRST_POINT");
+		logger.info("tileSelectionMode = MODE_WAIT_FIRST_POINT");
 		tracksPanel.setCursorText("Define upper left corner", Color.RED);
 		repaint();
 	}
@@ -2806,6 +2986,9 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 	}
 
 	protected void mntmEditPointActionPerformed(ActionEvent e) {
+		if( null == getTracksView().getSelectedTrackView()){
+			return;
+		}
 		Point selectedPoint = getTracksView().getSelectedTrackView()
 				.getSelectedPoint();
 		if (selectedPoint != null) {
@@ -2817,7 +3000,195 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 			dialog.setVisible(true);
 			repaint();
 		}
+	}
 
+	protected void mntmStartPointActionPerformed(ActionEvent e) {
+		if( null == getTracksView().getSelectedTrackView()){
+			return;
+		}
+		Point selectedPoint = getTracksView().getSelectedTrackView().getSelectedPoint();
+		if (selectedPoint != null) {
+			int selectedPointIndex = getTracksView().getSelectedTrackView().getSelectedPointIndex();
+			if (selectedPointIndex != -1 ) {
+				selectedStartPointIndex = selectedPointIndex;
+				selectedEndPointIndex = -1;
+				selectedTrack = getTracksView().getSelectedTrackView().getTrack();
+
+				mntmAppendTrackPart.setEnabled(false);
+				mntmPrependTrackPart.setEnabled(false);
+				mntmInsertTrackPart.setEnabled(false);
+				mntmDeleteTrackPart.setEnabled(false);
+				mntmMarkTrackEnd.setEnabled(true);
+				mntmDeleteTrackPartP.setEnabled(false);
+				mntmAppendTrackPartP.setEnabled(false);
+				mntmPrependTrackPartP.setEnabled(false);
+				mntmInsertTrackPartP.setEnabled(false);
+				mntmMarkTrackEndP.setEnabled(true);
+			}
+		}
+	}
+
+	protected void mntmEndPointActionPerformed(ActionEvent e) {
+		if( null == getTracksView().getSelectedTrackView()){
+			return;
+		}
+		Track tmpselectedTrack= getTracksView().getSelectedTrackView().getTrack();
+		if( selectedTrack != tmpselectedTrack ){
+			return;
+		}
+		Point selectedPoint = getTracksView().getSelectedTrackView().getSelectedPoint();
+		if (selectedPoint != null) {
+			int selectedPointIndex = getTracksView().getSelectedTrackView().getSelectedPointIndex();
+			if (selectedPointIndex != -1 ) {
+				selectedEndPointIndex = selectedPointIndex;
+				mntmAppendTrackPart.setEnabled(true);
+				mntmPrependTrackPart.setEnabled(true);
+				mntmInsertTrackPart.setEnabled(true);
+				mntmDeleteTrackPart.setEnabled(true);
+				mntmDeleteTrackPartP.setEnabled(true);
+				mntmAppendTrackPartP.setEnabled(true);
+				mntmPrependTrackPartP.setEnabled(true);
+				mntmInsertTrackPartP.setEnabled(true);
+			}
+		}
+	}
+
+	protected ArrayList<Point> trackpartHelper(boolean sametrack ){
+
+		if( null == getTracksView().getSelectedTrackView()){
+			return null;
+		}
+		Track tmpselectedTrack= getTracksView().getSelectedTrackView().getTrack();
+
+		if( selectedTrack == tmpselectedTrack ){
+			if( !sametrack ){
+				return null;
+			}
+		}else{
+			if( sametrack ){
+				return null;
+			}
+		}
+		ArrayList<Point> points = new ArrayList<Point>();
+		if( selectedEndPointIndex > selectedStartPointIndex ){
+			for( int index=selectedStartPointIndex; index <= selectedEndPointIndex; index++){
+				points.add( selectedTrack.getPoint(index).clone() );
+			}
+		}
+		if( selectedEndPointIndex < selectedStartPointIndex ){
+			for( int index=selectedStartPointIndex; index >= selectedEndPointIndex; index--){
+				points.add( selectedTrack.getPoint(index).clone()  );
+			}
+		}
+
+		return points;
+	}
+
+	protected void mntmPrependTrackActionPerformed(ActionEvent e) {
+		ArrayList<Point> points = trackpartHelper(false);
+		if( null != points ){
+			Track tmpselectedTrack= getTracksView().getSelectedTrackView().getTrack();
+			tmpselectedTrack.insert(0, points);
+			if( null == appendUnDo ){
+			  appendUnDo = new UnDoManager();
+			}
+			appendUnDo.add(tmpselectedTrack, points,true);
+			
+			mntmAppendTrackPart.setEnabled(false);
+			mntmPrependTrackPart.setEnabled(false);
+			mntmInsertTrackPart.setEnabled(false);
+			mntmMarkTrackEnd.setEnabled(false);
+			mntmDeleteTrackPart.setEnabled(false);
+			mntmAppendTrackPartP.setEnabled(false);
+			mntmDeleteTrackPartP.setEnabled(false);
+			mntmPrependTrackPartP.setEnabled(false);
+			mntmInsertTrackPartP.setEnabled(false);
+			mntmMarkTrackEndP.setEnabled(false);
+			repaint();
+		}
+	}
+
+	protected void mntmInsertTrackActionPerformed(ActionEvent e) {
+		ArrayList<Point> points = trackpartHelper(false);
+		if( null != points ){
+			Point selectedPoint = getTracksView().getSelectedTrackView().getSelectedPoint();
+			if (selectedPoint != null) {
+				int selectedPointIndex = getTracksView().getSelectedTrackView().getSelectedPointIndex();
+				if (selectedPointIndex != -1 ) {
+					Track tmpselectedTrack= getTracksView().getSelectedTrackView().getTrack();
+					tmpselectedTrack.insert(selectedPointIndex +1, points);
+					if( null == appendUnDo ){
+					  appendUnDo = new UnDoManager();
+					}
+					appendUnDo.add(tmpselectedTrack, points,true);
+					
+					mntmAppendTrackPart.setEnabled(false);
+					mntmPrependTrackPart.setEnabled(false);
+					mntmInsertTrackPart.setEnabled(false);
+					mntmMarkTrackEnd.setEnabled(false);
+					mntmDeleteTrackPart.setEnabled(false);
+					mntmAppendTrackPartP.setEnabled(false);
+					mntmDeleteTrackPartP.setEnabled(false);
+					mntmPrependTrackPartP.setEnabled(false);
+					mntmInsertTrackPartP.setEnabled(false);
+					mntmMarkTrackEndP.setEnabled(false);
+					repaint();
+				}
+			}
+		}
+	}
+
+	protected void mntmAppendTrackActionPerformed(ActionEvent e) {
+		ArrayList<Point> points = trackpartHelper(false);
+		if( null != points ){
+			Track tmpselectedTrack= getTracksView().getSelectedTrackView().getTrack();
+			tmpselectedTrack.add(points);
+			if( null == appendUnDo ){
+			  appendUnDo = new UnDoManager();
+			}
+			appendUnDo.add(tmpselectedTrack, points,true);
+			
+			mntmAppendTrackPart.setEnabled(false);
+			mntmPrependTrackPart.setEnabled(false);
+			mntmInsertTrackPart.setEnabled(false);
+			mntmMarkTrackEnd.setEnabled(false);
+			mntmDeleteTrackPart.setEnabled(false);
+			mntmAppendTrackPartP.setEnabled(false);
+			mntmDeleteTrackPartP.setEnabled(false);
+			mntmPrependTrackPartP.setEnabled(false);
+			mntmInsertTrackPartP.setEnabled(false);
+			mntmMarkTrackEndP.setEnabled(false);
+			repaint();
+		}
+	}
+
+	protected void mntmDeleteTrackActionPerformed(ActionEvent e){
+		ArrayList<Point> points = trackpartHelper(true);
+		if( null != points ){
+			Track tmpselectedTrack= getTracksView().getSelectedTrackView().getTrack();
+			
+			if( null == appendUnDo ){
+			  appendUnDo = new UnDoManager();
+			}
+			appendUnDo.add(tmpselectedTrack, points,false,selectedStartPointIndex);
+			
+			for (Point point : points) {
+				tmpselectedTrack.removeOnly(point);
+			}
+			tmpselectedTrack.notifyObservers();
+			
+			mntmAppendTrackPart.setEnabled(false);
+			mntmPrependTrackPart.setEnabled(false);
+			mntmInsertTrackPart.setEnabled(false);
+			mntmMarkTrackEnd.setEnabled(false);
+			mntmDeleteTrackPart.setEnabled(false);
+			mntmAppendTrackPartP.setEnabled(false);
+			mntmDeleteTrackPartP.setEnabled(false);
+			mntmPrependTrackPartP.setEnabled(false);
+			mntmInsertTrackPartP.setEnabled(false);
+			mntmMarkTrackEndP.setEnabled(false);
+			repaint();
+		}
 	}
 	
 	protected void mntmSaveMapViewActionPerformed(ActionEvent arg0) {

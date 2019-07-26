@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.TreeSet;
 
+import jgpstrackedit.data.util.ColorUtils;
 import jgpstrackedit.data.util.Geometry;
 import jgpstrackedit.data.util.TrackUtil;
 
@@ -24,8 +25,10 @@ import jgpstrackedit.data.util.TrackUtil;
  * 
  * @author hlutnik
  */
-public class Track {
-
+public class Track 
+{
+	private static ColorUtils colorConverter = new ColorUtils();
+	
 	private ArrayList<Point> points = new ArrayList<Point>();
 	private Point leftUpperBoundary = null;
 	private Point rightLowerBoundary = null;
@@ -43,8 +46,10 @@ public class Track {
 	private boolean modified = false;
 	
 	private Color color;
+	private boolean colorSet = false;
 	private List<TrackObserver> trackObservers = Collections.synchronizedList(new ArrayList<TrackObserver>());
 
+	
 	private transient TreeSet<Integer> compressedTrackIndizes;
 	
 	/**
@@ -188,8 +193,29 @@ public class Track {
 		return color;
 	}
 
+
 	public void setColor(Color color) {
 		this.color = color;
+		colorSet = true;
+	}
+
+	public String getExtensionsColor() {
+		return colorConverter.getColorNameFromColor(color);
+	}
+
+	public void setExtensionsColor(String color) {
+		this.color = colorConverter.getColorFromName(color);
+		colorSet = true;
+	}
+
+	public void assignColor(){
+		if( false == colorSet){
+			this.color = colorConverter.getNextColor();
+		}
+	}
+	
+	public static void resetColors() {
+		colorConverter.reset();
 	}
 
 	public String getLinkText() {
@@ -468,6 +494,14 @@ public class Track {
 		notifyTrackObservers();
 	}
 
+	public void removeOnly(Point point) {
+		points.remove(point);
+	}
+	
+	public void notifyObservers() {
+		checkBoundaries();
+		notifyTrackObservers();
+	}
 	/**
 	 * Removes an interval of points from track, beginning after the start point
 	 * and ending before the end point of the given interval.
@@ -506,6 +540,11 @@ public class Track {
 		notifyTrackObservers();
 	}
 
+	public void insert(int index, ArrayList<Point> points) {
+		this.points.addAll(index,points);
+		checkBoundaries();
+		notifyTrackObservers();
+	}
 	/**
 	 * Merges the given track to the current track.
 	 * 
@@ -650,35 +689,6 @@ public class Track {
 		}
 	}
 
-	/**
-	 * Returns the point of track, which is nearest to the given point
-	 * @param point point to search
-	 * @return point of the track which has the smallest distance to the given point, or null if the track has no points
-	 */
-	public Point nearestPoint(Point point) {
-		if (points.size() == 0)
-			return null;
-		double distance = point.distance(points.get(0));
-		Point nearestPoint = points.get(0);
-		for (Point p:points) {
-			if (p.distance(point) < distance) {
-				distance = p.distance(point);
-				nearestPoint = p;
-			}
-		}
-		return nearestPoint;
-	}
-	
-	/**
-	 * Tests if the given point is within boundaries
-	 * @param point point to test
-	 * @return true if point within boundaries
-	 */
-	public boolean isInBoundary(Point point) {
-		return leftUpperBoundary.getLongitude() < point.getLongitude() && leftUpperBoundary.getLatitude() > point.getLatitude()
-				&& rightLowerBoundary.getLongitude() > point.getLongitude() && rightLowerBoundary.getLatitude() < point.getLatitude();
-	}
-	
 	/**
 	 * Splits the current track into two sub-tracks. The splitting point is
 	 * member of each of the subtracks.

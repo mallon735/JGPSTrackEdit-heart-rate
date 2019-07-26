@@ -12,15 +12,16 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.util.List;
 
 import javax.xml.parsers.ParserConfigurationException;
+
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 import jgpstrackedit.data.Track;
 import jgpstrackedit.trackfile.TrackFile;
 import jgpstrackedit.trackfile.XmlParser;
-
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 
 /**
  * TCX Track file support.
@@ -31,23 +32,17 @@ import org.xml.sax.SAXException;
 public class TCX implements TrackFile
 {
 	@Override
-	public Track openTrack(File file) throws FileNotFoundException,
+	public List<Track> openTrack(File file) throws FileNotFoundException,
 			SAXException, ParserConfigurationException, IOException {
 		final XmlParser parser = new XmlParser(new TcxTagHandler());
 		final InputSource in = new InputSource(new InputStreamReader(new FileInputStream(
 				file)));
 		parser.parse(in);
 		
-		Track track = parser.getTrack();
+		final List<Track> tracks = parser.getTrack();
+		tracks.stream().forEach(track -> track.correct());
 		
-		if (track.getNumberPoints() == 0) {
-			track = null;
-		}
-		if (track != null) {
-			track.correct();
-		}
-		
-		return track;
+		return tracks;
 	}
 
 	@Override

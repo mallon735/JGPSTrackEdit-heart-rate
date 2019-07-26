@@ -16,11 +16,13 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Polygon;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
+import java.awt.geom.*;
 
 import jgpstrackedit.data.Point;
 import jgpstrackedit.data.util.TourPlaner;
@@ -50,6 +52,8 @@ public class TracksPanel extends javax.swing.JPanel implements ZoomObserver,
 	private ArrayList<Point> bondPoints = new ArrayList<Point>();
 	private boolean autoRefresh = true;
 	private Point rectanglePoint = null;
+	private Polygon arrowHead;
+	private AffineTransform transformation;
 
 	/**
 	 * @return the showScale
@@ -203,6 +207,13 @@ public class TracksPanel extends javax.swing.JPanel implements ZoomObserver,
 		this.tracksView = tracksView;
 		tracksView.addZoomObserver(this);
 		addComponentListener(this);
+		
+		transformation = new AffineTransform();
+		arrowHead = new Polygon();  
+		arrowHead.addPoint( 0,0);
+		arrowHead.addPoint( -6, -20);
+		arrowHead.addPoint( 6,-20);
+		
 		// to mask Map-Update Bug:
 		new Thread(this).start();
 	}
@@ -229,6 +240,7 @@ public class TracksPanel extends javax.swing.JPanel implements ZoomObserver,
 
 	@Override
 	protected void paintComponent(Graphics g) {
+		boolean isSelected;
 		Graphics2D g2D = (Graphics2D) g;
 		BasicStroke symbolStroke = new BasicStroke(1);
 		BasicStroke selectedLineStroke = new BasicStroke(
@@ -258,15 +270,32 @@ public class TracksPanel extends javax.swing.JPanel implements ZoomObserver,
 			g2D.setColor(trackColor);
 			PointView previousPoint = null;
 			for (PointView point : trackView.getPoints()) {
+				isSelected = false;
 				if (trackView.isSelected()) {
-					point.paint(g2D,
-							point.getPoint() == trackView.getSelectedPoint());
+					if(point.getPoint() == trackView.getSelectedPoint()) {
+						isSelected = true;
+					}					
+					point.paint(g2D, isSelected);
 				}
 				if (previousPoint != null) {
 					if (!(previousPoint.isOutView() && point.isOutView())) {
 						g2D.drawLine(previousPoint.getX(),
 								previousPoint.getY(), point.getX(),
 								point.getY());
+						if(isSelected ) {
+							//draw arrow
+							transformation = g2D.getTransform();
+						    double angle = Math.atan2(point.getY()-previousPoint.getY(), point.getX()-previousPoint.getX());
+						    transformation.translate(point.getX(), point.getY());
+						    transformation.rotate((angle-Math.PI/2d)); 
+						    AffineTransform temptrans = g2D.getTransform();
+						    g2D.setTransform(transformation);
+						    g2D.setColor(getCorrespondingColor(trackColor));
+						    g2D.fill(arrowHead);
+						   
+						    g2D.setTransform(temptrans); 
+						    g2D.setColor(trackColor);
+						}
 					}
 				}
 				previousPoint = point;
@@ -566,5 +595,24 @@ public class TracksPanel extends javax.swing.JPanel implements ZoomObserver,
         Graphics2D graphics2D = image.createGraphics();
         paint(graphics2D);
         return image;		
+	}
+	
+	private Color getCorrespondingColor(Color color) {
+		int r = 255 - color.getRed();
+		int g = 255 - color.getGreen();
+		int b = 255 - color.getBlue();
+		
+		boolean doDarker = true;
+		while(doDarker) {
+			if((r + g + b)/3d > 128d) {
+				r = Math.max(r - 1, 0);
+				g = Math.max(g - 1, 0);
+				b = Math.max(b - 1, 0);
+			} else {
+				doDarker = false;
+			}
+		}
+		
+		return new Color(r, g, b);
 	}
 }

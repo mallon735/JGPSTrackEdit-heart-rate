@@ -6,6 +6,7 @@ package jgpstrackedit.data.util;
 import java.util.ArrayList;
 
 import jgpstrackedit.data.Point;
+import jgpstrackedit.data.Track;
 /**
  * @author Hubert
  *
@@ -13,6 +14,18 @@ import jgpstrackedit.data.Point;
 public class UnDoLevel {
 	
 	private ArrayList<Point> points = new ArrayList<Point>();
+	private Track track;
+	private boolean actionAdd;
+	private int startindex;
+	
+	public UnDoLevel(Track track,boolean action) {
+		this.track = track;	
+		actionAdd = action;
+	}
+	
+	public void setStartindex(int index){
+		startindex = index;
+	}
 	
 	public void add(Point point) {
 		points.add(point);
@@ -26,4 +39,14 @@ public class UnDoLevel {
 		return points;
 	}
 
+	public Track getTrack(){
+		return track;
+	}
+	public boolean getAction(){
+		return actionAdd;
+	}
+	
+	public int getStartindex() {
+		return startindex;
+	}
 }

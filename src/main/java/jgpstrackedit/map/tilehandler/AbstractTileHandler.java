@@ -3,17 +3,26 @@
  */
 package jgpstrackedit.map.tilehandler;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
  * @author Hubert
  *
  */
-public abstract class AbstractTileHandler implements Runnable {
-
-	private ArrayList<QueueObserver> queueObservers = new ArrayList<QueueObserver>();
+public abstract class AbstractTileHandler implements Runnable 
+{
+	private static Logger logger = LoggerFactory.getLogger(AbstractTileHandler.class);
+	
+	private List<QueueObserver> queueObservers = new LinkedList<>();
+	private boolean stopped = false;
+	private BlockingQueue<AbstractTileCommand> commandQueue = new LinkedBlockingQueue<>();
 	
 	public synchronized void addQueueObserver(QueueObserver queueObserver) {
 		queueObservers.add(queueObserver);
@@ -29,7 +38,6 @@ public abstract class AbstractTileHandler implements Runnable {
 		}
 	}
 	
-	private BlockingQueue<AbstractTileCommand> commandQueue;
     /**
 	 * @return the commandQueue
 	 */
@@ -44,9 +52,6 @@ public abstract class AbstractTileHandler implements Runnable {
 			BlockingQueue<AbstractTileCommand> commandQueue) {
 		this.commandQueue = commandQueue;
 	}
-
-	private boolean stopped = false;
-
 	
     public void start() {
     	new Thread(this).start();
@@ -57,8 +62,7 @@ public abstract class AbstractTileHandler implements Runnable {
     	try {
 			commandQueue.put(new StopCommand());
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Error while stopping thread!", e);
 		}
     }
     
@@ -73,10 +77,8 @@ public abstract class AbstractTileHandler implements Runnable {
     	try {
 			commandQueue.put(command);
 			notifyQueueObservers();
-			//System.out.println("Command added to queue: "+command.toString());
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Error while adding command!", e);
 		}
     	
     }
@@ -88,12 +90,11 @@ public abstract class AbstractTileHandler implements Runnable {
 	public void run() {
 		while (!stopped) {
 			try {
-				AbstractTileCommand command = commandQueue.take();
+				final AbstractTileCommand command = commandQueue.take();
 				notifyQueueObservers();
 				command.doAction();
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.error("Error while running thread!", e);
 			}
 		}
 	}

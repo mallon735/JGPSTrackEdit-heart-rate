@@ -31,10 +31,15 @@ public class TrackTableModel extends AbstractTableModel
 	 *            the currentTrack to set
 	 */
 	public void setSelectedTrack(Track currentTrack) {
-		if (this.currentTrack != null)
+		if (this.currentTrack != null) {
 			this.currentTrack.removeTrackObserver(this);
+		}
+		
 		this.currentTrack = currentTrack;
-		this.currentTrack.addTrackObserver(this);
+		if (this.currentTrack != null) {
+			this.currentTrack.addTrackObserver(this);
+		}
+		
 		this.fireTableDataChanged();
 	}
 
@@ -53,6 +58,10 @@ public class TrackTableModel extends AbstractTableModel
 
 	@Override
 	public Object getValueAt(int row, int column) {
+		if(this.currentTrack == null) {
+			return null;
+		}
+		
 		switch (column) {
 		case 0:
 			return row;
@@ -137,6 +146,10 @@ public class TrackTableModel extends AbstractTableModel
 	 */
 	@Override
 	public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
+		if(this.currentTrack == null) {
+			return;
+		}
+		
 		switch (columnIndex) {
 		case 0:
 			break;

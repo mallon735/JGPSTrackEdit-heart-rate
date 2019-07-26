@@ -20,11 +20,11 @@ public class GPXTrackWriter {
 	public void print(Track track, PrintWriter out) {
 		out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
 		out.println("<gpx creator=\"JGPSTrackEdit\" version=\"1.1\" xmlns=\"http://www.topografix.com/GPX/1/1\"  xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd\">");
-		
 		writeMetaData(track, out);
 		
 		out.println("  <trk>");
 		out.println("    <name>" + track.getName() + "</name>");
+		writeColor(track, out);
 		writeLink(track, out);
 		
 		out.println("    <trkseg>");
@@ -50,6 +50,14 @@ public class GPXTrackWriter {
 		if(track.getLink() != null && track.getLink().trim().length() > 0) {
 			out.println("    <link href=\"" + track.getLink().trim() + "\" />");
 		}
+	}
+	
+	private void writeColor(Track track, PrintWriter out) {
+		out.println("    <extensions>");
+		out.println("      <gpxx:TrackExtension xmlns:gpxx=\"http://www.garmin.com/xmlschemas/GpxExtensions/v3\">");
+		out.println(String.format("        <gpxx:DisplayColor>%s</gpxx:DisplayColor>", track.getExtensionsColor()));
+		out.println("      </gpxx:TrackExtension>");
+		out.println("    </extensions>");
 	}
 
 	private void writeMetaData(Track track, PrintWriter out) {

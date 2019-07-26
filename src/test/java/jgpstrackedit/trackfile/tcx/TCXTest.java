@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -29,9 +30,11 @@ public class TCXTest {
 		final URL fileUrl = this.getClass().getResource("/Jaegerbaek-Hbf.tcx");
 		
 		// open the track
-		final Track track = tcxTrackFile.openTrack(new File(fileUrl.getFile()));
+		final List<Track> tracks = tcxTrackFile.openTrack(new File(fileUrl.getFile()));
 		
 		// test the new track
+		Assert.assertThat(tracks.size(), CoreMatchers.is(1));
+		final Track track = tracks.get(0);
 		Assert.assertThat(track, CoreMatchers.is(CoreMatchers.notNullValue()));
 		Assert.assertThat(track.getNumberPoints(), CoreMatchers.is(266));
 		
@@ -47,9 +50,11 @@ public class TCXTest {
 		// save the file and parse the new file
 		final File outFile = new File(fileUrl.getFile() + ".tmp");
 		tcxTrackFile.saveTrack(track, outFile);
-		final Track track2 = tcxTrackFile.openTrack(outFile);
+		final List<Track> tracks2 = tcxTrackFile.openTrack(outFile);
 		
 		// test the new track
+		Assert.assertThat(tracks2.size(), CoreMatchers.is(1));
+		final Track track2 = tracks2.get(0);
 		Assert.assertThat(track2, CoreMatchers.is(CoreMatchers.notNullValue()));
 		Assert.assertThat(track2.getNumberPoints(), CoreMatchers.is(266));
 		// test same track length

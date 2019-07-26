@@ -76,6 +76,18 @@ public class TcxTagHandler implements TagHandler {
 				context.getCurrentTrack().add(context.getCurentPoint());
 				context.setCurentPoint(null);
 			}
+		},
+		Track() {
+			@Override
+			public void handleStartTag(ParserContext context) {
+				if(context.getCurrentTrack().getNumberPoints() > 0) {
+					context.addNewTrack();
+				}
+			}
+
+			@Override
+			public void handleEndTag(ParserContext context, String content) {
+			}
 		},		
 		LatitudeDegrees() {
 			@Override

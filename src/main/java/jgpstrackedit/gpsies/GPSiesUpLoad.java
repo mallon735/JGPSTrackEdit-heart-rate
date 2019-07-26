@@ -11,10 +11,6 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 
-import jgpstrackedit.config.SystemConfig;
-import jgpstrackedit.data.Track;
-import jgpstrackedit.trackfile.kml.KMLWriter;
-
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.httpclient.HttpClient;
@@ -24,14 +20,20 @@ import org.apache.commons.httpclient.methods.multipart.FilePart;
 import org.apache.commons.httpclient.methods.multipart.MultipartRequestEntity;
 import org.apache.commons.httpclient.methods.multipart.Part;
 import org.apache.commons.httpclient.methods.multipart.StringPart;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import jgpstrackedit.data.Track;
+import jgpstrackedit.trackfile.kml.KMLWriter;
 
 /**
  * @author Hubert
  * 
  */
-public class GPSiesUpLoad {
-
+public class GPSiesUpLoad 
+{
 	private static final String UPLOAD_URL = "http://www.gpsies.com/upload.do";
+	private static Logger logger = LoggerFactory.getLogger(GPSiesUpLoad.class);
 
 	private static final String OCTET_STREAM_CONTENT_TYPE = "application/octet-stream";
 	private static final String CHARSET_DEFAULT = "UTF-8";
@@ -60,8 +62,7 @@ public class GPSiesUpLoad {
 			kmlWriter.print(track, out);
 			out.close();
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(String.format("Cannot write to file! (%s)", getFileName(trackName)), e);
 		}
 	}
 
@@ -112,8 +113,6 @@ public class GPSiesUpLoad {
 	}
 
 	public String getFileName(String trackName) {
-		// TODO Auto-generated method stub
-		return "gpsiesupload" + SystemConfig.dirSeparator()
-				+ trackName + ".kml";
+		return "gpsiesupload" + File.separator + trackName + ".kml";
 	}
 }

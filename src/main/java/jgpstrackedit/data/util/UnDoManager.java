@@ -16,19 +16,23 @@ import jgpstrackedit.data.Point;
 public class UnDoManager {
 	
 	private Stack<UnDoLevel> undoStack = new Stack<UnDoLevel>();
-	private Track track;
-	
-	public UnDoManager(Track track) {
-		this.track = track;
 		
+	public UnDoManager() {
 	}
 
 	/**
 	 * Adds a single point as an undo level
 	 * @param point the point to add
 	 */
-	public void add(Point point) {
-		UnDoLevel udl = new UnDoLevel();
+	public void add(Track track, Point point, boolean action ) {
+		UnDoLevel udl = new UnDoLevel(track, action);
+		udl.add(point);
+		undoStack.push(udl);		
+	}
+	
+	public void add(Track track, Point point, boolean action, int startindex ) {
+		UnDoLevel udl = new UnDoLevel(track, action);
+		udl.setStartindex(startindex);
 		udl.add(point);
 		undoStack.push(udl);		
 	}
@@ -37,8 +41,15 @@ public class UnDoManager {
 	 * Adds the given points as an undo level
 	 * @param points ArrayList<Point> containing the points
 	 */
-	public void add(ArrayList<Point> points) {
-		UnDoLevel udl = new UnDoLevel();
+	public void add(Track track, ArrayList<Point> points,boolean action) {
+		UnDoLevel udl = new UnDoLevel(track, action);
+		udl.add(points);
+		undoStack.push(udl);				
+	}
+	
+	public void add(Track track, ArrayList<Point> points,boolean action,int startindex) {
+		UnDoLevel udl = new UnDoLevel(track, action);
+		udl.setStartindex(startindex);
 		udl.add(points);
 		undoStack.push(udl);				
 	}
@@ -47,7 +58,7 @@ public class UnDoManager {
 	 * Adds the given undo level.
 	 * @param undoLevel undo level to add
 	 */
-	public void add(UnDoLevel undoLevel) {
+	public void add(Track track, UnDoLevel undoLevel) {
 		undoStack.push(undoLevel);
 	}
 	
@@ -56,9 +67,14 @@ public class UnDoManager {
 	 */
 	public void unDo() {
 		if (!undoStack.empty()) {
-			ArrayList<Point> points = undoStack.pop().getPoints();
+			UnDoLevel undoLevel = undoStack.pop();
+			ArrayList<Point> points = undoLevel.getPoints();
+			if( undoLevel.getAction()) {
 			for (int i=points.size()-1;i>=0;i--) {
-				track.remove(points.get(i));
+					undoLevel.getTrack().remove(points.get(i));
+				}
+			}else {
+			   undoLevel.getTrack().insert(undoLevel.getStartindex(), points);
 			}
 		}
 		

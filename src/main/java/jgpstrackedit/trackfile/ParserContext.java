@@ -1,5 +1,8 @@
 package jgpstrackedit.trackfile;
 
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Stack;
 
 import jgpstrackedit.data.Point;
@@ -9,12 +12,15 @@ import org.xml.sax.Attributes;
 
 public class ParserContext {
 	private final Stack<ParserContextEntry> context;
-	private final Track currentTrack;
+	private final List<Track> tracks;
+	private Track currentTrack;
 	private Point curentPoint;
 	
-	public ParserContext(Track currentTrack) {
+	public ParserContext() {
 		this.context = new Stack<>();
-		this.currentTrack = currentTrack;
+		this.tracks = new LinkedList<>();
+		this.currentTrack = new Track();
+		this.tracks.add(this.currentTrack);
 		this.curentPoint = null;
 	}
 
@@ -44,6 +50,16 @@ public class ParserContext {
 
 	public Track getCurrentTrack() {
 		return currentTrack;
+	}
+	
+	public Track addNewTrack() {
+		this.currentTrack = new Track();
+		this.tracks.add(this.currentTrack);
+		return currentTrack;
+	}
+	
+	public List<Track> getTracks() {
+		return Collections.unmodifiableList(this.tracks);
 	}
 
 	@Override

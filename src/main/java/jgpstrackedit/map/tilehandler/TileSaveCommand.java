@@ -10,15 +10,18 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import jgpstrackedit.config.SystemConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import jgpstrackedit.map.util.ImageConverter;
 
 /**
  * @author Hubert
  * 
  */
-public class TileSaveCommand extends AbstractDiskTileCommand {
-
+public class TileSaveCommand extends AbstractDiskTileCommand 
+{
+	private static Logger logger = LoggerFactory.getLogger(TileSaveCommand.class);
 	private Image tileImage;
 
 	/**
@@ -43,29 +46,24 @@ public class TileSaveCommand extends AbstractDiskTileCommand {
 	 */
 	@Override
 	public void doAction() {
-		// TODO Auto-generated method stub
-		String dirPath = getBaseDirectory() + SystemConfig.dirSeparator()
-				+ getTileNumber().getZoom() + SystemConfig.dirSeparator()
+		String dirPath = getBaseDirectory() + File.separator
+				+ getTileNumber().getZoom() + File.separator
 				+ getTileNumber().getX();
 		File dir = new File(dirPath);
 		dir.mkdirs();
-		String fileName = dirPath + SystemConfig.dirSeparator()
+		String fileName = dirPath + File.separator
 				+ getTileNumber().getY() + ".png";
 		BufferedImage bufferedImage = ImageConverter
 				.toBufferedImage(getTileImage());
-		// System.out.println("File saving: "+fileName);
 		if (bufferedImage != null) {
 			File file = new File(fileName);
 			try {
 				ImageIO.write(bufferedImage, "png", file);
-				// System.out.println("File saved: "+fileName);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.error(String.format("Cannot write png file \"%s\"" + file), e);
 			}
 		} else {
-			System.out.println("File not saved due to null-image: "+fileName);
-			
+			logger.warn("File not saved due to null-image: "+fileName);
 		}
 
 	}

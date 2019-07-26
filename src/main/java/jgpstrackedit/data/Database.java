@@ -40,46 +40,6 @@ public class Database extends AbstractTableModel implements TrackObserver {
 		return tracks.get(index);
 	}
 	
-	/**
-	 * Returns the index of the given track in the database
-	 * @param track the track
-	 * @return index of track
-	 */
-	public int getTrack(Track track) {
-		return tracks.indexOf(track);
-		
-	}
-
-	/**
-	 * Returns the track which is nearest to the given point
-	 * @param point point nearest to track
-	 * @return the nearest track or null if no nearest track could be found
-	 */
-	public Track getTrack(Point point) {
-		Track nearestTrack = null;
-		Point nearestPoint;
-		double minDistance = 10000.0;
-		for (Track track:tracks) {
-			if (track.isInBoundary(point)) {
-				Point nP = track.nearestPoint(point);
-				if (nP != null) {
-					if (nearestTrack == null) {
-						nearestTrack = track;
-						minDistance = nP.distance(point);
-					} else {
-						double dist = nP.distance(point);
-						if (dist < minDistance) {
-							nearestTrack = track;
-							minDistance = nP.distance(point);
-						
-						}
-					}
-				}
-			}
-		}
-		return nearestTrack;		
-	}
-	
 	public void addTrack(Track track) {
 		tracks.add(track);
 		track.addTrackObserver(this);

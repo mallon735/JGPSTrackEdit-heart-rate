@@ -1,10 +1,9 @@
 package jgpstrackedit.trackfile;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.xml.parsers.ParserConfigurationException;
-
-import jgpstrackedit.data.Track;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
@@ -13,6 +12,8 @@ import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLReader;
+
+import jgpstrackedit.data.Track;
 
 public class XmlParser 
 {
@@ -39,8 +40,8 @@ public class XmlParser
 		parser.parse(input);
 	}
 	
-	public Track getTrack() {
-		return this.xmlContentHandler.getTrack();
+	public List<Track> getTrack() {
+		return this.xmlContentHandler.getTracks();
 	}
 
 	private static class XmlContentHandler implements ContentHandler {
@@ -49,13 +50,13 @@ public class XmlParser
 		private transient StringBuilder contentBuffer;
 		
 		public XmlContentHandler(TagHandler tagHandler) {
-			this.context = new ParserContext(new Track());
+			this.context = new ParserContext();
 			this.tagHandler = tagHandler;
 			this.contentBuffer = new StringBuilder();
 		}
 		
-		public Track getTrack() {
-			return this.context.getCurrentTrack();
+		public List<Track> getTracks() {
+			return this.context.getTracks();
 		}
 		
 		@Override

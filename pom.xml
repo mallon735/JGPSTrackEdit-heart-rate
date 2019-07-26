@@ -14,9 +14,14 @@
   
   <dependencies>
 	<dependency>
-	    <groupId>commons-logging</groupId>
-	    <artifactId>commons-logging</artifactId>
-	    <version>1.1.1</version>
+	    <groupId>org.slf4j</groupId>
+	    <artifactId>slf4j-api</artifactId>
+	    <version>1.7.25</version>
+	</dependency>
+	<dependency>
+	    <groupId>ch.qos.logback</groupId>
+	    <artifactId>logback-classic</artifactId>
+	    <version>1.2.3</version>
 	</dependency>
 	<dependency>
 	    <groupId>commons-httpclient</groupId>
@@ -54,7 +59,6 @@
 	        <executions>
 	          <execution>
 	            <id>copy-resources</id>
-	            <!-- here the phase you need -->
 	            <phase>validate</phase>
 	            <goals>
 	              <goal>copy-resources</goal>

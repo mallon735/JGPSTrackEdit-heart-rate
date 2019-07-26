@@ -18,6 +18,9 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Vector;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import jgpstrackedit.international.International;
 import jgpstrackedit.util.Parser;
 
@@ -27,6 +30,7 @@ import jgpstrackedit.util.Parser;
  * @author Hubert
  */
 public class Configuration {
+	private static Logger logger = LoggerFactory.getLogger(Configuration.class);
 	private static Properties properties = null;
 	private static final List<ConfigurationObserver> observers = new ArrayList<ConfigurationObserver>();
 	
@@ -93,6 +97,9 @@ public class Configuration {
 			properties.setProperty("MAXTOURTIME","8.0"); // h
 			properties.setProperty("MAPTYPE","4UMap");
 			properties.setProperty("MAP_API_KEY_THUNDER_FOREST", "");
+			properties.setProperty("PROXY","");
+			properties.setProperty("PROXYPORT","");
+			properties.setProperty("AUTOMATIC_COLORS","1");
 			properties.setProperty("LOCALE", Locale.getDefault().toString());
 			
 
@@ -100,16 +107,16 @@ public class Configuration {
 				properties.load(inStream);
 				inStream.close();
 			} catch (FileNotFoundException e) {
-				e.printStackTrace();
+				logger.warn("File not found while loading properties from file JGPSTrackEdit.properties!");
 				saveProperties();
 			} catch (IOException e) {
-				e.printStackTrace();
+				logger.error("Exception while loading properties from file JGPSTrackEdit.properties!", e);
 			}
 			International.setCurrentLocale(
 					new Locale(
 							properties.getProperty("LOCALE").split("_")[0],
 							properties.getProperty("LOCALE").split("_")[1]));
-			System.out.println("Current locale: " + International.getCurrentLocale().toString());
+			logger.info("Current locale: " + International.getCurrentLocale().toString());
 		}
 	}
 	
@@ -164,9 +171,9 @@ public class Configuration {
 				writer.write(String.format("%s=%s\n", key, value));
 			}
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			logger.error("File JGPSTrackEdit.properties not found!", e);
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error("Exception while saving properties to file JGPSTrackEdit.properties!", e);
 		}
 	}
 

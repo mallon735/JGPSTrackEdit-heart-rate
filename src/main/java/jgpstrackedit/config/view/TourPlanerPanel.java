@@ -82,13 +82,11 @@ public class TourPlanerPanel extends JPanel implements ConfigurationPanel {
 
 	@Override
 	public String getTabName() {
-		// TODO Auto-generated method stub
 		return International.getText("dlgconfig.Tourplanner");
 	}
 
 	@Override
 	public void save() {
-		// TODO Auto-generated method stub
 		TourPlaner.setAverageSpeed(Parser.parseDouble(textFieldAverageSpeed.getText()));
 		TourPlaner.setInclineTime100Meters(Parser.parseDouble(textFieldInclineTime.getText()));
 		TourPlaner.setBreakRatio(Parser.parseDouble(textFieldBreakRatio.getText()));
@@ -101,19 +99,14 @@ public class TourPlanerPanel extends JPanel implements ConfigurationPanel {
 	}
 
 	@Override
-	public void cancel() {
-		// TODO Auto-generated method stub
-		
+	public void cancel() {		
 	}
 
 	@Override
 	public void initialize() {
-		// TODO Auto-generated method stub
-		//System.out.println("Incline="+TourPlaner.getInclineTime100Meters());
 		textFieldAverageSpeed.setText(df.format(TourPlaner.getAverageSpeed()));
 		textFieldInclineTime.setText(df.format(TourPlaner.getInclineTime100Meters()));
 		textFieldBreakRatio.setText(df.format(TourPlaner.getBreakRatio()));
 		textFieldMaxTourTime.setText(Parser.formatTimeHHMM(TourPlaner.getMaxTourTime()));
-		
 	}
 }

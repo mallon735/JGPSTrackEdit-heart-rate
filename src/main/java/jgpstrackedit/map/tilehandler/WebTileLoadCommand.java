@@ -9,6 +9,9 @@ import java.net.URL;
 
 import javax.imageio.ImageIO;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import jgpstrackedit.map.TileManager;
 
 
@@ -18,6 +21,7 @@ import jgpstrackedit.map.TileManager;
  */
 public class WebTileLoadCommand extends AbstractTileCommand 
 {
+	private static Logger logger = LoggerFactory.getLogger(WebTileLoadCommand.class);
 	private Image image;
 	
 	@Override
@@ -31,13 +35,13 @@ public class WebTileLoadCommand extends AbstractTileCommand
 			event.setTileNumber(getTileNumber());
 			notifyTileLoadObservers(event);
 		} catch (MalformedURLException e) {
-			e.printStackTrace();
+			logger.error(String.format("Incorrect URL! (%s)", urlString), e);
 		} catch(Exception exception) {
-			System.err.println(String.format("Exception while reading %s! %s", urlString, exception.getMessage()));
+			logger.error(String.format("Exception while reading %s! %s", urlString, exception.getMessage()));
 			if(exception.getCause() != null && exception.getCause().getMessage() != null) {
-				System.err.println(String.format("    %s", exception.getCause().getMessage()));
+				logger.error(String.format("    %s", exception.getCause().getMessage()));
 				if(exception.getCause().getCause() != null && exception.getCause().getCause().getMessage() != null) {
-					System.err.println(String.format("    %s", exception.getCause().getCause().getMessage()));
+					logger.error(String.format("    %s", exception.getCause().getCause().getMessage()));
 				}
 			}
 		}

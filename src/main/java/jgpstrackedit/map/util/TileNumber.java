@@ -3,7 +3,7 @@
  */
 package jgpstrackedit.map.util;
 
-import jgpstrackedit.config.SystemConfig;
+import java.io.File;
 
 /**
  * @author hlutnik
@@ -88,7 +88,7 @@ public class TileNumber implements Comparable {
 	}
 
 	public String toFileName() {
-		return SystemConfig.dirSeparator() + zoom + SystemConfig.dirSeparator() + x + SystemConfig.dirSeparator() + y;
+		return File.separator + zoom + File.separator + x + File.separator + y;
 		
 	}
 	/*

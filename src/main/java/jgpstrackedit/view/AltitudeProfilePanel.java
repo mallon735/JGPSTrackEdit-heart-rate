@@ -1,31 +1,22 @@
 package jgpstrackedit.view;
 
 import java.awt.Color;
-import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
-import java.awt.image.RenderedImage;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import javax.swing.JPanel;
 
-import jgpstrackedit.control.UIController;
+import jgpstrackedit.data.Point;
 import jgpstrackedit.data.Track;
 import jgpstrackedit.data.TrackObserver;
-import jgpstrackedit.data.Point;
 import jgpstrackedit.data.util.TourPlaner;
 import jgpstrackedit.util.Parser;
 
-public class AltitudeProfilePanel extends JPanel implements TrackObserver,
-                                                            MouseMotionListener,
-                                                            MouseListener {
+public class AltitudeProfilePanel extends JPanel implements TrackObserver {
 
 	private Track track = null;
 	private Point selectedPoint = null;
@@ -36,8 +27,6 @@ public class AltitudeProfilePanel extends JPanel implements TrackObserver,
 	private final static int LENGTH_HEIGHT = 15;
 	private final static int BORDER_HEIGHT = 14;
 
-	private int mouseX = 0;
-	private int mouseY = 0;
 	/**
 	 * @return the showDayTourMarkers
 	 */
@@ -75,11 +64,13 @@ public class AltitudeProfilePanel extends JPanel implements TrackObserver,
 	 *            the track to set
 	 */
 	public void setTrack(Track track) {
-		if (this.track != null)
+		if (this.track != null) {
 			this.track.removeTrackObserver(this);
+		}
 		this.track = track;
-		this.track.addTrackObserver(this);
-		this.track.getLength(true);
+		if (this.track != null) {
+			this.track.addTrackObserver(this);
+		}
 		repaint();
 	}
 
@@ -88,9 +79,6 @@ public class AltitudeProfilePanel extends JPanel implements TrackObserver,
 	 */
 	public AltitudeProfilePanel() {
 		setPreferredSize(new Dimension(200, 100));
-		this.addMouseListener(this);
-		this.addMouseMotionListener(this);
-		this.setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
 	}
 
 	/*
@@ -101,10 +89,8 @@ public class AltitudeProfilePanel extends JPanel implements TrackObserver,
 	@Override
 	protected void paintComponent(Graphics g) {
 		// TODO Auto-generated method stub
-		Graphics2D g2D = (Graphics2D) g;
-		g2D.setColor(Color.WHITE);
-		g2D.fillRect(0, 0, getWidth(), getHeight());
 		if (this.track != null) {
+			Graphics2D g2D = (Graphics2D) g;
 			double trackLength = track.getLength();
 			double maxElevation = track.getHighestElevation();
 			double minElevation = track.getLowestElevation();
@@ -119,6 +105,8 @@ public class AltitudeProfilePanel extends JPanel implements TrackObserver,
 			double scaleUnitLength = lengthScaleUnit(trackLength);
 			int width = getWidth() - ALT_WIDTH;
 			int height = getHeight() - BORDER_HEIGHT - LENGTH_HEIGHT;
+			g2D.setColor(Color.WHITE);
+			g2D.fillRect(0, 0, getWidth(), getHeight());
 			g2D.setColor(Color.LIGHT_GRAY);
 			for (double alt = scaleMinAltitude; alt < scaleMaxAltitude
 					+ scaleUnit; alt += scaleUnit) {
@@ -168,49 +156,23 @@ public class AltitudeProfilePanel extends JPanel implements TrackObserver,
 				if (isShowDayTourMarkers()) {
 					for (Point marker : markers) {
 						if (firstPoint.equals(marker)) {
-							g2D.setColor(Color.WHITE);
-							g2D.fillRect((int) (distance / trackLength * width) -4, getHeight() - BORDER_HEIGHT, ALT_WIDTH, BORDER_HEIGHT);
-							g2D.fillRect((int) (distance / trackLength * width) -4,  0, ALT_WIDTH, BORDER_HEIGHT-1);
 							g2D.setColor(Color.BLUE);
-							g2D.drawString(Parser.formatLengthProfile(firstPoint.getLength()),
-								       (int) (distance / trackLength * width) , 
-								       getHeight()-4);
-							g2D.drawString(Parser.formatAltProfile(firstPoint.getElevation()),(int) (distance / trackLength * width)+2, BORDER_HEIGHT-4);
 							g2D.drawLine(
 									(int) (distance / trackLength * width)
 											+ ALT_WIDTH,
-									0,/*getHeight() - LENGTH_HEIGHT*/
+									getHeight() - LENGTH_HEIGHT,
 									(int) (distance / trackLength * width)
 											+ ALT_WIDTH,
-											getHeight()
-									/*(height
+									(height
 											- 1
 											- (int) ((firstPoint.getElevation() - scaleMinAltitude)
-													/ scaleAltitudeDifference * height) + BORDER_HEIGHT)*/);
+													/ scaleAltitudeDifference * height) + BORDER_HEIGHT));
 							g2D.setColor(Color.RED);
 						}
 					}
 				}
 				if (selectedPoint == firstPoint) {
-					g2D.setColor(Color.WHITE);
-					g2D.fillRect((int) (distance / trackLength * width) -4, getHeight() - BORDER_HEIGHT, ALT_WIDTH, BORDER_HEIGHT);
-					g2D.fillRect((int) (distance / trackLength * width) -4,  0, ALT_WIDTH, BORDER_HEIGHT-1);
-					g2D.setColor(Color.GREEN);
-					g2D.drawString(Parser.formatLengthProfile(firstPoint.getLength()),
-						       (int) (distance / trackLength * width) , 
-						       getHeight()-4);
-					g2D.drawString(Parser.formatAltProfile(firstPoint.getElevation()),(int) (distance / trackLength * width)+2, BORDER_HEIGHT-4);
-					/*
-					g2D.drawLine(
-							(int) (distance / trackLength * width) + ALT_WIDTH,
-							getHeight() - LENGTH_HEIGHT,
-							(int) (distance / trackLength * width) + ALT_WIDTH,
-							(height
-									- 1
-									- (int) ((firstPoint.getElevation() - scaleMinAltitude)
-											/ scaleAltitudeDifference * height) + BORDER_HEIGHT));
-											 * * /
-					*/						 
+					g2D.setColor(Color.GREEN);		 
 					g2D.drawLine(
 							(int) (distance / trackLength * width) + ALT_WIDTH,
 							0,
@@ -221,27 +183,13 @@ public class AltitudeProfilePanel extends JPanel implements TrackObserver,
 				distance += delta;
 				firstPoint = secondPoint;
 			}
-			if (mouseX > ALT_WIDTH) {
-				g2D.setColor(Color.WHITE);
-				g2D.fillRect(mouseX - ALT_WIDTH-1, getHeight() - BORDER_HEIGHT, ALT_WIDTH, BORDER_HEIGHT);
-				g2D.fillRect(mouseX - ALT_WIDTH-1,  0, ALT_WIDTH, BORDER_HEIGHT-1);
-				g2D.setColor(Color.MAGENTA);
-				g2D.drawLine(mouseX, 0, mouseX, getHeight());
-				double lengthAtCursor = trackLength * (mouseX - ALT_WIDTH) / width;
-				g2D.drawString(Parser.formatLengthProfile(lengthAtCursor), mouseX - ALT_WIDTH+3, getHeight()-4);
-				Optional<Point> pointOptional = track.getPoint(lengthAtCursor);
-				pointOptional.ifPresent(point -> {
-					g2D.drawString(Parser.formatAltProfile(point.getElevation()), mouseX - ALT_WIDTH+3, BORDER_HEIGHT-4);
-				});
-			}
 		}
 
 	}
 
 	@Override
 	public void trackModified(Track track) {
-		// TODO Auto-generated method stub
-		if (this.track.equals(track)) {
+		if (this.track != null && this.track.equals(track)) {
 			repaint();
 		}
 
@@ -287,55 +235,4 @@ public class AltitudeProfilePanel extends JPanel implements TrackObserver,
 		paint(graphics2D);
 		return image;
 	}
-
-	@Override
-	public void mouseDragged(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseMoved(MouseEvent e) {
-		mouseX = e.getX();
-		mouseY = e.getY();
-		repaint();
-		
-	}
-
-	@Override
-	public void mouseClicked(MouseEvent arg0) {
-		double trackLength = track.getLength();
-		double lengthAtCursor = trackLength * (mouseX - ALT_WIDTH) / (getWidth() - ALT_WIDTH);
-		Optional<Point> point = track.getPoint(lengthAtCursor);
-		point.ifPresent(p -> {
-			UIController.getUIController().selectPoint(track, p, true);
-		});
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent arg0) {
-		mouseX = 0;
-		mouseY = 0;
-		repaint();
-	}
-
-	@Override
-	public void mouseExited(MouseEvent arg0) {
-		mouseX = 0;
-		mouseY = 0;
-		repaint();		
-	}
-
-	@Override
-	public void mousePressed(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
 }

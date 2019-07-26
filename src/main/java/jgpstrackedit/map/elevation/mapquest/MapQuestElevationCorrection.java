@@ -32,7 +32,7 @@ import jgpstrackedit.map.elevation.PointWrapper;
 public class MapQuestElevationCorrection implements IElevationCorrection 
 {
 	private static final String BASE_URL = "http://open.mapquestapi.com/elevation/v1/profile?key=Fmjtd%7Cluubn96ynu%2C2s%3Do5-907guw&shapeFormat=cmp&outShapeFormat=none&latLngCollection=";
-	private static final int NUMBER_OF_POINTS_PER_REQUEST = 240;
+	private static final int NUMBER_OF_POINTS_PER_REQUEST = 120;
 	private static int NO_DATA_ERROR = 601;
 	private static int PARTIAL_SUCCESS = 602;
 	private static int NO_HEIGHT_DATA = -32768;

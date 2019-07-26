@@ -9,8 +9,8 @@ import java.awt.Cursor;
 import java.awt.Dialog.ModalityType;
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -21,13 +21,16 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.xml.parsers.ParserConfigurationException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import jgpstrackedit.config.Configuration;
 import jgpstrackedit.config.Constants;
 import jgpstrackedit.data.Database;
 import jgpstrackedit.data.Point;
 import jgpstrackedit.data.Track;
+import jgpstrackedit.data.util.UnDoManager;
 import jgpstrackedit.gpsies.GPSiesComDialog;
 import jgpstrackedit.gpsies.GPSiesSaveDlg;
 import jgpstrackedit.map.FourUMapsTileManager;
@@ -64,13 +67,12 @@ import jgpstrackedit.view.ElevationCorrectionAction;
 import jgpstrackedit.view.JGPSTrackEdit;
 import jgpstrackedit.view.Transform;
 
-import org.xml.sax.SAXException;
-
 /**
  * 
  * @author Hubert
  */
 public class UIController implements Runnable {
+	private static Logger logger = LoggerFactory.getLogger(UIController.class);
 	private static final String ELEVATION_CORRECTION_API_GOOGLE = "google";
 	private static final String ELEVATION_CORRECTION_API_MAPQUEST = "mapquest";
 	
@@ -78,15 +80,12 @@ public class UIController implements Runnable {
 	private JGPSTrackEdit form;
 	private JFileChooser fileSaveChooser;
 	private JFileChooser fileOpenChooser;
-	private static JFileChooser imageSaveChooser = null;
 	private File dirFile = null;
 
 	private boolean googleMapEnabled = false;
 	private boolean googleElevationAPIEnabled = false;
 
-	private static UIController instance = null;
-	
-	private UIController(Database db, JGPSTrackEdit form) {
+	public UIController(Database db, JGPSTrackEdit form) {
 		this.db = db;
 		this.form = form;
 		TrackFileManager.addTrackFile(new GPXRoute());
@@ -94,60 +93,39 @@ public class UIController implements Runnable {
 		TrackFileManager.addTrackFile(new KML());
 		TrackFileManager.addTrackFile(new TCX());
 		TrackFileManager.addTrackFile(new ASC());
-		fileOpenChooser = new JFileChooser();
-		fileSaveChooser = new JFileChooser();
+		fileOpenChooser = new JFileChooser(System.getProperty("user.home"));
+		fileSaveChooser = new JFileChooser(System.getProperty("user.home"));
 		for (FileNameExtensionFilter filter : TrackFileManager
 				.getFileNameExtensionFilters()) {
 			fileSaveChooser.addChoosableFileFilter(filter);
 		}
 	}
 
-	public static UIController newUIController(Database db, JGPSTrackEdit form) {
-		if (instance == null) {
-			instance = new UIController(db,form);
-		}
-		return instance;
-	}
-	
-	public static UIController getUIController() {
-		return instance;
-	}
-	
-	public static JFileChooser getJFileChooser() {
-		if (imageSaveChooser == null) {
-		    imageSaveChooser = new JFileChooser();
-		    imageSaveChooser.addChoosableFileFilter(new FileNameExtensionFilter("Image", "png"));
-		}
-		return imageSaveChooser;
-	}
 	/**
 	 * Opens the given track file
 	 * 
 	 * @param file
 	 *            track file to open
 	 */
-	protected void openTrack(File file) {
+	public void openTrack(File file) {
 		form.setStateMessage("Reading file " + file.getAbsolutePath());
-		Track track;
+
 		try {
-			track = TrackFileManager.openTrack(file);
-			track.setModified(false);
-			db.addTrack(track);
+			final List<Track> tracks = TrackFileManager.openTrack(file);
+			tracks.stream().forEach(track -> db.addTrack(track));
+			
+			int lastTrackIndex = db.getTrackNumber() - 1;
+			final Track track = db.getTrack(lastTrackIndex);
+			
 			db.getTrackTableModel().setSelectedTrack(track);
-			// form.getTracksView().setSelectedTrack(track);
-			form.getTracksTable().addRowSelectionInterval(
-					db.getTrackNumber() - 1, db.getTrackNumber() - 1);
+			form.getTracksTable().addRowSelectionInterval(lastTrackIndex, lastTrackIndex);
 			form.setSelectedTrack(track);
 			form.setStateMessage(TrackFileManager.getLastMessage());
-			//
 			zoomSelectedTrack();
-			// form.getTracksPanel().zoom(track.getLeftUpperBoundary(),track.getRightLowerBoundary());
 			form.repaint();
 		} catch (TrackFileException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Exception while open track!", e);
 		}
-
 	}
 
 	/**
@@ -190,38 +168,24 @@ public class UIController implements Runnable {
 	}
 
 	public void openTrack(String urlString) {
-
 		form.setStateMessage("Loading GPSies track... ");
-		Track track = null;
-		URL url;
-		try {
-			url = new URL(urlString);
-			KML kml = new KML();
-			track = kml.openTrack(url);
-			track.setTrackFileType(kml.getTypeDescription());
-			track.setModified(false);
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SAXException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ParserConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		db.addTrack(track);
-		db.getTrackTableModel().setSelectedTrack(track);
-		form.getTracksTable().addRowSelectionInterval(db.getTrackNumber() - 1,
-				db.getTrackNumber() - 1);
-		form.setSelectedTrack(track);
-		form.setStateMessage("GPSies track " + track.getName() + " loaded.");
-		zoomSelectedTrack();
-		form.repaint();
 
+		try {
+			final List<Track> tracks = TrackFileManager.openKmlTrack(new URL(urlString));
+			tracks.stream().forEach(track -> db.addTrack(track));
+			
+			int lastTrackIndex = db.getTrackNumber() - 1;
+			final Track track = db.getTrack(lastTrackIndex);
+			
+			db.getTrackTableModel().setSelectedTrack(track);
+			form.getTracksTable().addRowSelectionInterval(db.getTrackNumber() - 1, db.getTrackNumber() - 1);
+			form.setSelectedTrack(track);
+			form.setStateMessage("GPSies track " + track.getName() + " loaded.");
+			zoomSelectedTrack();
+			form.repaint();
+		} catch (Exception e) {
+			logger.error("Exception while open track!", e);
+		}
 	}
 
 	public void reverseTrack() {
@@ -237,10 +201,38 @@ public class UIController implements Runnable {
 	public void delete() {
 		int[] selectedRows = form.getTracksTable().getSelectedRows();
 		for (int i = 0; i < selectedRows.length; i++) {
-			String name = db.getTracks().get(selectedRows[i]).getName();
 			db.removeTrack(selectedRows[i]);
-			form.setStateMessage("Track " + name + " deleted.");
 		}
+		form.setStateMessage("");
+			
+		if(db.getTrackNumber() > 0) {
+			int lastTrackIndex = db.getTrackNumber() - 1;
+			final Track track = db.getTrack(lastTrackIndex);
+			
+			db.getTrackTableModel().setSelectedTrack(track);
+			form.getTracksTable().addRowSelectionInterval(lastTrackIndex, lastTrackIndex);
+			form.setSelectedTrack(track);
+			form.repaint();
+		} else {
+			db.getTrackTableModel().setSelectedTrack(null);
+			form.getTracksTable().clearSelection();
+			form.setSelectedTrack(null);
+			Track.resetColors();
+			form.repaint();
+		}
+	}
+
+	public void deleteAll() {
+		int count = db.getTracks().size();
+		for (int i = 0; i < count; i++) {
+			db.removeTrack(0);
+		}
+		
+		db.getTrackTableModel().setSelectedTrack(null);
+		form.getTracksTable().clearSelection();
+		form.setSelectedTrack(null);
+		Track.resetColors();
+		form.repaint();
 	}
 
 	public void saveSelected() {
@@ -253,8 +245,7 @@ public class UIController implements Runnable {
 						saveTrack.getTrackFileType());
 				saveTrack.setModified(false);
 			} catch (TrackFileException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.error("Exception while save selected track!", e);
 				JOptionPane.showMessageDialog(form,
 						"Error while saving track: " + e.getMessage(), "Error",
 						JOptionPane.ERROR_MESSAGE);
@@ -275,8 +266,7 @@ public class UIController implements Runnable {
 						selectedTrack.getTrackFileType());
 				selectedTrack.setModified(false);
 			} catch (TrackFileException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.error("Exception while save track!", e);
 				JOptionPane.showMessageDialog(
 						form,
 						"Error while saving track "
@@ -306,8 +296,7 @@ public class UIController implements Runnable {
 							.getDescription());
 					saveTrack.setModified(false);
 				} catch (TrackFileException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					logger.error("Exception while save track as file!", e);
 					JOptionPane.showMessageDialog(form,
 							"Error while saving track: " + e.getMessage(),
 							"Error", JOptionPane.ERROR_MESSAGE);
@@ -497,7 +486,7 @@ public class UIController implements Runnable {
 		form.getTracksPanel().setCursor(
 				Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
 		if (points != null) {
-			form.getAppendUnDo().add(points);
+			form.getAppendUnDo().add(selectedTrack,points,true);
 			selectedTrack.add(points);
 		} else {
 			JOptionPane
@@ -510,7 +499,11 @@ public class UIController implements Runnable {
 
 	public void undoAppend() {
 		// TODO Auto-generated method stub
-		form.getAppendUnDo().unDo();
+		UnDoManager undo = form.getAppendUnDo();
+		if( null != undo ){
+			undo.unDo();
+			form.repaint();
+		}
 	}
 
 	public void tileManagerNone() {
@@ -621,15 +614,17 @@ public class UIController implements Runnable {
 	}
 
 	public void tileManagerMapQuestSat() {
-		// TODO Auto-generated method stub
 		initTileManager(new MapQuestSatTileManager());
 
 	}
 
 	public void tileManagerMapQuestHybride() {
-		// TODO Auto-generated method stub
 		initTileManager(new MapQuestHybrideTileManager());
-
+	}
+	
+	public void updateTimeStamps() {
+		final Track selectedTrack = db.getTrackTableModel().getSelectedTrack();
+		if(selectedTrack == null) return;
 	}
 	
 	public void updateElevation() {
@@ -657,23 +652,52 @@ public class UIController implements Runnable {
 	}
 
 	public Track newTrack() {
-		String trackName = JOptionPane.showInputDialog("Name of new track:");
-		if (trackName == null)
-			return null;
-		Track track = new Track();
+		final Track track = new Track();
+		
+		final String trackName = this.getNewTrackName();
 		track.setName(trackName);
-		track.setTrackFileName(trackName);
+		
+		Path path = this.getTrackPath();
+		track.setTrackFilePath(path);
 		track.setTrackFileType("Garmin GPX Track");
+		
+		if( Configuration.getProperty("AUTOMATIC_COLORS").equals("1")){
+			track.assignColor();
+		}
 		return track;
-
+	}
+	
+	private String getNewTrackName() {
+		String trackName = JOptionPane.showInputDialog("Name of new track:");
+		if (trackName == null || trackName.trim().length() == 0) {
+			trackName = "Track-" + Long.toString((long)(Math.random() * 1000D));
+		}
+		return trackName;
+	}
+	
+	private Path getTrackPath() {
+		Path path = null;
+		for(Track track : this.db.getTracks()) {
+			if(track.getTrackFilePath() != null) {
+				path = track.getTrackFilePath();
+			}
+		}
+		
+		if(path == null) {
+			path = new File(System.getProperty("user.home")).toPath();
+		}
+		
+		return path;
 	}
 
 	public void correctSelectedTrack() {
-		String epsilon = JOptionPane
+		final Track selectedTrack = db.getTrackTableModel().getSelectedTrack();
+		if(selectedTrack == null) return;
+		
+		final String epsilon = JOptionPane
 				.showInputDialog("Correction epsilon perimeter in km:");
-		if (epsilon == null)
-			return;
-		Track selectedTrack = db.getTrackTableModel().getSelectedTrack();
+		if (epsilon == null) return;
+		
 		selectedTrack.correct(Parser.parseDouble(epsilon));
 		form.setStateMessage("Track " + selectedTrack.getName() + " corrected");
 		zoomSelectedTrack();
@@ -687,7 +711,7 @@ public class UIController implements Runnable {
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("Exception while open GPSies track!", e);
 		}
 
 	}
@@ -745,7 +769,9 @@ public class UIController implements Runnable {
 	}
 
 	public void correctZeroPoints() {
-		Track selectedTrack = db.getTrackTableModel().getSelectedTrack();
+		final Track selectedTrack = db.getTrackTableModel().getSelectedTrack();
+		if(selectedTrack == null) return;
+		
 		selectedTrack.correct();
 		selectedTrack.correctDoublePoints();
 		form.setStateMessage("Track " + selectedTrack.getName() + " corrected");
@@ -755,6 +781,8 @@ public class UIController implements Runnable {
 
 	public void compress() {
 		Track selectedTrack = db.getTrackTableModel().getSelectedTrack();
+		if(selectedTrack == null) return;
+		
 		DlgCompressOptions dialog = new DlgCompressOptions(
 				selectedTrack.getName());
 		dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -813,7 +841,15 @@ public class UIController implements Runnable {
 		if (selectedTrack != null && selectedPoint != null) {
 			selectedPoint = selectedTrack.previousPoint(selectedPoint);
 			// TODO: Refactor code, use Observer Design Pattern
-			selectPoint(selectedTrack,selectedPoint,zoom);
+			form.getTracksView().getSelectedTrackView()
+					.setSelectedPoint(selectedPoint);
+			form.getAltitudeProfilePanel().setSelectedPoint(selectedPoint);
+			int selectedPointIndex = selectedTrack.indexOf(selectedPoint);
+			form.getPointsTable().setRowSelectionInterval(selectedPointIndex,
+					selectedPointIndex);
+			//
+			if (zoom)
+				zoomSelectedPoint();
 		}
 
 	}
@@ -827,21 +863,16 @@ public class UIController implements Runnable {
 			// TODO: Refactor code, use Observer Design Pattern when selecting a
 			// point
 			// to inform all interested instances
-			selectPoint(selectedTrack,selectedPoint,zoom);
-		}
-
-	}
-
-	public void selectPoint(Track track, Point point, boolean zoom) {
 		form.getTracksView().getSelectedTrackView()
-		.setSelectedPoint(point);
-        form.getAltitudeProfilePanel().setSelectedPoint(point);
-        int selectedPointIndex = track.indexOf(point);
+					.setSelectedPoint(selectedPoint);
+			form.getAltitudeProfilePanel().setSelectedPoint(selectedPoint);
+			int selectedPointIndex = selectedTrack.indexOf(selectedPoint);
         form.getPointsTable().setRowSelectionInterval(selectedPointIndex,
         			selectedPointIndex);
 //
         if (zoom)
         	zoomSelectedPoint();
+		}
 		
 	}
 	
@@ -882,19 +913,18 @@ public class UIController implements Runnable {
 	}
 
 	public void saveMapViewAsImage() {
-		// TODO Auto-generated method stub
-		JFileChooser chooser = getJFileChooser();
-		int returnVal = chooser.showSaveDialog(form);
+		JFileChooser imageSaveChooser = new JFileChooser();
+		imageSaveChooser.addChoosableFileFilter(new FileNameExtensionFilter("Image", "png"));
+		int returnVal = imageSaveChooser.showSaveDialog(form);
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 	        try {
-	        	String fileName = chooser.getSelectedFile().getAbsolutePath();
+	        	String fileName = imageSaveChooser.getSelectedFile().getAbsolutePath();
 	        	if (!fileName.endsWith(".png")) {
 	        		fileName = fileName + ".png";
 	        	}
 				ImageIO.write(form.getTracksPanel().getImage(),"png", new File(fileName));
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.error("Exception in save map view as image!", e);
 			}
 
 		}
@@ -902,23 +932,21 @@ public class UIController implements Runnable {
 	}
 
 	public void saveAltitudeProfileasImage() {
-		// TODO Auto-generated method stub
-		JFileChooser chooser = getJFileChooser();
-		int returnVal = chooser.showSaveDialog(form);
+		JFileChooser imageSaveChooser = new JFileChooser();
+		imageSaveChooser.addChoosableFileFilter(new FileNameExtensionFilter("Image", "png"));
+		int returnVal = imageSaveChooser.showSaveDialog(form);
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 	        try {
-	        	String fileName = chooser.getSelectedFile().getAbsolutePath();
+	        	String fileName = imageSaveChooser.getSelectedFile().getAbsolutePath();
 	        	if (!fileName.endsWith(".png")) {
 	        		fileName = fileName + ".png";
 	        	}
 				ImageIO.write(form.getAltitudeProfilePanel().getImage(),"png", new File(fileName));
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.error("Exception in save altitude profile as image!", e);
 			}
 
 		}
-		
 	}
 
 	public void smoothTrackElevation() {

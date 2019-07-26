@@ -6,8 +6,12 @@ package jgpstrackedit.map.elevation.google;
 import java.net.URL;
 import java.util.ArrayList;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import jgpstrackedit.data.Point;
 import jgpstrackedit.data.Track;
+import jgpstrackedit.gpsies.GPSiesUpLoad;
 import jgpstrackedit.map.elevation.ElevationException;
 import jgpstrackedit.map.elevation.IElevationCorrection;
 import jgpstrackedit.map.elevation.IProgressDetector;
@@ -20,7 +24,10 @@ import jgpstrackedit.util.Parser;
  * @author Hubert
  * 
  */
-public class GoogleElevationCorrection implements IElevationCorrection {
+public class GoogleElevationCorrection implements IElevationCorrection 
+{
+	private static Logger logger = LoggerFactory.getLogger(GoogleElevationCorrection.class);
+	
 	private StringBuilder elevationURL;
 	private boolean firstPoint;
 	private ArrayList<Point> points;
@@ -128,7 +135,7 @@ public class GoogleElevationCorrection implements IElevationCorrection {
 		} catch (ElevationException e) {
 			throw e;
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("Error during elevation correction!", e);
 		}
 
 	}

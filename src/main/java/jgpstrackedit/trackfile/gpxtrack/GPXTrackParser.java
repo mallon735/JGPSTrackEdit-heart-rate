@@ -197,7 +197,14 @@ public class GPXTrackParser implements ContentHandler {
                 throw new IllegalStateException("Unexpected characters() event! (Missing DTD?)");
             }
             handler.handle_ele(buffer.length() == 0 ? null : buffer.toString(), attrs);
-        } else {
+        }else if (here.endsWith("DisplayColor")) {
+            if (fireOnlyIfMixed) {
+                throw new IllegalStateException("Unexpected characters() event! (Missing DTD?)");
+            }
+            handler.handle_gxxcolor(buffer.length() == 0 ? null : buffer.toString());
+        }
+        
+        else {
             //do not care
         }
         buffer.delete(0, buffer.length());

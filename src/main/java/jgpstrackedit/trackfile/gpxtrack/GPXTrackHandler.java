@@ -190,5 +190,6 @@ public interface GPXTrackHandler {
      * A container element end event handling method.
      */
     public void end_metadata() throws SAXException;
+    public void handle_gxxcolor(final String data) throws SAXException;
     
 }

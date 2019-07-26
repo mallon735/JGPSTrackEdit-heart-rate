@@ -13,23 +13,31 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import javax.xml.parsers.ParserConfigurationException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.xml.sax.SAXException;
 
 import jgpstrackedit.data.Point;
 import jgpstrackedit.data.Track;
 import jgpstrackedit.trackfile.TrackFile;
-
-import org.xml.sax.SAXException;
+import jgpstrackedit.trackfile.kml.KML;
 
 /**
  * @author Hubert
  *
  */
-public class ASC implements TrackFile {
+public class ASC implements TrackFile 
+{
+	private static Logger logger = LoggerFactory.getLogger(ASC.class);
 
 	@Override
-	public Track openTrack(File file) throws FileNotFoundException,
+	public List<Track> openTrack(File file) throws FileNotFoundException,
 			SAXException, ParserConfigurationException, IOException {
 		final Track track = new Track();
 		try(BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(file)))) {
@@ -46,44 +54,43 @@ public class ASC implements TrackFile {
 				track.add(point);
 				line = in.readLine();
 			}
+		} catch(Exception e) {
+			logger.error(String.format("Cannot open track [%s]", file.getAbsolutePath()), e);
 		}
 		
 		track.setValid(true);
-		
-		return track;
+		return Arrays.asList(track);
 	}
 
 	@Override
 	public String getOpenReadyMessage() {
-		// TODO Auto-generated method stub
 		return "ASC Track imported.";
 	}
 
 	@Override
 	public String getTrackFileExtension() {
-		// TODO Auto-generated method stub
 		return "asc";
 	}
 
 	@Override
 	public String getTypeDescription() {
-		// TODO Auto-generated method stub
 		return "ASC Track";
 	}
 
 	@Override
 	public void saveTrack(Track track, File file) throws FileNotFoundException,
 			IOException {
-		PrintWriter out = new PrintWriter(new BufferedWriter(
-				new OutputStreamWriter(new FileOutputStream(file))));
-		new ASCWriter().print(track, out);
-		out.close();
-		
+		try(PrintWriter out = new PrintWriter(new BufferedWriter(
+				new OutputStreamWriter(new FileOutputStream(file))))) {
+			new ASCWriter().print(track, out);
+			out.close();
+		} catch(Exception e) {
+			logger.error(String.format("Cannot write track [%s]", file.getAbsolutePath()), e);
+		}
 	}
 
 	@Override
 	public String getSaveReadyMessage() {
-		// TODO Auto-generated method stub
 		return "ASC Track saved.";
 	}
 

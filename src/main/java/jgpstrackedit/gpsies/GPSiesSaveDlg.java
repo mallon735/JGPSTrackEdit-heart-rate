@@ -18,13 +18,17 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
+import org.apache.commons.httpclient.HttpException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import jgpstrackedit.data.Track;
 import jgpstrackedit.international.International;
 
-import org.apache.commons.httpclient.HttpException;
-
 public class GPSiesSaveDlg extends JDialog {
 	private static final long serialVersionUID = 1L;
+	private static Logger logger = LoggerFactory.getLogger(GPSiesSaveDlg.class);
+	
 	private final JPanel contentPanel = new JPanel();
 	private JLabel lblTrackName;
 	private JTextField textFieldTrackName;
@@ -152,12 +156,9 @@ public class GPSiesSaveDlg extends JDialog {
 				if (result == 200) {
 				    this.setVisible(false);
 				}
-			} catch (HttpException e) {
+			} catch (Exception e) {
 				textAreaErrorLog.setText(e.getMessage());
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-				textAreaErrorLog.setText(e.getMessage());
+				logger.error("Exception during upload track!", e);
 			}
 		}
 		

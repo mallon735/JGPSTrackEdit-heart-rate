@@ -13,76 +13,87 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.URL;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import jgpstrackedit.data.Track;
-import jgpstrackedit.trackfile.TrackFile;
-import jgpstrackedit.trackfile.gpxtrack.GPXTrackWriter;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+
+import jgpstrackedit.data.Track;
+import jgpstrackedit.trackfile.TrackFile;
 
 /**
  * @author Hubert
  * 
  */
 public class KML implements TrackFile {
-
+	private static Logger logger = LoggerFactory.getLogger(KML.class);
+	
 	@Override
-	public Track openTrack(File file) throws FileNotFoundException,
+	public List<Track> openTrack(File file) throws FileNotFoundException,
 			SAXException, ParserConfigurationException, IOException {
-		// TODO Auto-generated method stub
-		InputSource in = null;
-		KmlHandlerImpl handler = new KmlHandlerImpl();
-		KmlParser parser = new KmlParser(handler, null);
-		in = new InputSource(new InputStreamReader(new FileInputStream(file)));
-		parser.parse(in);
-		Track track = handler.getTrack();
-		return track;
+		final KmlHandlerImpl handler = new KmlHandlerImpl();
+		final KmlParser parser = new KmlParser(handler, null);
+		
+		try(FileInputStream fis = new FileInputStream(file)) {
+			InputSource in = new InputSource(new InputStreamReader(fis,"UTF-8"));
+			parser.parse(in);
+			
+			final Track track = handler.getTrack();
+			track.correct();
+			return Arrays.asList(track);
+		} catch(Exception e) {
+			logger.error(String.format("Cannot open track [%s]", file.getAbsolutePath()), e);
+			return Collections.emptyList();
+		}
 	}
 
-	public Track openTrack(URL url) throws 
+	public List<Track> openTrack(URL url) throws 
 			SAXException, ParserConfigurationException, IOException {
-		// TODO Auto-generated method stub
-		KmlHandlerImpl handler = new KmlHandlerImpl();
-		KmlParser parser = new KmlParser(handler, null);
+		final KmlHandlerImpl handler = new KmlHandlerImpl();
+		final KmlParser parser = new KmlParser(handler, null);
 		parser.parse(url);
-		return handler.getTrack();
+		
+		final Track track = handler.getTrack();
+		track.correct();
+		return Arrays.asList(track);
 	}
 
 	@Override
 	public String getOpenReadyMessage() {
-		// TODO Auto-generated method stub
 		return "KML Track imported.";
 	}
 
 	@Override
 	public String getTrackFileExtension() {
-		// TODO Auto-generated method stub
 		return "kml";
 	}
 
 	@Override
 	public String getTypeDescription() {
-		// TODO Auto-generated method stub
 		return "KML Track";
 	}
 
 	@Override
 	public void saveTrack(Track track, File file) throws FileNotFoundException,
 			IOException {
-		// TODO Auto-generated method stub
-		PrintWriter out = new PrintWriter(new BufferedWriter(
-				new OutputStreamWriter(new FileOutputStream(file))));
-		new KMLWriter().print(track, out);
-		out.close();
-
+		try(FileOutputStream fos = new FileOutputStream(file)) {
+			final PrintWriter out = new PrintWriter(new BufferedWriter(
+				new OutputStreamWriter(fos)));
+			new KMLWriter().print(track, out);
+			out.close();
+		} catch(Exception e) {
+			logger.error(String.format("Cannot write track [%s]", file.getAbsolutePath()), e);
+		}
 	}
 
 	@Override
 	public String getSaveReadyMessage() {
-		// TODO Auto-generated method stub
 		return "KML Track saved.";
 	}
 

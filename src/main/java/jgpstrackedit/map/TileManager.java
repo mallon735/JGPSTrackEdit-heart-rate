@@ -14,14 +14,15 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.TreeSet;
 
 import javax.imageio.ImageIO;
 
-import jgpstrackedit.config.SystemConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import jgpstrackedit.config.Configuration;
 import jgpstrackedit.map.tiledownload.TileCopyCommand;
 import jgpstrackedit.map.tiledownload.TileDownload;
@@ -34,9 +35,9 @@ import jgpstrackedit.map.tilehandler.WebTileLoader;
 import jgpstrackedit.map.util.ImageConverter;
 import jgpstrackedit.map.util.MapObserver;
 import jgpstrackedit.map.util.Tile;
+import jgpstrackedit.map.util.TileBoundary;
 import jgpstrackedit.map.util.TileLRUList;
 import jgpstrackedit.map.util.TileLRUObserver;
-import jgpstrackedit.map.util.TileBoundary;
 import jgpstrackedit.map.util.TileNumber;
 import jgpstrackedit.map.util.TileState;
 import jgpstrackedit.util.ProgressHandler;
@@ -49,8 +50,10 @@ import jgpstrackedit.view.Transform;
  * 
  */
 public abstract class TileManager implements Runnable, TileLoadObserver,
-		ImageObserver, TileLRUObserver {
-
+		ImageObserver, TileLRUObserver 
+{
+	private static Logger logger = LoggerFactory.getLogger(TileManager.class);
+	
 	// Constants
 	private int maxZoom = 18;
 	//
@@ -210,7 +213,7 @@ public abstract class TileManager implements Runnable, TileLoadObserver,
 				Configuration.getIntProperty("MAX_TILES_IN_MEMORY"));
 		tileLRU.addTileLRUObserver(this);
 		diskTileLoader = new DiskTileLoader();
-		diskTileLoader.setBaseDirectory("map" + SystemConfig.dirSeparator()
+		diskTileLoader.setBaseDirectory("map" + File.separator
 				+ mapName);
 		diskTileLoader.addTileLoadObserver(this);
 		diskTileLoader.start();
@@ -218,7 +221,7 @@ public abstract class TileManager implements Runnable, TileLoadObserver,
 		webTileLoader.addTileLoadObserver(this);
 		webTileLoader.start();
 		tileSaver = new TileSaver();
-		tileSaver.setBaseDirectory("map" + SystemConfig.dirSeparator()
+		tileSaver.setBaseDirectory("map" + File.separator
 				+ mapName);
 		tileSaver.start();
 		loadingImage = createLoadingImage();
@@ -587,12 +590,12 @@ public abstract class TileManager implements Runnable, TileLoadObserver,
 				//System.out.println("TileManager: URL loading: "+urlString);
 				url = new URL(urlString);
 				Image image = Toolkit.getDefaultToolkit().createImage(url);
-				String dirPath = getBaseDir() + SystemConfig.dirSeparator()
-						+ tileNumber.getZoom() + SystemConfig.dirSeparator()
+				String dirPath = getBaseDir() + File.separator
+						+ tileNumber.getZoom() + File.separator
 						+ tileNumber.getX();
 				File dir = new File(dirPath);
 				dir.mkdirs();
-				String fileName = dirPath + SystemConfig.dirSeparator()
+				String fileName = dirPath + File.separator
 						+ tileNumber.getY() + ".png";
 				BufferedImage bufferedImage = ImageConverter
 						.toBufferedImage(image);
@@ -661,8 +664,8 @@ public abstract class TileManager implements Runnable, TileLoadObserver,
 			}
 			if (downloadTileFromWeb(tile)) {
 				try {
-					File file = new File(targetDir + SystemConfig.dirSeparator()
-							+ tile.getZoom() + SystemConfig.dirSeparator()
+					File file = new File(targetDir + File.separator
+							+ tile.getZoom() + File.separator
 							+ tile.getX());
 					file.mkdirs();
 					String sourceFile = getBaseDir() + tile.toFileName() + ".png";
@@ -692,7 +695,7 @@ public abstract class TileManager implements Runnable, TileLoadObserver,
 	public void initializeTileCacheStructure() {
 		tiles.clear();
 		for (int i = 0; i <= getMaxZoom(); i++) {
-			File file = new File(getBaseDir() + SystemConfig.dirSeparator() + i);
+			File file = new File(getBaseDir() + File.separator + i);
 			file.mkdirs();
 			initializeZoomLevel(file, i);
 		}
@@ -700,7 +703,7 @@ public abstract class TileManager implements Runnable, TileLoadObserver,
 	}
 
 	public String getBaseDir() {
-		return "map" + SystemConfig.dirSeparator() + getMapName();
+		return "map" + File.separator + getMapName();
 	}
 
 	protected void initializeZoomLevel(File directory, int zoomLevel) {

@@ -5,7 +5,6 @@ package jgpstrackedit.map.tiledownload;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -17,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeSet;
 
-import jgpstrackedit.config.SystemConfig;
 import jgpstrackedit.data.Point;
 import jgpstrackedit.data.Track;
 import jgpstrackedit.map.tilehandler.QueueObserver;
@@ -287,16 +285,16 @@ public class TileDownload {
 	public void saveDownloadedTiles(String mapDir, String tileDir,
 			String extraExtension) {
 		/-*
-		 * File file = new File("map" + SystemConfig.dirSeparator() +
-		 * getMapName() + SystemConfig.dirSeparator() + i); file.mkdirs();
+		 * File file = new File("map" + File.separator +
+		 * getMapName() + File.separator + i); file.mkdirs();
 		 *-/
 		File file = new File(tileDir);
 		file.mkdirs();
 		TreeSet<TileNumber> allTiles = new TreeSet<TileNumber>(downloadTiles);
 		allTiles.addAll(extensionDownloadTiles);
 		for (TileNumber tile : allTiles) {
-			file = new File(tileDir + SystemConfig.dirSeparator()
-					+ tile.getZoom() + SystemConfig.dirSeparator()
+			file = new File(tileDir + File.separator
+					+ tile.getZoom() + File.separator
 					+ tile.getX());
 			file.mkdirs();
 			String sourceFile = mapDir + tile.toFileName() + ".png";
