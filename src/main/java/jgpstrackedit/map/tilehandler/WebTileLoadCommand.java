@@ -4,9 +4,11 @@
 package jgpstrackedit.map.tilehandler;
 
 import java.awt.Image;
-import java.awt.Toolkit;
 import java.net.MalformedURLException;
 import java.net.URL;
+
+import javax.imageio.ImageIO;
+
 import jgpstrackedit.map.TileManager;
 
 
@@ -14,31 +16,31 @@ import jgpstrackedit.map.TileManager;
  * @author Hubert
  *
  */
-public class WebTileLoadCommand extends AbstractTileCommand {
-
+public class WebTileLoadCommand extends AbstractTileCommand 
+{
 	private Image image;
 	
 	@Override
 	public void doAction() {
-		// TODO Auto-generated method stub
 		String urlString = TileManager.getCurrentTileManager().getTileURL(getTileNumber()) ;
-		URL url;
-		try {
-			//System.out.println("URL loading: "+urlString);
-			url = new URL(urlString);
-			image = Toolkit.getDefaultToolkit().createImage(url);
+		
+		try {	
+			image = ImageIO.read(new URL(urlString));
 			TileLoadEvent event = new TileLoadEvent();
 			event.setImageLoaded(image);
 			event.setTileNumber(getTileNumber());
 			notifyTileLoadObservers(event);
 		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			System.out.println("URL="+urlString);
 			e.printStackTrace();
+		} catch(Exception exception) {
+			System.err.println(String.format("Exception while reading %s! %s", urlString, exception.getMessage()));
+			if(exception.getCause() != null && exception.getCause().getMessage() != null) {
+				System.err.println(String.format("    %s", exception.getCause().getMessage()));
+				if(exception.getCause().getCause() != null && exception.getCause().getCause().getMessage() != null) {
+					System.err.println(String.format("    %s", exception.getCause().getCause().getMessage()));
+				}
+			}
 		}
 		
 	}
-
-
-	
 }

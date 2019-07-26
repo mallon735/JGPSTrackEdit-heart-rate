@@ -23,6 +23,7 @@ import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.xml.parsers.ParserConfigurationException;
 
+import jgpstrackedit.config.Configuration;
 import jgpstrackedit.config.Constants;
 import jgpstrackedit.data.Database;
 import jgpstrackedit.data.Point;
@@ -40,6 +41,7 @@ import jgpstrackedit.map.MapQuestSatTileManager;
 import jgpstrackedit.map.MapQuestTileManager;
 import jgpstrackedit.map.OCMTileManager;
 import jgpstrackedit.map.OSMTileManager;
+import jgpstrackedit.map.ThunderForestCycleMapTileManager;
 import jgpstrackedit.map.TileManager;
 import jgpstrackedit.map.elevation.ElevationCorrectionFactory;
 import jgpstrackedit.map.elevation.IElevationCorrection;
@@ -605,6 +607,10 @@ public class UIController implements Runnable {
 		// TODO Auto-generated method stub
 		initTileManager(new FourUMapsTileManager());
 		
+	}
+	
+	public void tileManagerThunderForest() {
+		initTileManager(new ThunderForestCycleMapTileManager(Configuration.getProperty("MAP_API_KEY_THUNDER_FOREST")));
 	}
 
 	public void tileManagerMapQuest() {

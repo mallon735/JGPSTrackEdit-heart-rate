@@ -189,6 +189,9 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 		} else if (mapType.equals("4UMap")) {
 			uiController.tileManager4UMap();
 			this.rdbtnmntmumap.setSelected(true);
+		} else if (mapType.equals("ThunderforestCycleMap")) {
+			uiController.tileManagerThunderForest();
+			this.rdbtnThunderforest.setSelected(true);
 		} else {
 			rdbtnmntmOpenstreetmapmapnik.setSelected(true);
 			uiController.tileManagerOSM_Mapnik();
@@ -1638,6 +1641,15 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 			}
 		});
 		mnMaps.add(rdbtnmntmumap);
+		
+		rdbtnThunderforest= new JRadioButtonMenuItem("ThunderforestCycleMap");
+		mapRadioButtons.add(rdbtnThunderforest);
+		rdbtnThunderforest.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				uiController.tileManagerThunderForest();
+			}
+		});
+		mnMaps.add(rdbtnThunderforest);
 		mnMaps.add(new JSeparator());
 
 		rdbtnmntmMapquest = new JRadioButtonMenuItem("MapQuest");
@@ -2230,6 +2242,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 	private JCheckBoxMenuItem chckbxmntmMoveselectedpointmodeP;
 	private JCheckBoxMenuItem chckbxmntmDistanceMeasurement;
 	private JRadioButtonMenuItem rdbtnmntmumap;
+	private JRadioButtonMenuItem rdbtnThunderforest;
 	private JRadioButtonMenuItem rdbtnmntmGooglemapsatellite;
 	private JRadioButtonMenuItem rdbtnmntmGooglemaphybrid;
 	private JRadioButtonMenuItem rdbtnmntmGooglemapterrain;
