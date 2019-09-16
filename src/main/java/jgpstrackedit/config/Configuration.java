@@ -95,7 +95,7 @@ public class Configuration {
 			properties.setProperty("INCLINETIME100METERS","10.0"); // min
 			properties.setProperty("BREAKRATIO","0.5"); //
 			properties.setProperty("MAXTOURTIME","8.0"); // h
-			properties.setProperty("MAPTYPE","4UMap");
+			properties.setProperty("MAPTYPE","OpenStreetMap");
 			properties.setProperty("MAP_API_KEY_THUNDER_FOREST", "");
 			properties.setProperty("PROXY","");
 			properties.setProperty("PROXYPORT","");

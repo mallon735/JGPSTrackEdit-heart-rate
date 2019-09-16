@@ -4,6 +4,7 @@
 package jgpstrackedit.map.tilehandler;
 
 import java.awt.Image;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -21,15 +22,18 @@ import jgpstrackedit.map.TileManager;
  */
 public class WebTileLoadCommand extends AbstractTileCommand 
 {
+	private static final String USER_AGENT_VALUE = "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:68.0) Gecko/20100101 Firefox/68.0";
 	private static Logger logger = LoggerFactory.getLogger(WebTileLoadCommand.class);
-	private Image image;
 	
 	@Override
 	public void doAction() {
 		String urlString = TileManager.getCurrentTileManager().getTileURL(getTileNumber()) ;
 		
 		try {	
-			image = ImageIO.read(new URL(urlString));
+			final URL url = new URL(urlString);
+			final HttpURLConnection httpcon = (HttpURLConnection) url.openConnection();
+			httpcon.addRequestProperty("User-Agent", USER_AGENT_VALUE);
+			final Image image = ImageIO.read(httpcon.getInputStream());
 			TileLoadEvent event = new TileLoadEvent();
 			event.setImageLoaded(image);
 			event.setTileNumber(getTileNumber());

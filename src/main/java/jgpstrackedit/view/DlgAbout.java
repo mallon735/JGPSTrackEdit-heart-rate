@@ -28,7 +28,8 @@ public class DlgAbout extends JDialog {
 	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
 	
-	private static final String BUILDSTRING = "Release 1.6.6-SNAPSHOT 20190726";
+	private static final String VERSION_INFO_STATIC = "1.7.0-RC1";
+	private static final String RELEASE_DATE_STATIC = "2019/09/16";
 
 	/**
 	 * Create the dialog.
@@ -36,9 +37,9 @@ public class DlgAbout extends JDialog {
 	public DlgAbout() {
 		final Manifest manifest = getManifest();
 		final String buildTime = 
-				Optional.ofNullable(manifest.getMainAttributes().getValue("Build-Time")).orElse("");
+				Optional.ofNullable(manifest.getMainAttributes().getValue("Build-Time")).orElse(RELEASE_DATE_STATIC);
 		final String buildVersion =
-				Optional.ofNullable(manifest.getMainAttributes().getValue("Build-Label")).orElse("");
+				Optional.ofNullable(manifest.getMainAttributes().getValue("Build-Label")).orElse(VERSION_INFO_STATIC);
 		
 		setTitle("JGPSTrackEdit - "+International.getText("dlgabout.About"));
 		setBounds(100, 100, 530, 470);
@@ -52,8 +53,7 @@ public class DlgAbout extends JDialog {
  			txtrJgpstrackeditc.setFont(new Font("Arial", Font.PLAIN, 12));
 			txtrJgpstrackeditc.setText(
 					"<html>JGPSTrackEdit (c) 2012-2019 by Hubert Lutnik (hubert.lutnik@htl-klu.at)<br/>"
-					//+ String.format("Release %s (%s)<br/><br/>", buildVersion, buildTime )
-					+ (buildVersion.equals("")?BUILDSTRING + "<br/><br/>":String.format("Release %s (%s)<br/><br/>", buildVersion, buildTime ))
+					+ String.format("Release %s (%s)<br/><br/>", buildVersion, buildTime )
 					+ "Usage for non commercial purposes only.<br/>"
 					+ "No guaranties!<br/><br/>"
 					+ "Thanks to GPSPrune for some ideas:<br/>"
