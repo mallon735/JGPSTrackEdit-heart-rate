@@ -4,7 +4,7 @@
   <groupId>JGPSTrackEdit</groupId>
   <artifactId>JGPSTrackEdit</artifactId>
   <packaging>jar</packaging>
-  <version>1.7.0-RC1</version>
+  <version>1.7.0-RC2</version>
   <name>JGPSTrackEdit</name>
   
   <properties>

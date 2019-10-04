@@ -8,27 +8,28 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
+import java.util.stream.Collectors;
 
 public class ParserContext {
 	private final Stack<ParserContextEntry> context;
 	private final List<Track> tracks;
 	private Track currentTrack;
-	private Point curentPoint;
+	private Point currentPoint;
 	
 	public ParserContext() {
 		this.context = new Stack<>();
 		this.tracks = new LinkedList<>();
 		this.currentTrack = new Track();
 		this.tracks.add(this.currentTrack);
-		this.curentPoint = null;
+		this.currentPoint = null;
 	}
 
-	public Point getCurentPoint() {
-		return curentPoint;
+	public Point getCurrentPoint() {
+		return currentPoint;
 	}
 
-	public void setCurentPoint(Point curentPoint) {
-		this.curentPoint = curentPoint;
+	public void setCurrentPoint(Point currentPoint) {
+		this.currentPoint = currentPoint;
 	}
 
 	public Stack<ParserContextEntry> getContext() {
@@ -55,6 +56,15 @@ public class ParserContext {
 		this.currentTrack = new Track();
 		this.tracks.add(this.currentTrack);
 		return currentTrack;
+	}
+
+	public void removeEmptyTracks() {
+		final List<Track> rewrittenTracks = this.tracks
+				.stream()
+				.filter(track -> track.getNumberPoints() > 1)
+				.collect(Collectors.toList());
+		this.tracks.clear();
+		this.tracks.addAll(rewrittenTracks);
 	}
 	
 	public List<Track> getTracks() {

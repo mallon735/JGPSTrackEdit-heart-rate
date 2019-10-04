@@ -549,7 +549,7 @@ public class Track
 	 * 
 	 * @param track
 	 *            the track to merge
-	 * @param if true, then the last point of current track is connected to the
+	 * @param direct if true, then the last point of current track is connected to the
 	 *        first point of the given track, otherwise the tracks are reversed
 	 *        as necessary
 	 */
@@ -594,9 +594,6 @@ public class Track
 	 * Corrects the track. Deletes all points which has a zero coordinates, that
 	 * means whose longitude and latitude values are equals to 0.0. The first
 	 * point is assumed to be correct.
-	 * 
-	 * @param epsilon
-	 *            the epsilon distance
 	 */
 	public void correct() {
 		for (int i = 0; i < points.size(); i++) {
@@ -697,9 +694,10 @@ public class Track
 	 *            Point who splits the track into two new tracks
 	 * @param name
 	 *            new base name of the splitted track
+	 * @param automaticColor select a new color for the second track
 	 * @return new track
 	 */
-	public Track split(Point splitPoint, String name) {
+	public Track split(Point splitPoint, String name, boolean automaticColor) {
 		int splitIndex = points.indexOf(splitPoint);
 		assert (splitIndex != -1);
 		
@@ -717,7 +715,11 @@ public class Track
 		secondTrack.add(splitPoint);
 		secondTrack.setTrackFilePath(this.getTrackFilePath());
 		secondTrack.setTrackFileType(this.getTrackFileType());
-		secondTrack.setColor(this.getColor());
+		if(automaticColor) {
+			secondTrack.assignColor();
+		} else {
+			secondTrack.setColor(this.getColor());
+		}
 		
 		for (int i = splitIndex + 1; i < points.size(); i++) {
 			secondTrack.add(points.get(i));
@@ -743,8 +745,8 @@ public class Track
 	 *            Point who splits the track into two new tracks
 	 * @return new track
 	 */
-	public Track split(Point splitPoint) {
-		return split(splitPoint, this.getName());
+	public Track split(Point splitPoint, boolean automaticColor) {
+		return split(splitPoint, this.getName(), automaticColor);
 	}
 
 	/**
@@ -757,7 +759,6 @@ public class Track
 	 *            selected point
 	 */
 	public void insertAdjacentPoints(Point selectedPoint) {
-		// TODO Auto-generated method stub
 		int selectedIndex = points.indexOf(selectedPoint);
 		if (selectedIndex < points.size() - 1)
 			insertAdjacentPoint(selectedIndex + 1, selectedPoint,
@@ -783,7 +784,6 @@ public class Track
 	 */
 	protected void insertAdjacentPoint(int insertionIndex, Point selectedPoint,
 			Point adjacentPoint) {
-		// TODO Auto-generated method stub
 		double longitude = (selectedPoint.getLongitude() + adjacentPoint
 				.getLongitude()) / 2.0;
 		double latitude = (selectedPoint.getLatitude() + adjacentPoint
@@ -806,7 +806,6 @@ public class Track
 	 */
 	public void setPointPosition(Point point, double mapLongitude,
 			double mapLatitude) {
-		// TODO Auto-generated method stub
 		if (point != null) {
 			point.setLongitude(mapLongitude);
 			point.setLatitude(mapLatitude);
@@ -823,7 +822,6 @@ public class Track
 	 * @return index or -1 if point not found
 	 */
 	public int indexOf(Point point) {
-		// TODO Auto-generated method stub
 		return points.indexOf(point);
 	}
 
@@ -836,7 +834,6 @@ public class Track
 	 *            latitude of point
 	 */
 	public void add(double mapLongitude, double mapLatitude) {
-		// TODO Auto-generated method stub
 		Point point = new Point(mapLongitude, mapLatitude);
 		add(point);
 	}
@@ -947,7 +944,6 @@ public class Track
 	 */
 	@Override
 	public Track clone() {
-		// TODO Auto-generated method stub
 		Track cloneTrack = new Track();
 		for (Point p : points) {
 			cloneTrack.add(p.clone());
@@ -1011,7 +1007,6 @@ public class Track
 	 * @return the point after the given point
 	 */
 	public Point nextPoint(Point point) {
-		// TODO Auto-generated method stub
 		int pointIndex = points.indexOf(point);
 		if (pointIndex < points.size() - 1)
 			return points.get(pointIndex + 1);

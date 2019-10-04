@@ -2,7 +2,12 @@ package jgpstrackedit.trackfile.tcx;
 
 import jgpstrackedit.data.Point;
 import jgpstrackedit.trackfile.ParserContext;
+import jgpstrackedit.trackfile.ParserContextEntry;
 import jgpstrackedit.trackfile.TagHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Stack;
 
 /**
  * Tag handler is used by the xml parser. Handle tcx tags and build a track.
@@ -13,6 +18,7 @@ import jgpstrackedit.trackfile.TagHandler;
  *
  */
 public class TcxTagHandler implements TagHandler {
+	private static final Logger logger = LoggerFactory.getLogger(TcxTagHandler.class);
 
 	@Override
 	public void handleStartDocument(ParserContext context) {		
@@ -20,9 +26,7 @@ public class TcxTagHandler implements TagHandler {
 
 	@Override
 	public void handleEndDocument(ParserContext context) {
-		if(context.getCurrentTrack().getNumberPoints() > 0) {
-			context.getCurrentTrack().setValid(true);
-		}
+		context.removeEmptyTracks();
 	}
 
 	@Override
@@ -52,7 +56,9 @@ public class TcxTagHandler implements TagHandler {
 
 			@Override
 			public void handleEndTag(ParserContext context, String content) {
-				context.getCurrentTrack().setName(content);
+				if(getParentQName(context).equals("Course")) {
+					context.getCurrentTrack().setName(content);
+				}
 			}
 		}, 
 		Author() {
@@ -68,13 +74,13 @@ public class TcxTagHandler implements TagHandler {
 		Trackpoint() {
 			@Override
 			public void handleStartTag(ParserContext context) {
-				context.setCurentPoint(new Point());	
+				context.setCurrentPoint(new Point());
 			}
 
 			@Override
 			public void handleEndTag(ParserContext context, String content) {
-				context.getCurrentTrack().add(context.getCurentPoint());
-				context.setCurentPoint(null);
+				context.getCurrentTrack().add(context.getCurrentPoint());
+				context.setCurrentPoint(null);
 			}
 		},
 		Track() {
@@ -87,6 +93,9 @@ public class TcxTagHandler implements TagHandler {
 
 			@Override
 			public void handleEndTag(ParserContext context, String content) {
+				if(context.getCurrentTrack().getNumberPoints() > 1) {
+					context.getCurrentTrack().setValid(true);
+				}
 			}
 		},		
 		LatitudeDegrees() {
@@ -97,7 +106,7 @@ public class TcxTagHandler implements TagHandler {
 			@Override
 			public void handleEndTag(ParserContext context, String content) {
 				if(context.getParserContextEntry(2).getQname().equals(Trackpoint.name())) {
-					context.getCurentPoint().setLatitude(content);
+					context.getCurrentPoint().setLatitude(content);
 				}
 			}
 		},
@@ -109,7 +118,7 @@ public class TcxTagHandler implements TagHandler {
 			@Override
 			public void handleEndTag(ParserContext context, String content) {
 				if(context.getParserContextEntry(2).getQname().equals(Trackpoint.name())) {
-					context.getCurentPoint().setLongitude(content);
+					context.getCurrentPoint().setLongitude(content);
 				}
 			}
 		},
@@ -121,7 +130,7 @@ public class TcxTagHandler implements TagHandler {
 			@Override
 			public void handleEndTag(ParserContext context, String content) {
 				if(context.getParserContextEntry(1).getQname().equals(Trackpoint.name())) {
-					context.getCurentPoint().setTime(content);
+					context.getCurrentPoint().setTime(content);
 				}
 			}
 		},
@@ -133,7 +142,7 @@ public class TcxTagHandler implements TagHandler {
 			@Override
 			public void handleEndTag(ParserContext context, String content) {
 				if(context.getParserContextEntry(1).getQname().equals(Trackpoint.name())) {
-					context.getCurentPoint().setElevation(content);
+					context.getCurrentPoint().setElevation(content);
 				}
 			}
 		};
@@ -148,6 +157,15 @@ public class TcxTagHandler implements TagHandler {
 				}
 			}
 			return TcxTag.Ignore;		
+		}
+
+		public String getParentQName(ParserContext context) {
+			try {
+				final Stack<ParserContextEntry> stack = context.getContext();
+				return stack.get(stack.size() - 2).getQname();
+			} catch (Exception e) {
+				return "";
+			}
 		}
 	}
 }

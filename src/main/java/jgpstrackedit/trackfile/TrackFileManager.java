@@ -48,17 +48,19 @@ public class TrackFileManager
 		setLastMessage(null);
 		final KML kmlImporter = new KML();
 		final List<Track> tracks = kmlImporter.openTrack(url);
-		
+
+		int trackNumber = 0;
 		for(Track track : tracks) {
+			trackNumber += 1;
 			String fileName = "Imported KML File.kml";
 			if(track.getName() != null) {
 				fileName = track.getName() + ".kml";
 			}
 			File file = new File(fileName);
 			updateFileAndType(track, kmlImporter, file.getAbsolutePath());
-			postProcessTrack(track, file);
+			postProcessTrack(track, trackNumber, file);
 		}
-		
+
 		return tracks;
 	}
 
@@ -100,9 +102,11 @@ public class TrackFileManager
 			}
 
 		}
-		
+
+		int trackNumber = 0;
 		for(Track track : tracks) {
-			postProcessTrack(track, file);
+			trackNumber += 1;
+			postProcessTrack(track, trackNumber, file);
 		}
 		
 		return tracks;
@@ -117,7 +121,7 @@ public class TrackFileManager
 		return valid;
 	}
 
-	private static Track postProcessTrack(Track track, File file) throws TrackFileException {
+	private static Track postProcessTrack(Track track, int trackNumber, File file) throws TrackFileException {
 		if (track == null) {
 			throw new TrackFileException("Unknown trackfile type");
 		} 
@@ -133,7 +137,11 @@ public class TrackFileManager
 		logger.info(String.format("TrackFileManager: \"%s\" (%s) imported!", file.toString(), track.getTrackFileType()));
 		
 		if(track.getName() == null) {
-			track.setName(file.getName());
+			if(trackNumber > 1) {
+				track.setName(file.getName() + "_" + Integer.toString(trackNumber));
+			} else {
+				track.setName(file.getName());
+			}
 		}
 		
 		if(automaticColors) {

@@ -54,6 +54,7 @@ public class UIController implements Runnable {
 	private static Logger logger = LoggerFactory.getLogger(UIController.class);
 	private static final String ELEVATION_CORRECTION_API_GOOGLE = "google";
 	private static final String ELEVATION_CORRECTION_API_MAPQUEST = "mapquest";
+	private static boolean automaticColors = Configuration.getProperty("AUTOMATIC_COLORS").equals("1");
 	
 	private Database db;
 	private JGPSTrackEdit form;
@@ -362,8 +363,10 @@ public class UIController implements Runnable {
 		Track secondTrack;
 		for (int nr = 0; nr < numberTrackPoints - numberPoints - 1; nr = nr
 				+ numberPoints) {
-			secondTrack = firstTrack.split(firstTrack.getPoint(numberPoints),
-					trackName + c);
+			secondTrack = firstTrack.split(
+					firstTrack.getPoint(numberPoints),
+					trackName + c,
+					automaticColors);
 			c = c + "a";
 			db.addTrack(secondTrack);
 			firstTrack = secondTrack;
@@ -382,7 +385,7 @@ public class UIController implements Runnable {
 				&& form.getSelectedPoint() != track.getFirstPoint() 
 				&& form.getSelectedPoint() != track.getLastPoint()) 
 			{
-				secondTrack = track.split(form.getSelectedPoint(), trackName);
+				secondTrack = track.split(form.getSelectedPoint(), trackName, automaticColors);
 				db.addTrack(secondTrack);
 			}
 			break;
@@ -406,8 +409,10 @@ public class UIController implements Runnable {
 		while (firstTrack.getLength() > splitLength) {
 			Optional<Point> splitPoint = firstTrack.getPoint(splitLength);
 			if(splitPoint.isPresent()) {
-				Track secondTrack = firstTrack.split(splitPoint.get(),
-						trackName + c);
+				Track secondTrack = firstTrack.split(
+						splitPoint.get(),
+						trackName + c,
+						automaticColors);
 				c = c + "a";
 				db.addTrack(secondTrack);
 				firstTrack = secondTrack;
