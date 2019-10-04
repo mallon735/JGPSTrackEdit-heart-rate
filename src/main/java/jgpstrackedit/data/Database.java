@@ -4,15 +4,12 @@
  */
 package jgpstrackedit.data;
 
-import java.awt.Color;
-import java.util.ArrayList;
-
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.table.AbstractTableModel;
-
 import jgpstrackedit.data.util.TrackTableModel;
 import jgpstrackedit.international.International;
+
+import javax.swing.table.AbstractTableModel;
+import java.awt.*;
+import java.util.ArrayList;
 
 /**
  * 

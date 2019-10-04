@@ -3,17 +3,15 @@
  */
 package jgpstrackedit.map.tilehandler;
 
-import java.awt.Image;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-
-import javax.imageio.ImageIO;
-
+import jgpstrackedit.map.TileManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import jgpstrackedit.map.TileManager;
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 
 /**

@@ -1,12 +1,5 @@
 package jgpstrackedit.view;
 
-import java.awt.Dimension;
-import java.text.DecimalFormat;
-
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-
 import jgpstrackedit.config.Configuration;
 import jgpstrackedit.config.ConfigurationObserver;
 import jgpstrackedit.data.Track;
@@ -14,6 +7,10 @@ import jgpstrackedit.data.TrackObserver;
 import jgpstrackedit.data.util.TourPlaner;
 import jgpstrackedit.international.International;
 import jgpstrackedit.util.Parser;
+
+import javax.swing.*;
+import java.awt.*;
+import java.text.DecimalFormat;
 
 public class TrackDataPanel extends JPanel implements TrackObserver,ConfigurationObserver {
 

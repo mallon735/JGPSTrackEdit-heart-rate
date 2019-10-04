@@ -3,9 +3,9 @@
  */
 package jgpstrackedit.map.tilehandler;
 
-import java.awt.Image;
-
 import jgpstrackedit.map.util.TileNumber;
+
+import java.awt.*;
 
 /**
  * @author hlutnik

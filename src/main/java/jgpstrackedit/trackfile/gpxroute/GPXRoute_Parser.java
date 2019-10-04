@@ -12,19 +12,23 @@
 
 package jgpstrackedit.trackfile.gpxroute;
 
-import java.io.IOException;
-import java.util.Stack;
-
-import javax.xml.parsers.ParserConfigurationException;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.*;
 import org.xml.sax.helpers.AttributesImpl;
 
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.IOException;
+import java.util.Stack;
+
 /**
+ * GPXRoute_Parser
  *
  * @author hlutnik
  */
 public class GPXRoute_Parser implements ContentHandler {
+    private static final Logger logger = LoggerFactory.getLogger(GPXRoute_Parser.class);
+
     private GPXRoute_Handler handler;
     private Stack<Context> contextStack;
     private StringBuffer buffer;
@@ -267,7 +271,7 @@ public class GPXRoute_Parser implements ContentHandler {
 
             public void error(SAXParseException ex) throws SAXException {
                 if (contextStack.isEmpty()) {
-                    System.err.println("Missing DOCTYPE.");
+                    logger.error("Missing DOCTYPE.");
                 }
                 throw ex;
             }

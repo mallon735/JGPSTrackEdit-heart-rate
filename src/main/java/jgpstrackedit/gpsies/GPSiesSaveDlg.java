@@ -1,29 +1,16 @@
 package jgpstrackedit.gpsies;
 
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.IOException;
-
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.border.EmptyBorder;
-
-import org.apache.commons.httpclient.HttpException;
+import jgpstrackedit.data.Track;
+import jgpstrackedit.international.International;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import jgpstrackedit.data.Track;
-import jgpstrackedit.international.International;
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
 
 public class GPSiesSaveDlg extends JDialog {
 	private static final long serialVersionUID = 1L;
@@ -152,7 +139,7 @@ public class GPSiesSaveDlg extends JDialog {
 						textFieldUsername.getText(),
 						new String(passwordField.getPassword()));
 				textAreaErrorLog.setText("Response status code: " + result);
-				System.out.println("Response status code: " + result);
+				logger.info("Response status code: " + result);
 				if (result == 200) {
 				    this.setVisible(false);
 				}

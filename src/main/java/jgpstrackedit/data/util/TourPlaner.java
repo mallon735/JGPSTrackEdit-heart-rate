@@ -3,12 +3,12 @@
  */
 package jgpstrackedit.data.util;
 
+import jgpstrackedit.config.Configuration;
+import jgpstrackedit.data.Point;
+import jgpstrackedit.data.Track;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import jgpstrackedit.config.Configuration;
-import jgpstrackedit.data.Track;
-import jgpstrackedit.data.Point;
 
 /** Utility for planing a tour. The time (duration) of a tour is calculated using following formula:<br>
  * duration = (length / averageSpeed + altitudeDifference/100 * inclineTime100Meters/60.0) * (1+breakRatio)

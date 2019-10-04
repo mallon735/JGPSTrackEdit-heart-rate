@@ -3,21 +3,14 @@
  */
 package jgpstrackedit.map.elevation;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.HashMap;
-
-import javax.xml.parsers.ParserConfigurationException;
-
 import jgpstrackedit.data.Point;
 import jgpstrackedit.data.Track;
-import jgpstrackedit.map.elevation.google.GoogleElevationCorrection;
 import jgpstrackedit.util.Parser;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.xml.sax.SAXException;
+
+import java.net.URL;
+import java.util.HashMap;
 
 /**
  * Facade of the google elevation api, see
@@ -104,7 +97,7 @@ public class ElevationAPI
 	 */
 	protected void issueElevationRequest() throws ElevationException {
 		elevationURL.append("&sensor=false");
-		System.out.println(elevationURL.toString());
+		logger.info(elevationURL.toString());
 		URL url;
 		try {
 			url = new URL(elevationURL.toString());
@@ -116,11 +109,11 @@ public class ElevationAPI
 				throw new ElevationException(elevationResponse.getState());
 			}
 			for (ElevationResult elevationResult:elevationResponse.getResults()) {
-				System.out.println(elevationResult);
+				logger.info(elevationResult.toString());
 				Point point = points.get(elevationResult.getLocation());
 				if (point == null) {
 					// No match, what went wrong?
-					System.out.println("ElevationAPI: no match for "+elevationResult.getLocation());
+					logger.info("ElevationAPI: no match for "+elevationResult.getLocation());
 				} else {
 				    point.setElevation(elevationResult.getElevation());
 				}

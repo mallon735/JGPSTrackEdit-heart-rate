@@ -3,10 +3,10 @@
  */
 package jgpstrackedit.map.tilehandler;
 
+import jgpstrackedit.map.util.TileNumber;
+
 import java.util.LinkedList;
 import java.util.concurrent.PriorityBlockingQueue;
-
-import jgpstrackedit.map.util.TileNumber;
 
 
 /** Abstract superclass for all tile loaders

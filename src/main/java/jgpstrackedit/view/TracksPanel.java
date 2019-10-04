@@ -10,27 +10,23 @@
  */
 package jgpstrackedit.view;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Polygon;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
-import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.List;
-import java.awt.geom.*;
-
+import jgpstrackedit.config.Configuration;
 import jgpstrackedit.data.Point;
 import jgpstrackedit.data.util.TourPlaner;
 import jgpstrackedit.map.TileManager;
-import jgpstrackedit.map.util.MapObserver;
 import jgpstrackedit.map.util.MapExtract;
+import jgpstrackedit.map.util.MapObserver;
 import jgpstrackedit.util.Parser;
-import jgpstrackedit.config.Configuration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.awt.*;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
+import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 
@@ -38,6 +34,7 @@ import jgpstrackedit.config.Configuration;
  */
 public class TracksPanel extends javax.swing.JPanel implements ZoomObserver,
 		ComponentListener, MapObserver, Runnable {
+	private static final Logger logger = LoggerFactory.getLogger(TracksPanel.class);
 
 	private TracksView tracksView;
 	private boolean showDayTourMarkers = false;
@@ -178,8 +175,7 @@ public class TracksPanel extends javax.swing.JPanel implements ZoomObserver,
 	}
 
 	/**
-	 * @param showBonds
-	 *            the showBonds to set
+	 * @param show the showBonds to set
 	 */
 	public void setShowBonds(boolean show) {
 		this.showBonds = show;
@@ -517,22 +513,18 @@ public class TracksPanel extends javax.swing.JPanel implements ZoomObserver,
 
 	@Override
 	public void mapTilesUpdated() {
-		// TODO Auto-generated method stub
-		// System.out.println("TracksPanel: mapTilesUpdated()");
 		repaint();
 
 	}
 
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
 		// to Mask Map Update Bug
 		while (isAutoRefresh()) {
 			try {
 				Thread.sleep(2000);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.error("Exception while waiting for repaint!", e);
 			}
 			repaint();
 		}

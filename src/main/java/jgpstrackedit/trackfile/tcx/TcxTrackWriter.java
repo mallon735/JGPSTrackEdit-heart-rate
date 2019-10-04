@@ -1,10 +1,10 @@
 package jgpstrackedit.trackfile.tcx;
 
-import java.io.PrintWriter;
-import java.util.Optional;
-
 import jgpstrackedit.data.Point;
 import jgpstrackedit.data.Track;
+
+import java.io.PrintWriter;
+import java.util.Optional;
 
 /**
  * Writer for Garmin TrainingCenterDatabase (TCX).

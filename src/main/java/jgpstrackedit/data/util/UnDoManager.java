@@ -3,10 +3,11 @@
  */
 package jgpstrackedit.data.util;
 
+import jgpstrackedit.data.Point;
+import jgpstrackedit.data.Track;
+
 import java.util.ArrayList;
 import java.util.Stack;
-import jgpstrackedit.data.Track;
-import jgpstrackedit.data.Point;
 
 /** Undo manager for inserting points to track. Undo levels may be added using the add()-methods.
  * Undoing is performed by the unDo()-method.

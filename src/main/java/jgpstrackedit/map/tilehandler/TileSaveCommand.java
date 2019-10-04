@@ -3,17 +3,15 @@
  */
 package jgpstrackedit.map.tilehandler;
 
-import java.awt.Image;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
-
+import jgpstrackedit.map.util.ImageConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import jgpstrackedit.map.util.ImageConverter;
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 /**
  * @author Hubert

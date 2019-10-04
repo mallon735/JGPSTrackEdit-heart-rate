@@ -1,20 +1,20 @@
 package jgpstrackedit.test;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.Locale;
 
-import jgpstrackedit.map.GoogleMapTerrainTileManager;
-import jgpstrackedit.map.util.TileNumber;
-
 public class DTest {
+	private static final Logger logger = LoggerFactory.getLogger(DTest.class);
 
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		System.out.println(Locale.getDefault());
-		System.out.println(Locale.getAvailableLocales());
-
+		logger.info(Locale.getDefault().toString());
+		logger.info(Locale.getAvailableLocales().toString());
 	}
 
 }

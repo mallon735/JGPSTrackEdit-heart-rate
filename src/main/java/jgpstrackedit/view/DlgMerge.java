@@ -1,25 +1,16 @@
 package jgpstrackedit.view;
 
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.List;
-
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-
 import jgpstrackedit.config.Constants;
 import jgpstrackedit.data.Track;
 import jgpstrackedit.international.International;
 import net.miginfocom.swing.MigLayout;
+
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.List;
 
 public class DlgMerge extends JDialog {
 	private static final long serialVersionUID = 1L;

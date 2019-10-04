@@ -3,22 +3,22 @@
  */
 package jgpstrackedit.map.elevation.mapquest;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jgpstrackedit.data.Track;
+import jgpstrackedit.map.elevation.ElevationException;
+import jgpstrackedit.map.elevation.IElevationCorrection;
+import jgpstrackedit.map.elevation.IProgressDetector;
+import jgpstrackedit.map.elevation.PointWrapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import jgpstrackedit.data.Track;
-import jgpstrackedit.map.elevation.ElevationException;
-import jgpstrackedit.map.elevation.IElevationCorrection;
-import jgpstrackedit.map.elevation.IProgressDetector;
-import jgpstrackedit.map.elevation.PointWrapper;
 
 /**
  * Implementation of the interface {@link IElevationCorrection}.
@@ -31,6 +31,7 @@ import jgpstrackedit.map.elevation.PointWrapper;
  */
 public class MapQuestElevationCorrection implements IElevationCorrection 
 {
+	private static final Logger logger = LoggerFactory.getLogger(MapQuestElevationCorrection.class);
 	private static final String BASE_URL = "http://open.mapquestapi.com/elevation/v1/profile?key=Fmjtd%7Cluubn96ynu%2C2s%3Do5-907guw&shapeFormat=cmp&outShapeFormat=none&latLngCollection=";
 	private static final int NUMBER_OF_POINTS_PER_REQUEST = 120;
 	private static int NO_DATA_ERROR = 601;
@@ -115,7 +116,7 @@ public class MapQuestElevationCorrection implements IElevationCorrection
 			}
 			track.hasBeenModified();
 		} else {
-			System.err.println("The elevation correction response is null or has a wrong size!");
+			logger.error("The elevation correction response is null or has a wrong size!");
 		}
 	}
 	

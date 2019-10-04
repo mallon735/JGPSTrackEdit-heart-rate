@@ -3,26 +3,16 @@
  */
 package jgpstrackedit.config;
 
+import jgpstrackedit.international.International;
+import jgpstrackedit.util.Parser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Vector;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import jgpstrackedit.international.International;
-import jgpstrackedit.util.Parser;
+import java.util.*;
 
 /**
  * Serialize and deserialize the configuration. Set default valaues.

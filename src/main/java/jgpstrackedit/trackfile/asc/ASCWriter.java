@@ -3,11 +3,11 @@
  */
 package jgpstrackedit.trackfile.asc;
 
-import java.io.PrintWriter;
-import java.util.Optional;
-
 import jgpstrackedit.data.Point;
 import jgpstrackedit.data.Track;
+
+import java.io.PrintWriter;
+import java.util.Optional;
 
 /**
  * ASCII-Track writer

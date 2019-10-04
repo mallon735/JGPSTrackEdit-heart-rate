@@ -1,14 +1,13 @@
 package jgpstrackedit.trackfile;
 
+import jgpstrackedit.data.Point;
+import jgpstrackedit.data.Track;
+import org.xml.sax.Attributes;
+
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
-
-import jgpstrackedit.data.Point;
-import jgpstrackedit.data.Track;
-
-import org.xml.sax.Attributes;
 
 public class ParserContext {
 	private final Stack<ParserContextEntry> context;

@@ -11,16 +11,22 @@
  */
 package jgpstrackedit.map.elevation;
 
-import java.io.IOException;
-import java.util.Stack;
-import javax.xml.parsers.ParserConfigurationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.*;
 
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.IOException;
+import java.util.Stack;
+
 /**
+ * Elevation Parser.
  *
  * @author hlutnik
  */
 public class ElevationParser implements ContentHandler {
+    private static final Logger logger = LoggerFactory.getLogger(ElevationParser.class);
+
     private ElevationHandler handler;
     private Stack context;
     private StringBuffer buffer;
@@ -237,7 +243,7 @@ public class ElevationParser implements ContentHandler {
 
             public void error(SAXParseException ex) throws SAXException {
                 if (context.isEmpty()) {
-                    System.err.println("Missing DOCTYPE.");
+                    logger.error("Missing DOCTYPE.");
                 }
                 throw ex;
             }
@@ -247,7 +253,7 @@ public class ElevationParser implements ContentHandler {
             }
 
             public void warning(SAXParseException ex) throws SAXException {
-                // ignore
+                logger.warn("Warning while parsing elevation results!", ex);
             }
         };
     }

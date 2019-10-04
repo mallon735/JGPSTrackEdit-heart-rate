@@ -3,16 +3,14 @@
  */
 package jgpstrackedit.trackfile;
 
+import jgpstrackedit.data.Track;
+import org.xml.sax.SAXException;
+
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
-
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.xml.sax.SAXException;
-
-import jgpstrackedit.data.Track;
 
 /**
  * A class which is able to open a trackfile must implement this interface. The interface consists of methods

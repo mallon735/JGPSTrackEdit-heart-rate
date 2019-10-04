@@ -3,9 +3,8 @@
  */
 package jgpstrackedit.util;
 
-import java.io.File;
-
 import javax.swing.filechooser.FileFilter;
+import java.io.File;
 
 /** FileFilter for directories.
  * @author Hubert

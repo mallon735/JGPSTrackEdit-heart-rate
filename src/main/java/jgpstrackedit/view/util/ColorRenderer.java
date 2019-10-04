@@ -37,13 +37,10 @@ package jgpstrackedit.view.util;
  * TableDialogEditDemo.java.
  */
 
-import javax.swing.BorderFactory;
-import javax.swing.JLabel;
-import javax.swing.JTable;
+import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.table.TableCellRenderer;
-import java.awt.Color;
-import java.awt.Component;
+import java.awt.*;
 
 public class ColorRenderer extends JLabel
                            implements TableCellRenderer {

@@ -3,14 +3,11 @@
  */
 package jgpstrackedit.map.tilehandler;
 
-import java.awt.Image;
-import java.awt.Label;
-import java.awt.MediaTracker;
-import java.awt.Toolkit;
-import java.io.File;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.awt.*;
+import java.io.File;
 
 
 /**

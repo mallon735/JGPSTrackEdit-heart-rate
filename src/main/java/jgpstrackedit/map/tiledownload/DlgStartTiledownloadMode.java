@@ -1,21 +1,10 @@
 package jgpstrackedit.map.tiledownload;
 
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.ButtonGroup;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JRadioButton;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
-import javax.swing.JComboBox;
-import java.awt.event.ActionListener;
+import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 
 public class DlgStartTiledownloadMode extends JDialog {

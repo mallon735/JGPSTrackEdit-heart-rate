@@ -3,19 +3,17 @@
  */
 package jgpstrackedit.map.elevation.google;
 
-import java.net.URL;
-import java.util.ArrayList;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import jgpstrackedit.data.Point;
 import jgpstrackedit.data.Track;
-import jgpstrackedit.gpsies.GPSiesUpLoad;
 import jgpstrackedit.map.elevation.ElevationException;
 import jgpstrackedit.map.elevation.IElevationCorrection;
 import jgpstrackedit.map.elevation.IProgressDetector;
 import jgpstrackedit.util.Parser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.net.URL;
+import java.util.ArrayList;
 
 /**
  * Facade of the google elevation api, see
@@ -110,7 +108,7 @@ public class GoogleElevationCorrection implements IElevationCorrection
 	 */
 	protected void issueElevationRequest() throws ElevationException {
 		elevationURL.append("&sensor=false");
-		System.out.println(elevationURL.toString());
+		logger.info(elevationURL.toString());
 		URL url;
 		try {
 			url = new URL(elevationURL.toString());
@@ -129,7 +127,7 @@ public class GoogleElevationCorrection implements IElevationCorrection
 			for (int i = 0; i < elevationResponse.getResults().size(); i++) {
 				ElevationResult elevationResult = elevationResponse.getResults().get(i);
 				Point point = points.get(i);
-				// System.out.println(elevationResult);
+				// logger.info(elevationResult);
 				point.setElevation(elevationResult.getElevation());
 			}
 		} catch (ElevationException e) {

@@ -3,14 +3,8 @@
  */
 package jgpstrackedit.gpsies;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-
+import jgpstrackedit.data.Track;
+import jgpstrackedit.trackfile.kml.KMLWriter;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.httpclient.HttpClient;
@@ -23,8 +17,7 @@ import org.apache.commons.httpclient.methods.multipart.StringPart;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import jgpstrackedit.data.Track;
-import jgpstrackedit.trackfile.kml.KMLWriter;
+import java.io.*;
 
 /**
  * @author Hubert

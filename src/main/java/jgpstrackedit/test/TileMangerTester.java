@@ -1,19 +1,15 @@
 package jgpstrackedit.test;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-
-import jgpstrackedit.map.TileManager;
 import jgpstrackedit.map.OSMTileManager;
-import jgpstrackedit.map.util.MapObserver;
-import jgpstrackedit.map.util.TileNumber;
+import jgpstrackedit.map.TileManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /*
  * 
@@ -27,6 +23,7 @@ http://tile.openstreetmap.org/15/17685/11577.png
 
 
 public class TileMangerTester extends JFrame {
+	private static final Logger logger = LoggerFactory.getLogger(TileMangerTester.class);
 
 	private JPanel contentPane;
 	private TileManager tileManager;
@@ -42,7 +39,7 @@ public class TileMangerTester extends JFrame {
 					TileMangerTester frame = new TileMangerTester();
 					frame.setVisible(true);
 				} catch (Exception e) {
-					e.printStackTrace();
+					logger.error("Exception while running TileMangerTester!", e);
 				}
 			}
 		});

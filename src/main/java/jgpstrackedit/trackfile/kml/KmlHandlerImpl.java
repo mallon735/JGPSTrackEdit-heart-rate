@@ -13,16 +13,18 @@ package jgpstrackedit.trackfile.kml;
 
 import jgpstrackedit.data.Point;
 import jgpstrackedit.data.Track;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
 /**
- * 
+ * KmlHandlerImpl
+ *
  * @author hlutnik
  */
 public class KmlHandlerImpl implements KmlHandler {
-	public static final boolean DEBUG = false;
+	private static final Logger logger = LoggerFactory.getLogger(KmlHandlerImpl.class);
 
 	private Track track;
 	private Point point;
@@ -30,171 +32,170 @@ public class KmlHandlerImpl implements KmlHandler {
 
 	public void handle_scale(final String data, final Attributes meta)
 			throws SAXException {
-		if (DEBUG) {
-			System.err.println("handle_scale: " + meta);
+		if (logger.isDebugEnabled()) {
+			logger.debug("handle_scale: " + meta);
 		}
 	}
 
 	public void start_LineStyle(final Attributes meta) throws SAXException {
-		if (DEBUG) {
-			System.err.println("start_LineStyle: " + meta);
+		if (logger.isDebugEnabled()) {
+			logger.debug("start_LineStyle: " + meta);
 		}
 	}
 
 	public void end_LineStyle() throws SAXException {
-		if (DEBUG) {
-			System.err.println("end_LineStyle()");
+		if (logger.isDebugEnabled()) {
+			logger.debug("end_LineStyle()");
 		}
 	}
 
 	public void handle_visibility(final String data, final Attributes meta)
 			throws SAXException {
-		if (DEBUG) {
-			System.err.println("handle_visibility: " + meta);
+		if (logger.isDebugEnabled()) {
+			logger.debug("handle_visibility: " + meta);
 		}
 	}
 
 	public void start_Pair(final Attributes meta) throws SAXException {
-		if (DEBUG) {
-			System.err.println("start_Pair: " + meta);
+		if (logger.isDebugEnabled()) {
+			logger.debug("start_Pair: " + meta);
 		}
 	}
 
 	public void end_Pair() throws SAXException {
-		if (DEBUG) {
-			System.err.println("end_Pair()");
+		if (logger.isDebugEnabled()) {
+			logger.debug("end_Pair()");
 		}
 	}
 
 	public void start_Style(final Attributes meta) throws SAXException {
-		if (DEBUG) {
-			System.err.println("start_Style: " + meta);
+		if (logger.isDebugEnabled()) {
+			logger.debug("start_Style: " + meta);
 		}
 	}
 
 	public void end_Style() throws SAXException {
-		if (DEBUG) {
-			System.err.println("end_Style()");
+		if (logger.isDebugEnabled()) {
+			logger.debug("end_Style()");
 		}
 	}
 
 	public void handle_styleUrl(final String data, final Attributes meta)
 			throws SAXException {
-		if (DEBUG) {
-			System.err.println("handle_styleUrl: " + meta);
+		if (logger.isDebugEnabled()) {
+			logger.debug("handle_styleUrl: " + meta);
 		}
 	}
 
 	public void handle_extrude(final String data, final Attributes meta)
 			throws SAXException {
-		if (DEBUG) {
-			System.err.println("handle_extrude: " + meta);
+		if (logger.isDebugEnabled()) {
+			logger.debug("handle_extrude: " + meta);
 		}
 	}
 
 	public void handle_open(final String data, final Attributes meta)
 			throws SAXException {
-		if (DEBUG) {
-			System.err.println("handle_open: " + meta);
+		if (logger.isDebugEnabled()) {
+			logger.debug("handle_open: " + meta);
 		}
 	}
 
 	public void handle_description(final String data, final Attributes meta)
 			throws SAXException {
-		if (DEBUG) {
-			System.err.println("handle_description: " + meta);
+		if (logger.isDebugEnabled()) {
+			logger.debug("handle_description: " + meta);
 		}
 	}
 
 	public void handle_name(final String data, final Attributes meta)
 			throws SAXException {
-		if (DEBUG) {
-			System.err.println("handle_name: " + meta);
+		if (logger.isDebugEnabled()) {
+			logger.debug("handle_name: " + meta);
 		}
 		track.setName(data);
 	}
 
 	public void start_MultiGeometry(final Attributes meta) throws SAXException {
-		if (DEBUG) {
-			System.err.println("start_MultiGeometry: " + meta);
+		if (logger.isDebugEnabled()) {
+			logger.debug("start_MultiGeometry: " + meta);
 		}
 	}
 
 	public void end_MultiGeometry() throws SAXException {
-		if (DEBUG) {
-			System.err.println("end_MultiGeometry()");
+		if (logger.isDebugEnabled()) {
+			logger.debug("end_MultiGeometry()");
 		}
 	}
 
 	public void start_kml(final Attributes meta) throws SAXException {
-		if (DEBUG) {
-			System.err.println("start_kml: " + meta);
+		if (logger.isDebugEnabled()) {
+			logger.debug("start_kml: " + meta);
 		}
 		track = new Track();
 		StringBuilder gpxAttributes = new StringBuilder();
 		for (int i = 0; i < meta.getLength(); i++) {
-			gpxAttributes.append(meta.getQName(i) + "=\"" + meta.getValue(i)
-					+ "\" ");
+			gpxAttributes.append(meta.getQName(i) + "=\"" + meta.getValue(i) + "\" ");
 		}
 		track.setGpxAttributes(gpxAttributes.toString());
 	}
 
 	public void end_kml() throws SAXException {
-		if (DEBUG) {
-			System.err.println("end_kml()");
+		if (logger.isDebugEnabled()) {
+			logger.debug("end_kml()");
 		}
 		track.setValid(true);
 	}
 
 	public void start_BalloonStyle(final Attributes meta) throws SAXException {
-		if (DEBUG) {
-			System.err.println("start_BalloonStyle: " + meta);
+		if (logger.isDebugEnabled()) {
+			logger.debug("start_BalloonStyle: " + meta);
 		}
 	}
 
 	public void end_BalloonStyle() throws SAXException {
-		if (DEBUG) {
-			System.err.println("end_BalloonStyle()");
+		if (logger.isDebugEnabled()) {
+			logger.debug("end_BalloonStyle()");
 		}
 	}
 
 	public void handle_colorMode(final String data, final Attributes meta)
 			throws SAXException {
-		if (DEBUG) {
-			System.err.println("handle_colorMode: " + meta);
+		if (logger.isDebugEnabled()) {
+			logger.debug("handle_colorMode: " + meta);
 		}
 	}
 
 	public void handle_href(final String data, final Attributes meta)
 			throws SAXException {
-		if (DEBUG) {
-			System.err.println("handle_href: " + meta);
+		if (logger.isDebugEnabled()) {
+			logger.debug("handle_href: " + meta);
 		}
 	}
 
 	public void handle_key(final String data, final Attributes meta)
 			throws SAXException {
-		if (DEBUG) {
-			System.err.println("handle_key: " + meta);
+		if (logger.isDebugEnabled()) {
+			logger.debug("handle_key: " + meta);
 		}
 	}
 
 	public void start_Point(final Attributes meta) throws SAXException {
-		if (DEBUG) {
-			System.err.println("start_Point: " + meta);
+		if (logger.isDebugEnabled()) {
+			logger.debug("start_Point: " + meta);
 		}
 	}
 
 	public void end_Point() throws SAXException {
-		if (DEBUG) {
-			System.err.println("end_Point()");
+		if (logger.isDebugEnabled()) {
+			logger.debug("end_Point()");
 		}
 	}
 
 	public void handle_coordinates(final String data, final Attributes meta)
 			throws SAXException {
-		if (DEBUG) {
-			System.err.println("handle_coordinates: " + meta);
+		if (logger.isDebugEnabled()) {
+			logger.debug("handle_coordinates: " + meta);
 		}
 		if (pointFlag) {
 			String[] coordinates = data.split("\n");
@@ -210,119 +211,118 @@ public class KmlHandlerImpl implements KmlHandler {
 	}
 
 	public void start_Document(final Attributes meta) throws SAXException {
-		if (DEBUG) {
-			System.err.println("start_Document: " + meta);
+		if (logger.isDebugEnabled()) {
+			logger.debug("start_Document: " + meta);
 		}
 	}
 
 	public void end_Document() throws SAXException {
-		if (DEBUG) {
-			System.err.println("end_Document()");
+		if (logger.isDebugEnabled()) {
+			logger.debug("end_Document()");
 		}
 	}
 
 	public void handle_text(final String data, final Attributes meta)
 			throws SAXException {
-		if (DEBUG) {
-			System.err.println("handle_text: " + meta);
+		if (logger.isDebugEnabled()) {
+			logger.debug("handle_text: " + meta);
 		}
 	}
 
 	public void handle_width(final String data, final Attributes meta)
 			throws SAXException {
-		if (DEBUG) {
-			System.err.println("handle_width: " + meta);
+		if (logger.isDebugEnabled()) {
+			logger.debug("handle_width: " + meta);
 		}
 	}
 
 	public void handle_Snippet(final Attributes meta) throws SAXException {
-		if (DEBUG) {
-			System.err.println("handle_Snippet: " + meta);
+		if (logger.isDebugEnabled()) {
+			logger.debug("handle_Snippet: " + meta);
 		}
 	}
 
 	public void handle_tessellate(final String data, final Attributes meta)
 			throws SAXException {
-		if (DEBUG) {
-			System.err.println("handle_tessellate: " + meta);
+		if (logger.isDebugEnabled()) {
+			logger.debug("handle_tessellate: " + meta);
 		}
 	}
 
 	public void start_LineString(final Attributes meta) throws SAXException {
-		if (DEBUG) {
-			System.err.println("start_LineString: " + meta);
+		if (logger.isDebugEnabled()) {
+			logger.debug("start_LineString: " + meta);
 		}
 		pointFlag = true;
 	}
 
 	public void end_LineString() throws SAXException {
-		if (DEBUG) {
-			System.err.println("end_LineString()");
+		if (logger.isDebugEnabled()) {
+			logger.debug("end_LineString()");
 		}
 	}
 
 	public void start_StyleMap(final Attributes meta) throws SAXException {
-		if (DEBUG) {
-			System.err.println("start_StyleMap: " + meta);
+		if (logger.isDebugEnabled()) {
+			logger.debug("start_StyleMap: " + meta);
 		}
 	}
 
 	public void end_StyleMap() throws SAXException {
-		if (DEBUG) {
-			System.err.println("end_StyleMap()");
+		if (logger.isDebugEnabled()) {
+			logger.debug("end_StyleMap()");
 		}
 	}
 
 	public void start_LabelStyle(final Attributes meta) throws SAXException {
-		if (DEBUG) {
-			System.err.println("start_LabelStyle: " + meta);
+		if (logger.isDebugEnabled()) {
+			logger.debug("start_LabelStyle: " + meta);
 		}
 	}
 
 	public void end_LabelStyle() throws SAXException {
-		if (DEBUG) {
-			System.err.println("end_LabelStyle()");
+		if (logger.isDebugEnabled()) {
+			logger.debug("end_LabelStyle()");
 		}
 	}
 
 	public void start_IconStyle(final Attributes meta) throws SAXException {
-		if (DEBUG) {
-			System.err.println("start_IconStyle: " + meta);
+		if (logger.isDebugEnabled()) {
+			logger.debug("start_IconStyle: " + meta);
 		}
 	}
 
 	public void end_IconStyle() throws SAXException {
-		if (DEBUG) {
-			System.err.println("end_IconStyle()");
+		if (logger.isDebugEnabled()) {
+			logger.debug("end_IconStyle()");
 		}
 	}
 
 	public void start_Placemark(final Attributes meta) throws SAXException {
-		if (DEBUG) {
-			System.err.println("start_Placemark: " + meta);
+		if (logger.isDebugEnabled()) {
+			logger.debug("start_Placemark: " + meta);
 		}
 	}
 
 	public void end_Placemark() throws SAXException {
-		if (DEBUG) {
-			System.err.println("end_Placemark()");
+		if (logger.isDebugEnabled()) {
+			logger.debug("end_Placemark()");
 		}
 	}
 
 	public void start_Icon(final Attributes meta) throws SAXException {
-		if (DEBUG) {
-			System.err.println("start_Icon: " + meta);
+		if (logger.isDebugEnabled()) {
+			logger.debug("start_Icon: " + meta);
 		}
 	}
 
 	public void end_Icon() throws SAXException {
-		if (DEBUG) {
-			System.err.println("end_Icon()");
+		if (logger.isDebugEnabled()) {
+			logger.debug("end_Icon()");
 		}
 	}
 
 	public Track getTrack() {
-		// TODO Auto-generated method stub
 		return track;
 	}
 

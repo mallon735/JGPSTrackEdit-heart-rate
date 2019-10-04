@@ -3,10 +3,10 @@
  */
 package jgpstrackedit.map.tilehandler;
 
+import jgpstrackedit.map.util.TileNumber;
+
 import java.util.Comparator;
 import java.util.LinkedList;
-
-import jgpstrackedit.map.util.TileNumber;
 
 /** 
  * @author hlutnik

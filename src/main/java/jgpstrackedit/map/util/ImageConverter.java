@@ -3,23 +3,21 @@
  */
 package jgpstrackedit.map.util;
 
-import java.awt.Graphics;
-import java.awt.GraphicsConfiguration;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
-import java.awt.HeadlessException;
-import java.awt.Image;
-import java.awt.Transparency;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.PixelGrabber;
 
-import javax.swing.ImageIcon;
-
 /**
+ * ImageConverter
+ *
  * @author Hubert
- * 
  */
 public class ImageConverter {
+	private static final Logger logger = LoggerFactory.getLogger(ImageConverter.class);
 
 	public static BufferedImage toBufferedImage(Image image) {
 		if (image instanceof BufferedImage) {
@@ -49,10 +47,8 @@ public class ImageConverter {
 				bimage = new BufferedImage(image.getWidth(null),
 						image.getHeight(null), type);
 			}
-		} catch (HeadlessException e) {
-		} catch (IllegalArgumentException e) {// No screen
-			System.out
-					.println("Converter(line 45): IllegalArgumentException cought");
+		} catch (Exception e) {
+			logger.error("Exception while converting image!",e);
 		}
 
 		// Copy image to buffered image
@@ -79,6 +75,7 @@ public class ImageConverter {
 		try {
 			pg.grabPixels();
 		} catch (InterruptedException e) {
+			logger.warn("Exception while grab pixel!", e);
 		}
 
 		// Get the image's color model

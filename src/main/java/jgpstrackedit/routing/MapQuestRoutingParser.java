@@ -12,16 +12,21 @@
 
 package jgpstrackedit.routing;
 
-import java.io.IOException;
-import java.util.Stack;
-import javax.xml.parsers.ParserConfigurationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.*;
 
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.IOException;
+import java.util.Stack;
+
 /**
+ * MapQuestRoutingParser
  *
  * @author Hubert
  */
 public class MapQuestRoutingParser implements ContentHandler {
+    private static final Logger logger = LoggerFactory.getLogger(MapQuestRoutingParser.class);
     private MapQuestRoutingHandler handler;
     private Stack context;
     private StringBuffer buffer;
@@ -533,7 +538,6 @@ public class MapQuestRoutingParser implements ContentHandler {
      * @throws java.io.IOException on I/O error
      * @throws org.xml.sax.SAXException propagated exception thrown by a DocumentHandler
      * @throws javax.xml.parsers.ParserConfigurationException a parser satisfying the requested configuration cannot be created
-     * @throws javax.xml.parsers.FactoryConfigurationRrror if the implementation cannot be instantiated
      */
     public void parse(final org.xml.sax.InputSource input) throws SAXException, ParserConfigurationException, IOException {
         parse(input, this);
@@ -546,7 +550,6 @@ public class MapQuestRoutingParser implements ContentHandler {
      * @throws java.io.IOException on I/O error
      * @throws org.xml.sax.SAXException propagated exception thrown by a DocumentHandler
      * @throws javax.xml.parsers.ParserConfigurationException a parser satisfying the requested configuration cannot be created
-     * @throws javax.xml.parsers.FactoryConfigurationRrror if the implementation cannot be instantiated
      */
     public void parse(final java.net.URL url) throws SAXException, ParserConfigurationException, IOException {
         parse(new org.xml.sax.InputSource(url.toExternalForm()), this);
@@ -559,7 +562,6 @@ public class MapQuestRoutingParser implements ContentHandler {
      * @throws java.io.IOException on I/O error
      * @throws org.xml.sax.SAXException propagated exception thrown by a DocumentHandler
      * @throws javax.xml.parsers.ParserConfigurationException a parser satisfying the requested configuration cannot be created
-     * @throws javax.xml.parsers.FactoryConfigurationRrror if the implementation cannot be instantiated
      */
     public static void parse(final org.xml.sax.InputSource input, final MapQuestRoutingHandler handler) throws SAXException, ParserConfigurationException, IOException {
         parse(input, new MapQuestRoutingParser(handler, null));
@@ -572,7 +574,6 @@ public class MapQuestRoutingParser implements ContentHandler {
      * @throws java.io.IOException on I/O error
      * @throws org.xml.sax.SAXException propagated exception thrown by a DocumentHandler
      * @throws javax.xml.parsers.ParserConfigurationException a parser satisfying the requested configuration cannot be created
-     * @throws javax.xml.parsers.FactoryConfigurationRrror if the implementation cannot be instantiated
      */
     public static void parse(final java.net.URL url, final MapQuestRoutingHandler handler) throws SAXException, ParserConfigurationException, IOException {
         parse(new org.xml.sax.InputSource(url.toExternalForm()), handler);
@@ -604,7 +605,7 @@ public class MapQuestRoutingParser implements ContentHandler {
 
             public void error(SAXParseException ex) throws SAXException {
                 if (context.isEmpty()) {
-                    System.err.println("Missing DOCTYPE.");
+                    logger.error("Missing DOCTYPE.");
                 }
                 throw ex;
             }

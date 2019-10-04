@@ -1,21 +1,18 @@
 package jgpstrackedit.trackfile.tcx;
 
+import jgpstrackedit.data.Point;
+import jgpstrackedit.data.Track;
+import org.hamcrest.CoreMatchers;
+import org.junit.Assert;
+import org.junit.Test;
+import org.xml.sax.SAXException;
+
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
-
-import javax.xml.parsers.ParserConfigurationException;
-
-import jgpstrackedit.data.Point;
-import jgpstrackedit.data.Track;
-import jgpstrackedit.trackfile.tcx.TCX;
-
-import org.hamcrest.CoreMatchers;
-import org.junit.Assert;
-import org.junit.Test;
-import org.xml.sax.SAXException;
 
 /**
  * Test class for the tcx TrackFile class.

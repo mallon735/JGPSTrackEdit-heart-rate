@@ -1,10 +1,7 @@
 package jgpstrackedit.view;
 
-import javax.swing.JPanel;
-import java.awt.BorderLayout;
-import java.awt.GridBagLayout;
-import javax.swing.JLabel;
-import java.awt.GridLayout;
+import javax.swing.*;
+import java.awt.*;
 
 public class TrackPanel extends JPanel {
 

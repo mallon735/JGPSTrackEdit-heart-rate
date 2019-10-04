@@ -1,17 +1,17 @@
 package jgpstrackedit.test;
 
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.image.ImageObserver;
-
-import javax.swing.JPanel;
 import jgpstrackedit.map.TileManager;
 import jgpstrackedit.map.util.MapObserver;
-import jgpstrackedit.map.util.TileNumber;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.image.ImageObserver;
 
 public class TestMapPanel extends JPanel implements MapObserver, ImageObserver {
 
+	private static final Logger logger = LoggerFactory.getLogger(TestMapPanel.class);
 	private TileManager tileManager;
 	/*
 	 * (non-Javadoc)
@@ -46,7 +46,7 @@ public class TestMapPanel extends JPanel implements MapObserver, ImageObserver {
 		super.paintComponent(g);
 		Graphics2D g2D = (Graphics2D) g;
 		//image = tileManager.getTileImage(new TileNumber(15, 17683, 11577));
-		System.out.println("TestPanel: paintComponent "+image);
+		logger.info("TestPanel: paintComponent "+image);
 		g2D.drawImage(image, 0, 0, this);
 		//g2D.drawRect(20,20,100,100);
 	}
@@ -61,16 +61,7 @@ public class TestMapPanel extends JPanel implements MapObserver, ImageObserver {
 
 	@Override
 	public void mapTilesUpdated() {
-		// TODO Auto-generated method stub
-		System.out.println("TestPanel: mapTilesUpdated");
-		/*
-		try {
-			Thread.sleep(100);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		*/
+		logger.info("TestPanel: mapTilesUpdated");
 		repaint();
 
 	}
@@ -78,10 +69,9 @@ public class TestMapPanel extends JPanel implements MapObserver, ImageObserver {
 	@Override
 	public boolean imageUpdate(Image arg0, int infoflags, int arg2, int arg3,
 			int arg4, int arg5) {
-		// TODO Auto-generated method stub
 		boolean loaded = (infoflags & ImageObserver.ALLBITS) > 0;
 		if (loaded) {
-			System.out.println("ImageObserver");
+			logger.info("ImageObserver");
 			repaint();
 		}
 

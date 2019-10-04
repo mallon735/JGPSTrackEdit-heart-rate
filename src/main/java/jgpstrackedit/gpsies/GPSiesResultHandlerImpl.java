@@ -12,245 +12,245 @@
 
 package jgpstrackedit.gpsies;
 
-import javax.swing.table.TableModel;
-
+import jgpstrackedit.util.Parser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
-import jgpstrackedit.util.Parser;
 
 /**
  *
  * @author Hubert
  */
 public class GPSiesResultHandlerImpl implements GPSiesResultHandler {
-    public static final boolean DEBUG = false;
+    
+    private static final Logger logger = LoggerFactory.getLogger(GPSiesResultHandlerImpl.class);
     private GPSiesResult gpsiesResult = new GPSiesResult();
-    GPSiesTrackDescription trackDes;
+    private GPSiesTrackDescription trackDes;
 
     public void handle_startPointLon(final String data, final Attributes meta) throws SAXException {
-        if (DEBUG) {
-            System.err.println("handle_startPointLon: " + meta);
+        if (logger.isDebugEnabled()) {
+            logger.debug("handle_startPointLon: " + meta);
         }
     }
 
     public void handle_startPointLat(final String data, final Attributes meta) throws SAXException {
-        if (DEBUG) {
-            System.err.println("handle_startPointLat: " + meta);
+        if (logger.isDebugEnabled()) {
+            logger.debug("handle_startPointLat: " + meta);
         }
     }
 
     public void handle_endPointLat(final String data, final Attributes meta) throws SAXException {
-        if (DEBUG) {
-            System.err.println("handle_endPointLat: " + meta);
+        if (logger.isDebugEnabled()) {
+            logger.debug("handle_endPointLat: " + meta);
         }
     }
 
     public void start_meta(final Attributes meta) throws SAXException {
-        if (DEBUG) {
-            System.err.println("start_meta: " + meta);
+        if (logger.isDebugEnabled()) {
+            logger.debug("start_meta: " + meta);
         }
     }
 
     public void end_meta() throws SAXException {
-        if (DEBUG) {
-            System.err.println("end_meta()");
+        if (logger.isDebugEnabled()) {
+            logger.debug("end_meta()");
         }
     }
 
     public void handle_resultPage(final String data, final Attributes meta) throws SAXException {
-        if (DEBUG) {
-            System.err.println("handle_resultPage: " + meta);
+        if (logger.isDebugEnabled()) {
+            logger.debug("handle_resultPage: " + meta);
         }
     }
 
     public void handle_changedDate(final String data, final Attributes meta) throws SAXException {
-        if (DEBUG) {
-            System.err.println("handle_changedDate: " + meta);
+        if (logger.isDebugEnabled()) {
+            logger.debug("handle_changedDate: " + meta);
         }
     }
 
     public void handle_title(final String data, final Attributes meta) throws SAXException {
-        if (DEBUG) {
-            System.err.println("handle_title: " + meta);
+        if (logger.isDebugEnabled()) {
+            logger.debug("handle_title: " + meta);
         }
         trackDes.setTitle(data);
     }
 
     public void handle_username(final String data, final Attributes meta) throws SAXException {
-        if (DEBUG) {
-            System.err.println("handle_username: " + meta);
+        if (logger.isDebugEnabled()) {
+            logger.debug("handle_username: " + meta);
         }
     }
 
     public void handle_description(final String data, final Attributes meta) throws SAXException {
-        if (DEBUG) {
-            System.err.println("handle_description: " + meta);
-            System.out.println("Description="+data);
+        if (logger.isDebugEnabled()) {
+            logger.debug("handle_description: " + meta);
+            logger.info("Description="+data);
         }
         trackDes.setDescription(data);
     }
 
     public void handle_endPointCountry(final String data, final Attributes meta) throws SAXException {
-        if (DEBUG) {
-            System.err.println("handle_endPointCountry: " + meta);
+        if (logger.isDebugEnabled()) {
+            logger.debug("handle_endPointCountry: " + meta);
         }
     }
 
     public void handle_filetype(final String data, final Attributes meta) throws SAXException {
-        if (DEBUG) {
-            System.err.println("handle_filetype: " + meta);
+        if (logger.isDebugEnabled()) {
+            logger.debug("handle_filetype: " + meta);
         }
     }
 
     public void handle_altitudeMaxHeightM(final String data, final Attributes meta) throws SAXException {
-        if (DEBUG) {
-            System.err.println("handle_altitudeMaxHeightM: " + meta);
+        if (logger.isDebugEnabled()) {
+            logger.debug("handle_altitudeMaxHeightM: " + meta);
         }
         trackDes.setMaxAltitude(Parser.parseDouble(data));
     }
 
     public void handle_createdDate(final String data, final Attributes meta) throws SAXException {
-        if (DEBUG) {
-            System.err.println("handle_createdDate: " + meta);
+        if (logger.isDebugEnabled()) {
+            logger.debug("handle_createdDate: " + meta);
         }
     }
 
     public void handle_endPointLon(final String data, final Attributes meta) throws SAXException {
-        if (DEBUG) {
-            System.err.println("handle_endPointLon: " + meta);
+        if (logger.isDebugEnabled()) {
+            logger.debug("handle_endPointLon: " + meta);
         }
     }
 
     public void handle_limit(final String data, final Attributes meta) throws SAXException {
-        if (DEBUG) {
-            System.err.println("handle_limit: " + meta);
+        if (logger.isDebugEnabled()) {
+            logger.debug("handle_limit: " + meta);
         }
     }
 
     public void handle_altitudeDifferenceM(final String data, final Attributes meta) throws SAXException {
-        if (DEBUG) {
-            System.err.println("handle_altitudeDifferenceM: " + meta);
+        if (logger.isDebugEnabled()) {
+            logger.debug("handle_altitudeDifferenceM: " + meta);
         }
     }
 
     public void handle_totalDescentM(final String data, final Attributes meta) throws SAXException {
-        if (DEBUG) {
-            System.err.println("handle_totalDescentM: " + meta);
+        if (logger.isDebugEnabled()) {
+            logger.debug("handle_totalDescentM: " + meta);
         }
         trackDes.setTotalDescent(Parser.parseDouble(data));
     }
 
     public void start_track(final Attributes meta) throws SAXException {
-        if (DEBUG) {
-            System.err.println("start_track: " + meta);
+        if (logger.isDebugEnabled()) {
+            logger.debug("start_track: " + meta);
         }
         trackDes = new GPSiesTrackDescription();
     }
 
     public void end_track() throws SAXException {
-        if (DEBUG) {
-            System.err.println("end_track()");
+        if (logger.isDebugEnabled()) {
+            logger.debug("end_track()");
         }
         gpsiesResult.add(trackDes);
 
     }
 
     public void handle_totalAscentM(final String data, final Attributes meta) throws SAXException {
-        if (DEBUG) {
-            System.err.println("handle_totalAscentM: " + meta);
+        if (logger.isDebugEnabled()) {
+            logger.debug("handle_totalAscentM: " + meta);
         }
         trackDes.setTotalAscent(Parser.parseDouble(data));
     }
 
     public void handle_altitudeMinHeightM(final String data, final Attributes meta) throws SAXException {
-        if (DEBUG) {
-            System.err.println("handle_altitudeMinHeightM: " + meta);
+        if (logger.isDebugEnabled()) {
+            logger.debug("handle_altitudeMinHeightM: " + meta);
         }
         trackDes.setMinAltitude(Parser.parseDouble(data));
     }
 
     public void start_tracks(final Attributes meta) throws SAXException {
-        if (DEBUG) {
-            System.err.println("start_tracks: " + meta);
+        if (logger.isDebugEnabled()) {
+            logger.debug("start_tracks: " + meta);
         }
     }
 
     public void end_tracks() throws SAXException {
-        if (DEBUG) {
-            System.err.println("end_tracks()");
+        if (logger.isDebugEnabled()) {
+            logger.debug("end_tracks()");
         }
     }
 
     public void handle_requestUrl(final String data, final Attributes meta) throws SAXException {
-        if (DEBUG) {
-            System.err.println("handle_requestUrl: " + meta);
+        if (logger.isDebugEnabled()) {
+            logger.debug("handle_requestUrl: " + meta);
         }
     }
 
     public void handle_countTrackpoints(final String data, final Attributes meta) throws SAXException {
-        if (DEBUG) {
-            System.err.println("handle_countTrackpoints: " + meta);
+        if (logger.isDebugEnabled()) {
+            logger.debug("handle_countTrackpoints: " + meta);
         }
     }
 
     public void handle_fileId(final String data, final Attributes meta) throws SAXException {
-        if (DEBUG) {
-            System.err.println("handle_fileId: " + meta);
+        if (logger.isDebugEnabled()) {
+            logger.debug("handle_fileId: " + meta);
         }
     }
 
     public void handle_startPointCountry(final String data, final Attributes meta) throws SAXException {
-        if (DEBUG) {
-            System.err.println("handle_startPointCountry: " + meta);
+        if (logger.isDebugEnabled()) {
+            logger.debug("handle_startPointCountry: " + meta);
         }
     }
 
     public void handle_trackProperty(final String data, final Attributes meta) throws SAXException {
-        if (DEBUG) {
-            System.err.println("handle_trackProperty: " + meta);
+        if (logger.isDebugEnabled()) {
+            logger.debug("handle_trackProperty: " + meta);
         }
     }
 
     public void handle_downloadLink(final String data, final Attributes meta) throws SAXException {
-        if (DEBUG) {
-            System.err.println("handle_downloadLink: " + meta);
+        if (logger.isDebugEnabled()) {
+            logger.debug("handle_downloadLink: " + meta);
         }
         trackDes.setDownloadlink(data);
     }
 
     public void handle_trackLengthM(final String data, final Attributes meta) throws SAXException {
-        if (DEBUG) {
-            System.err.println("handle_trackLengthM: " + meta);
+        if (logger.isDebugEnabled()) {
+            logger.debug("handle_trackLengthM: " + meta);
         }
         trackDes.setTrackLength(Parser.parseDouble(data)/1000.0);
     }
 
     public void start_gpsies(final Attributes meta) throws SAXException {
-        if (DEBUG) {
-            System.err.println("start_gpsies: " + meta);
+        if (logger.isDebugEnabled()) {
+            logger.debug("start_gpsies: " + meta);
         }
     }
 
     public void end_gpsies() throws SAXException {
-        if (DEBUG) {
-            System.err.println("end_gpsies()");
+        if (logger.isDebugEnabled()) {
+            logger.debug("end_gpsies()");
         }
     }
 
     public void handle_resultSize(final String data, final Attributes meta) throws SAXException {
-        if (DEBUG) {
-            System.err.println("handle_resultSize: " + meta);
+        if (logger.isDebugEnabled()) {
+            logger.debug("handle_resultSize: " + meta);
         }
     }
 
     public void handle_downloadBaseUrl(final String data, final Attributes meta) throws SAXException {
-        if (DEBUG) {
-            System.err.println("handle_downloadBaseUrl: " + meta);
+        if (logger.isDebugEnabled()) {
+            logger.debug("handle_downloadBaseUrl: " + meta);
         }
     }
 
 	public GPSiesResult getResult() {
-		// TODO Auto-generated method stub
 		return gpsiesResult;
 	}
 

@@ -3,11 +3,11 @@
  */
 package jgpstrackedit.trackfile.gpxtrack;
 
-import java.io.PrintWriter;
-import java.util.Optional;
-
 import jgpstrackedit.data.Point;
 import jgpstrackedit.data.Track;
+
+import java.io.PrintWriter;
+import java.util.Optional;
 
 /**
  * Serialize a track as a garmin gpx track file.

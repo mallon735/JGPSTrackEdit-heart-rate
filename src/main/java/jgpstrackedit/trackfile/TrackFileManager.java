@@ -3,6 +3,15 @@
  */
 package jgpstrackedit.trackfile;
 
+import jgpstrackedit.config.Configuration;
+import jgpstrackedit.data.Track;
+import jgpstrackedit.trackfile.kml.KML;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.xml.sax.SAXException;
+
+import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -10,17 +19,6 @@ import java.net.URL;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
-
-import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.xml.sax.SAXException;
-
-import jgpstrackedit.config.Configuration;
-import jgpstrackedit.data.Track;
-import jgpstrackedit.trackfile.kml.KML;
 
 /**
  * Manages opening and saving of trackfiles.

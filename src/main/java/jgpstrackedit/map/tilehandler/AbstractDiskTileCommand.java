@@ -3,9 +3,6 @@
  */
 package jgpstrackedit.map.tilehandler;
 
-import java.awt.Image;
-
-
 /**
  * @author Hubert
  *

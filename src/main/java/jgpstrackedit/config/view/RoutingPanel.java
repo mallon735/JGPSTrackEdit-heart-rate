@@ -3,18 +3,10 @@
  */
 package jgpstrackedit.config.view;
 
-import javax.swing.JPanel;
-
-import jgpstrackedit.data.util.TourPlaner;
-import jgpstrackedit.international.International;
-import jgpstrackedit.util.Parser;
 import jgpstrackedit.config.Configuration;
+import jgpstrackedit.international.International;
 
-import javax.swing.JLabel;
-import javax.swing.JComboBox;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JTextField;
-import javax.swing.JCheckBox;
+import javax.swing.*;
 
 /**
  * @author Hubert

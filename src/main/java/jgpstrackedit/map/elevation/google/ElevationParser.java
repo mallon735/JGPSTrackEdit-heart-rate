@@ -11,27 +11,24 @@
  */
 package jgpstrackedit.map.elevation.google;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.xml.sax.*;
+
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.util.AbstractMap;
 import java.util.Map;
 import java.util.Stack;
 
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.xml.sax.Attributes;
-import org.xml.sax.ContentHandler;
-import org.xml.sax.EntityResolver;
-import org.xml.sax.ErrorHandler;
-import org.xml.sax.Locator;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
-import org.xml.sax.XMLReader;
-
 /**
+ * ElevationParser
  *
  * @author hlutnik
  */
 public class ElevationParser implements ContentHandler {
+    private static final Logger logger = LoggerFactory.getLogger(ElevationParser.class);
+
     private ElevationHandler handler;
     private Stack<Map.Entry<String, org.xml.sax.Attributes>> context;
     private StringBuffer buffer;
@@ -180,7 +177,6 @@ public class ElevationParser implements ContentHandler {
      * @throws java.io.IOException on I/O error
      * @throws org.xml.sax.SAXException propagated exception thrown by a DocumentHandler
      * @throws javax.xml.parsers.ParserConfigurationException a parser satisfying the requested configuration cannot be created
-     * @throws javax.xml.parsers.FactoryConfigurationRrror if the implementation cannot be instantiated
      */
     public void parse(final org.xml.sax.InputSource input) throws SAXException, ParserConfigurationException, IOException {
         parse(input, this);
@@ -193,7 +189,6 @@ public class ElevationParser implements ContentHandler {
      * @throws java.io.IOException on I/O error
      * @throws org.xml.sax.SAXException propagated exception thrown by a DocumentHandler
      * @throws javax.xml.parsers.ParserConfigurationException a parser satisfying the requested configuration cannot be created
-     * @throws javax.xml.parsers.FactoryConfigurationRrror if the implementation cannot be instantiated
      */
     public void parse(final java.net.URL url) throws SAXException, ParserConfigurationException, IOException {
         parse(new org.xml.sax.InputSource(url.toExternalForm()), this);
@@ -206,7 +201,6 @@ public class ElevationParser implements ContentHandler {
      * @throws java.io.IOException on I/O error
      * @throws org.xml.sax.SAXException propagated exception thrown by a DocumentHandler
      * @throws javax.xml.parsers.ParserConfigurationException a parser satisfying the requested configuration cannot be created
-     * @throws javax.xml.parsers.FactoryConfigurationRrror if the implementation cannot be instantiated
      */
     public static void parse(final org.xml.sax.InputSource input, final ElevationHandler handler) throws SAXException, ParserConfigurationException, IOException {
         parse(input, new ElevationParser(handler, null));
@@ -219,7 +213,6 @@ public class ElevationParser implements ContentHandler {
      * @throws java.io.IOException on I/O error
      * @throws org.xml.sax.SAXException propagated exception thrown by a DocumentHandler
      * @throws javax.xml.parsers.ParserConfigurationException a parser satisfying the requested configuration cannot be created
-     * @throws javax.xml.parsers.FactoryConfigurationRrror if the implementation cannot be instantiated
      */
     public static void parse(final java.net.URL url, final ElevationHandler handler) throws SAXException, ParserConfigurationException, IOException {
         parse(new org.xml.sax.InputSource(url.toExternalForm()), handler);
@@ -248,7 +241,7 @@ public class ElevationParser implements ContentHandler {
 
             public void error(SAXParseException ex) throws SAXException {
                 if (context.isEmpty()) {
-                    System.err.println("Missing DOCTYPE.");
+                    logger.error("Missing DOCTYPE.");
                 }
                 throw ex;
             }

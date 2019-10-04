@@ -1,22 +1,17 @@
 package jgpstrackedit.map.elevation.mapquest;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import jgpstrackedit.data.Point;
+import jgpstrackedit.data.Track;
+import jgpstrackedit.map.elevation.ElevationException;
+import jgpstrackedit.map.elevation.IProgressDetector;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-
-import org.junit.Before;
-import org.junit.Test;
-
-import jgpstrackedit.data.Point;
-import jgpstrackedit.data.Track;
-import jgpstrackedit.map.elevation.ElevationException;
-import jgpstrackedit.map.elevation.IProgressDetector;
-import jgpstrackedit.trackfile.asc.ASC;
 
 /**
  * Unit-Test for {@link MapQuestElevationCorrection}

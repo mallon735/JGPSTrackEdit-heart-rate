@@ -1,19 +1,12 @@
 package jgpstrackedit.config.view;
 
-import javax.swing.JPanel;
-import javax.swing.JCheckBox;
 import jgpstrackedit.config.Configuration;
 import jgpstrackedit.international.International;
 
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JLabel;
-import javax.swing.JComboBox;
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
+import javax.swing.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Locale;
-
-import jgpstrackedit.international.International;
 
 public class GeneralPanel extends JPanel implements ConfigurationPanel {
 

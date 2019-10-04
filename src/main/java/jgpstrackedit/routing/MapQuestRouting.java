@@ -3,26 +3,23 @@
  */
 package jgpstrackedit.routing;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
-
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.xml.sax.SAXException;
-
+import jgpstrackedit.config.Configuration;
 import jgpstrackedit.data.Point;
 import jgpstrackedit.data.util.TrackUtil;
-import jgpstrackedit.config.Configuration;
-import jgpstrackedit.gpsies.GPSiesResultParser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.net.URL;
+import java.util.ArrayList;
 
 /**
  * @author Hubert
  *
  */
 public class MapQuestRouting {
-	
+
+	private static final Logger logger = LoggerFactory.getLogger(MapQuestRouting.class);
+
 	protected ArrayList<Point> loadRouteFromMapQuest(Point fromPoint, Point toPoint) {
 		ArrayList<Point> points = null;
 		MapQuestRoutingHandlerImpl handler = new MapQuestRoutingHandlerImpl();
@@ -41,24 +38,14 @@ public class MapQuestRouting {
 	                   +(Configuration.getBooleanProperty("ROUTINGAVOIDTOLLROAD")?"&avoids=Toll road":"")
 		               +"&from="+fromPoint.getLatitudeAsString()+","+fromPoint.getLongitudeAsString()
 		               +"&to="+toPoint.getLatitudeAsString()+","+toPoint.getLongitudeAsString();
-        System.out.println(urlString);
+        logger.info(urlString);
 		URL url;
 		try {
 			url = new URL(urlString);
 			parser.parse(url);
 			points = handler.getPoints();
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SAXException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ParserConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (Exception e) {
+			logger.error("Error loading route!", e);
 		}
 		return points;
 

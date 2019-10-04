@@ -1,20 +1,16 @@
 package jgpstrackedit.view;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.swing.JPanel;
-
 import jgpstrackedit.data.Point;
 import jgpstrackedit.data.Track;
 import jgpstrackedit.data.TrackObserver;
 import jgpstrackedit.data.util.TourPlaner;
 import jgpstrackedit.util.Parser;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AltitudeProfilePanel extends JPanel implements TrackObserver {
 

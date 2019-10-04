@@ -5,11 +5,11 @@
 
 package jgpstrackedit.trackfile.gpxroute;
 
-import java.io.PrintWriter;
-import java.util.Optional;
-
 import jgpstrackedit.data.Point;
 import jgpstrackedit.data.Track;
+
+import java.io.PrintWriter;
+import java.util.Optional;
 
 /**
  * GPX Route writer.

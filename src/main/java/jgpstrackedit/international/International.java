@@ -3,18 +3,20 @@
  */
 package jgpstrackedit.international;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.Arrays;
 import java.util.Locale;
 import java.util.ResourceBundle;
-
-import javax.swing.DefaultComboBoxModel;
 
 /** Handles all localization specific tasks and provides methods and fields to support localization.
  * @author Hubert
  *
  */
 public class International {
-	
+
+    private static final Logger log = LoggerFactory.getLogger(International.class);
 	private static Locale currentLocale = Locale.getDefault();
 	private static ResourceBundle stringResources;
 		      
@@ -26,7 +28,7 @@ public class International {
 	}
 
 	/**
-	 * @param currentLocale the currentLocale to set
+	 * @param locale the currentLocale to set
 	 */
 	public static void setCurrentLocale(Locale locale) {
 		International.currentLocale = locale;
@@ -41,7 +43,7 @@ public class International {
 	}
 
 	public static void initialize(String localeName) {
-		System.out.println("CurrentLocale="+currentLocale.toString());
+		log.info("CurrentLocale=" + currentLocale.toString());
 		stringResources = ResourceBundle.getBundle("jgpstrackedit.international.jgpstrackeditlang", currentLocale);
 	}
 	
@@ -49,8 +51,8 @@ public class International {
 		return stringResources.getString(key);
 	}
 	
-	/** List of all countries according to ISO-3166
-	 * 
+	/**
+     * List of all countries according to ISO-3166
 	 */
 	public static String[] getCountries() {
 		
@@ -262,7 +264,5 @@ public class International {
 		"zh",
 		"zu"
 	};
-	
-	
 
 }

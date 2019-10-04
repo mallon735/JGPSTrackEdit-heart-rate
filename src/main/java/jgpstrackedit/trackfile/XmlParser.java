@@ -1,22 +1,22 @@
 package jgpstrackedit.trackfile;
 
+import jgpstrackedit.data.Track;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.xml.sax.*;
+
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.util.List;
 
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.xml.sax.Attributes;
-import org.xml.sax.ContentHandler;
-import org.xml.sax.ErrorHandler;
-import org.xml.sax.Locator;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
-import org.xml.sax.XMLReader;
-
-import jgpstrackedit.data.Track;
-
+/**
+ * Common XML parser
+ *
+ * @author gerdba
+ */
 public class XmlParser 
 {
+	private static final Logger logger = LoggerFactory.getLogger(XmlParser.class);
 	private final XmlContentHandler xmlContentHandler;
 	
 	public XmlParser(TagHandler tagHandler) {
@@ -124,15 +124,15 @@ public class XmlParser
 	 */
 	private static class XmlParserErrorHandler implements ErrorHandler {
 		public void error(SAXParseException ex) throws SAXException {
-			System.err.println(String.format("Parser error: %s", ex.getMessage()));
+			logger.error(String.format("Parser error: %s", ex.getMessage()));
 		}
 
 		public void fatalError(SAXParseException ex) throws SAXException {
-			System.err.println(String.format("Parser fatal error: %s", ex.getMessage()));
+			logger.error(String.format("Parser fatal error: %s", ex.getMessage()));
 		}
 
 		public void warning(SAXParseException ex) throws SAXException {
-			System.err.println(String.format("Parser warning: %s", ex.getMessage()));
+			logger.warn(String.format("Parser warning: %s", ex.getMessage()));
 		}
 	}
 }

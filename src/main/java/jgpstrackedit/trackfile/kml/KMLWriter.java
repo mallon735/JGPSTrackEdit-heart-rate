@@ -3,10 +3,10 @@
  */
 package jgpstrackedit.trackfile.kml;
 
-import java.io.PrintWriter;
-
 import jgpstrackedit.data.Point;
 import jgpstrackedit.data.Track;
+
+import java.io.PrintWriter;
 
 /**
  * @author Hubert

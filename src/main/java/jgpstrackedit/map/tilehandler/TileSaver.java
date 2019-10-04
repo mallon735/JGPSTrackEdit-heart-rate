@@ -3,10 +3,10 @@
  */
 package jgpstrackedit.map.tilehandler;
 
-import java.awt.Image;
-import java.util.concurrent.LinkedBlockingQueue;
-
 import jgpstrackedit.map.util.TileNumber;
+
+import java.awt.*;
+import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * @author Hubert

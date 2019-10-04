@@ -77,13 +77,13 @@ public class Transform {
 			scaleY = mapHeight / screenHeight;
 		}
 		/*
-		System.out.println("SetTransform UpperLeft:  " + upperLeftBoundary);
-		System.out.println("             LowerRight: " + lowerRightBoundary);
-		System.out.println("             Screen width=" + width + " height="
+		logger.info("SetTransform UpperLeft:  " + upperLeftBoundary);
+		logger.info("             LowerRight: " + lowerRightBoundary);
+		logger.info("             Screen width=" + width + " height="
 				+ height);
-		System.out.println("        mapWidth=" + mapWidth + " mapHeight="
+		logger.info("        mapWidth=" + mapWidth + " mapHeight="
 				+ mapHeight);
-		System.out.println("        zoomLevel=" + zoomLevel);
+		logger.info("        zoomLevel=" + zoomLevel);
 		*/
 
 	}

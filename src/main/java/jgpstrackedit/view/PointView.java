@@ -4,13 +4,13 @@
  */
 package jgpstrackedit.view;
 
-import java.awt.Graphics2D;
-
 import jgpstrackedit.config.Configuration;
 import jgpstrackedit.config.view.ViewingConfiguration;
 import jgpstrackedit.data.Point;
 import jgpstrackedit.data.Track;
 import jgpstrackedit.util.Parser;
+
+import java.awt.*;
 
 /**
  *

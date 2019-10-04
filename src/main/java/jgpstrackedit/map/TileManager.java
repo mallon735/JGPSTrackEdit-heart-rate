@@ -3,10 +3,18 @@
  */
 package jgpstrackedit.map;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.Toolkit;
+import jgpstrackedit.config.Configuration;
+import jgpstrackedit.map.tiledownload.TileCopyCommand;
+import jgpstrackedit.map.tiledownload.TileDownload;
+import jgpstrackedit.map.tilehandler.*;
+import jgpstrackedit.map.util.*;
+import jgpstrackedit.util.ProgressHandler;
+import jgpstrackedit.view.Transform;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.File;
@@ -17,31 +25,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.TreeSet;
-
-import javax.imageio.ImageIO;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import jgpstrackedit.config.Configuration;
-import jgpstrackedit.map.tiledownload.TileCopyCommand;
-import jgpstrackedit.map.tiledownload.TileDownload;
-import jgpstrackedit.map.tilehandler.DiskTileLoader;
-import jgpstrackedit.map.tilehandler.QueueObserver;
-import jgpstrackedit.map.tilehandler.TileLoadEvent;
-import jgpstrackedit.map.tilehandler.TileLoadObserver;
-import jgpstrackedit.map.tilehandler.TileSaver;
-import jgpstrackedit.map.tilehandler.WebTileLoader;
-import jgpstrackedit.map.util.ImageConverter;
-import jgpstrackedit.map.util.MapObserver;
-import jgpstrackedit.map.util.Tile;
-import jgpstrackedit.map.util.TileBoundary;
-import jgpstrackedit.map.util.TileLRUList;
-import jgpstrackedit.map.util.TileLRUObserver;
-import jgpstrackedit.map.util.TileNumber;
-import jgpstrackedit.map.util.TileState;
-import jgpstrackedit.util.ProgressHandler;
-import jgpstrackedit.view.Transform;
 
 /**
  * Manages all tiles of a map
@@ -56,7 +39,7 @@ public abstract class TileManager implements Runnable, TileLoadObserver,
 	
 	// Constants
 	private int maxZoom = 18;
-	//
+
 	private static TileManager currentTileManager = null;
 
 	private boolean showTiles = false;
@@ -122,8 +105,7 @@ public abstract class TileManager implements Runnable, TileLoadObserver,
 	}
 
 	/**
-	 * @param maxZoom
-	 *            the maxZoom to set
+	 * @param maxzoom the maxZoom to set
 	 */
 	protected void setMaxZoom(int maxzoom) {
 		maxZoom = maxzoom;
@@ -199,13 +181,6 @@ public abstract class TileManager implements Runnable, TileLoadObserver,
 
 	/**
 	 * Opens a map.
-	 * 
-	 * @param mapName
-	 *            name of the map, e.g. "OpenStreetMap". Only letters suitable
-	 *            for directory names are allowed
-	 * @param baseURL
-	 *            base URL to access tile images of the map, e.g.
-	 *            http://tile.openstreetmap.org
 	 */
 	public void open() {
 		tiles = new HashMap<TileNumber, Tile>();
@@ -284,7 +259,7 @@ public abstract class TileManager implements Runnable, TileLoadObserver,
 				upperLeftTileBoundary.getWest(),
 				upperLeftTileBoundary.getNorth());
 		/*
-		 * System.out .println("paintMap ready=" + ready + " tilesX=" + tilesX +
+		 * logger.info("paintMap ready=" + ready + " tilesX=" + tilesX +
 		 * " tilesY=" + tilesY + " xOff=" + xOffset + " yOff=" + yOffset);
 		 */
 		for (int x = 0; x < tilesX; x++)
@@ -305,7 +280,7 @@ public abstract class TileManager implements Runnable, TileLoadObserver,
 				if (isShowTiles()) {
 					Color saveColor = g2D.getColor();
 					g2D.setColor(Color.BLUE);
-					// System.out.println("TileBoundary: "+tb);
+					// logger.info("TileBoundary: "+tb);
 					drawTileBorder(g2D, tb);
 					g2D.drawString(loadingTileNumber.toString(),
 							Transform.screenX(tb.getWest()) + 2,
@@ -510,7 +485,7 @@ public abstract class TileManager implements Runnable, TileLoadObserver,
 		Image img = loadingImage;
 		if (!ready) {
 			/*
-			 * System.out.println("getTileImage: not ready, return DefaultImage "
+			 * logger.info("getTileImage: not ready, return DefaultImage "
 			 * + tileNumber.toString());
 			 */
 			return img;
@@ -526,7 +501,7 @@ public abstract class TileManager implements Runnable, TileLoadObserver,
 			tile.setTileState(TileState.loadingFromWeb);
 			webTileLoader.loadTile(tileNumber);
 			/*
-			 * System.out.println("getTileImage: unknown, return DefaultImage "
+			 * logger.info("getTileImage: unknown, return DefaultImage "
 			 * + tileNumber.toString());
 			 */
 			break;
@@ -534,27 +509,25 @@ public abstract class TileManager implements Runnable, TileLoadObserver,
 			tile.setTileState(TileState.loadingFromDisk);
 			diskTileLoader.loadTile(tileNumber);
 			/*
-			 * System.out.println("getTileImage: onDisk, return DefaultImage " +
+			 * logger.info("getTileImage: onDisk, return DefaultImage " +
 			 * tileNumber.toString());
 			 */
 			break;
 		case loadingFromWeb:
 			/*
-			 * System.out
-			 * .println("getTileImage: loadingFromWeb, return DefaultImage " +
+			 * logger.info("getTileImage: loadingFromWeb, return DefaultImage " +
 			 * tileNumber.toString());
 			 */
 			break;
 		case loadingFromDisk:
 			/*
-			 * System.out
-			 * .println("getTileImage: loadingFromDisk, return DefaultImage " +
+			 * logger.info("getTileImage: loadingFromDisk, return DefaultImage " +
 			 * tileNumber.toString());
 			 */
 			break;
 		case available:
 			/*
-			 * System.out.println("getTileImage: available, return TileImage " +
+			 * logger.info("getTileImage: available, return TileImage " +
 			 * tileNumber.toString());
 			 */
 			if (tile.getTileImage() != null) {
@@ -587,7 +560,7 @@ public abstract class TileManager implements Runnable, TileLoadObserver,
 			String urlString = getTileURL(tileNumber);
 			URL url;
 			try {
-				//System.out.println("TileManager: URL loading: "+urlString);
+				//logger.info("TileManager: URL loading: "+urlString);
 				url = new URL(urlString);
 				Image image = Toolkit.getDefaultToolkit().createImage(url);
 				String dirPath = getBaseDir() + File.separator
@@ -599,7 +572,7 @@ public abstract class TileManager implements Runnable, TileLoadObserver,
 						+ tileNumber.getY() + ".png";
 				BufferedImage bufferedImage = ImageConverter
 						.toBufferedImage(image);
-				//System.out.println("TileManager: File saving: "+fileName);
+				//logger.info("TileManager: File saving: "+fileName);
 				if (bufferedImage != null) {
 					File file = new File(fileName);
 					try {
@@ -607,19 +580,15 @@ public abstract class TileManager implements Runnable, TileLoadObserver,
 						tile.setTileState(TileState.onDisk);
 						result = true;
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						logger.error("Exception while writing image!", e);
 					}
 				} else {
-					System.out
-							.println("TileManager: File not saved due to null-image: "
-									+ fileName);
+					logger.info("TileManager: File not saved due to null-image: " + fileName);
 
 				}
 			} catch (MalformedURLException e) {
-				// TODO Auto-generated catch block
-				System.out.println("TileManager: URL=" + urlString);
-				e.printStackTrace();
+
+				logger.error("TileManager: URL=" + urlString, e);
 			}
 			break;
 		case onDisk:
@@ -672,11 +641,10 @@ public abstract class TileManager implements Runnable, TileLoadObserver,
 					String destFile = targetDir + tile.toFileName() + ".png"
 							+ extension;
 					TileCopyCommand.copy(sourceFile, destFile);
-					//System.out.println("TileManager: File copied: " + destFile);
+					//logger.info("TileManager: File copied: " + destFile);
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					errorTiles.add(tile);
-					e.printStackTrace();
+					logger.error("Exception while downloading tiles!", e);
 				}
 			} else {
 				errorTiles.add(tile);
@@ -764,7 +732,7 @@ public abstract class TileManager implements Runnable, TileLoadObserver,
 			case loadingFromWeb:
 				tile.setTileState(TileState.available);
 				/*
-				 * System.out.println("tileLoaded from Web " +
+				 * logger.info("tileLoaded from Web " +
 				 * tileLoadEvent.getTileNumber().toString());
 				 */
 				notifyMapObservers();
@@ -774,7 +742,7 @@ public abstract class TileManager implements Runnable, TileLoadObserver,
 			case loadingFromDisk:
 				tile.setTileState(TileState.available);
 				/*
-				 * System.out.println("tileLoaded from Disk " +
+				 * logger.info("tileLoaded from Disk " +
 				 * tileLoadEvent.getTileNumber().toString());
 				 */
 				notifyMapObservers();

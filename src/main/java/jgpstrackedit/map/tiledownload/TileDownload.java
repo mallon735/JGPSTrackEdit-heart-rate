@@ -3,24 +3,16 @@
  */
 package jgpstrackedit.map.tiledownload;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.TreeSet;
-
 import jgpstrackedit.data.Point;
 import jgpstrackedit.data.Track;
 import jgpstrackedit.map.tilehandler.QueueObserver;
 import jgpstrackedit.map.util.TileBoundary;
 import jgpstrackedit.map.util.TileNumber;
+
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.TreeSet;
 
 /**
  * @author hlutnik

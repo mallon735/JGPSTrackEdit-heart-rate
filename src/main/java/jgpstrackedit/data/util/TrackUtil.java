@@ -3,8 +3,9 @@
  */
 package jgpstrackedit.data.util;
 
-import java.util.ArrayList;
 import jgpstrackedit.data.Point;
+
+import java.util.ArrayList;
 
 /**
  * @author Hubert

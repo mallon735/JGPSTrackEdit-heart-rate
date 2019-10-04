@@ -1,15 +1,12 @@
 package jgpstrackedit.config.view;
 
-import java.text.DecimalFormat;
-
-import javax.swing.JPanel;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
-
 import jgpstrackedit.config.Configuration;
 import jgpstrackedit.data.util.TourPlaner;
-import jgpstrackedit.util.Parser;
 import jgpstrackedit.international.International;
+import jgpstrackedit.util.Parser;
+
+import javax.swing.*;
+import java.text.DecimalFormat;
 
 public class TourPlanerPanel extends JPanel implements ConfigurationPanel {
 	private JTextField textFieldAverageSpeed;

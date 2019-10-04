@@ -1,17 +1,16 @@
 package jgpstrackedit.view;
 
-import java.awt.Component;
-import java.awt.Frame;
-import java.util.List;
-
-import javax.swing.JOptionPane;
-import javax.swing.ProgressMonitor;
-
 import jgpstrackedit.data.Track;
 import jgpstrackedit.international.International;
 import jgpstrackedit.map.elevation.ElevationException;
 import jgpstrackedit.map.elevation.IElevationCorrection;
 import jgpstrackedit.map.elevation.IProgressDetector;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.List;
 
 /**
  * Elevation correction action. In this class the {@link IElevationCorrection} impl. is combined with the progress bar an a thread running 
@@ -22,6 +21,7 @@ import jgpstrackedit.map.elevation.IProgressDetector;
  */
 public class ElevationCorrectionAction 
 {
+	private static final Logger logger = LoggerFactory.getLogger(ElevationCorrectionAction.class);
 	private static final String PROGRESS_BAR_TEXT_KEY = "menu.Track.Update_Elevation";
 	
 	private ProgressMonitor progressMonitor;
@@ -64,7 +64,7 @@ public class ElevationCorrectionAction
 				try {
 					this.elevationCorrection.updateElevation(track, new ProgressDetector(progressMonitor));
 				} catch (ElevationException e) {
-					e.printStackTrace();
+					logger.error("Error while update elevation!", e);
 					if (e.getMessage().equals("OVER_QUERY_LIMIT")) {
 						JOptionPane.showMessageDialog(this.parentComponent,
 								"The Google-API query limit was reached. Try another day to update elevations!",

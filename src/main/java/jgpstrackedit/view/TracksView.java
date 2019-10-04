@@ -4,15 +4,15 @@
  */
 package jgpstrackedit.view;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-
 import jgpstrackedit.data.DBObserver;
 import jgpstrackedit.data.Database;
 import jgpstrackedit.data.Point;
 import jgpstrackedit.data.Track;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Class TracksView - Manage the views of the tracks. 

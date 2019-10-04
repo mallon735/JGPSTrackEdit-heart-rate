@@ -1,19 +1,13 @@
 package jgpstrackedit.view;
 
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
-
 import jgpstrackedit.data.Point;
 import jgpstrackedit.util.Parser;
-import java.awt.event.ActionListener;
+
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class DlgPointEdit extends JDialog {
 

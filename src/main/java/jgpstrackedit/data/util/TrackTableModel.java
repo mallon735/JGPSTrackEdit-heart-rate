@@ -3,11 +3,11 @@
  */
 package jgpstrackedit.data.util;
 
-import javax.swing.table.AbstractTableModel;
-
 import jgpstrackedit.data.Track;
 import jgpstrackedit.data.TrackObserver;
 import jgpstrackedit.international.International;
+
+import javax.swing.table.AbstractTableModel;
 
 /**
  * Table model for points view, which shows a table of all track points.

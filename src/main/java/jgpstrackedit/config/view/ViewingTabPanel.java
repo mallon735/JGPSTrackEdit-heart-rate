@@ -1,12 +1,9 @@
 package jgpstrackedit.config.view;
 
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-
 import jgpstrackedit.config.Configuration;
 import jgpstrackedit.international.International;
+
+import javax.swing.*;
 
 public class ViewingTabPanel extends JPanel implements ConfigurationPanel {
 

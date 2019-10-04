@@ -3,15 +3,14 @@
  */
 package jgpstrackedit.map.tiledownload;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-
+import jgpstrackedit.map.tilehandler.AbstractDiskTileCommand;
+import jgpstrackedit.map.util.TileNumber;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import jgpstrackedit.map.tilehandler.AbstractDiskTileCommand;
-import jgpstrackedit.map.util.TileNumber;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 
 /**
  * @author hlutnik

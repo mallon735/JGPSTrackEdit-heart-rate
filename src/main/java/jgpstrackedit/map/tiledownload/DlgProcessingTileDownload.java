@@ -1,24 +1,16 @@
 package jgpstrackedit.map.tiledownload;
 
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.JLabel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JProgressBar;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.util.ArrayList;
-import java.util.TreeSet;
-
 import jgpstrackedit.map.TileManager;
 import jgpstrackedit.map.util.TileNumber;
 import jgpstrackedit.util.ProgressHandler;
+
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.TreeSet;
 
 public class DlgProcessingTileDownload extends JDialog 
                                        implements ProgressHandler {
@@ -120,7 +112,7 @@ public class DlgProcessingTileDownload extends JDialog
 	@Override
 	public boolean stepDone(int percentage) {
 		// TODO Auto-generated method stub
-		//System.out.println("stepDone "+percentage);
+		//logger.info("stepDone "+percentage);
 		progressBar.setValue(percentage);
 		return progress;
 	}

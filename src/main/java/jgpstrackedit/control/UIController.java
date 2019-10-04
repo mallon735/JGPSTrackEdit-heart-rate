@@ -4,27 +4,6 @@
  */
 package jgpstrackedit.control;
 
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.Dialog.ModalityType;
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
-import javax.imageio.ImageIO;
-import javax.swing.JDialog;
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
-import javax.swing.filechooser.FileFilter;
-import javax.swing.filechooser.FileNameExtensionFilter;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import jgpstrackedit.config.Configuration;
 import jgpstrackedit.config.Constants;
 import jgpstrackedit.data.Database;
@@ -33,19 +12,7 @@ import jgpstrackedit.data.Track;
 import jgpstrackedit.data.util.UnDoManager;
 import jgpstrackedit.gpsies.GPSiesComDialog;
 import jgpstrackedit.gpsies.GPSiesSaveDlg;
-import jgpstrackedit.map.FourUMapsTileManager;
-import jgpstrackedit.map.GoogleMapHybridTileManager;
-import jgpstrackedit.map.GoogleMapSatelliteTileManager;
-import jgpstrackedit.map.GoogleMapTerrainTileManager;
-import jgpstrackedit.map.GoogleMapTileManager;
-import jgpstrackedit.map.HikeBikeTileManager;
-import jgpstrackedit.map.MapQuestHybrideTileManager;
-import jgpstrackedit.map.MapQuestSatTileManager;
-import jgpstrackedit.map.MapQuestTileManager;
-import jgpstrackedit.map.OCMTileManager;
-import jgpstrackedit.map.OSMTileManager;
-import jgpstrackedit.map.ThunderForestCycleMapTileManager;
-import jgpstrackedit.map.TileManager;
+import jgpstrackedit.map.*;
 import jgpstrackedit.map.elevation.ElevationCorrectionFactory;
 import jgpstrackedit.map.elevation.IElevationCorrection;
 import jgpstrackedit.map.util.MapExtract;
@@ -61,11 +28,23 @@ import jgpstrackedit.trackfile.tcx.TCX;
 import jgpstrackedit.util.Browser;
 import jgpstrackedit.util.DirectoryFilter;
 import jgpstrackedit.util.Parser;
-import jgpstrackedit.view.DlgCompressOptions;
-import jgpstrackedit.view.DlgSelectMapExtract;
-import jgpstrackedit.view.ElevationCorrectionAction;
-import jgpstrackedit.view.JGPSTrackEdit;
-import jgpstrackedit.view.Transform;
+import jgpstrackedit.view.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import java.awt.*;
+import java.awt.Dialog.ModalityType;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * 
@@ -348,7 +327,7 @@ public class UIController implements Runnable {
 	 *            relative amount to move in y direction (latitudee)
 	 */
 	public void move(double deltaX, double deltaY) {
-		// System.out.println("UIController: move: deltaX="+deltaX+" deltaY="+deltaY);
+		// logger.info("UIController: move: deltaX="+deltaX+" deltaY="+deltaY);
 		form.getTracksPanel().move(deltaX, deltaY);
 	}
 
@@ -516,14 +495,14 @@ public class UIController implements Runnable {
 	}
 
 	public void tileManagerOSM_Mapnik() {
-		System.out.println("Command: OpenStreetMap");
+		logger.debug("Command: OpenStreetMap");
 		initTileManager(new OSMTileManager());
 
 	}
 
 	public void tileManagerOCM() {
 		// TODO Auto-generated method stub
-		// System.out.println("Command: OpenCycleMap");
+		// logger.debug("Command: OpenCycleMap");
 		initTileManager(new OCMTileManager());
 
 	}
@@ -556,7 +535,7 @@ public class UIController implements Runnable {
 	public void tileManagerGoogleMap() {
 		// TODO Auto-generated method stub
 		if (isGoogleMapEnabled()) {
-			// System.out.println("Command: GoogleMap");
+			// logger.debug("Command: GoogleMap");
 			initTileManager(new GoogleMapTileManager());
 		}
 
@@ -565,7 +544,7 @@ public class UIController implements Runnable {
 	public void tileManagerGoogleMapSatellite() {
 		// TODO Auto-generated method stub
 		if (isGoogleMapEnabled()) {
-			// System.out.println("Command: GoogleMapSatellite");
+			// logger.debug("Command: GoogleMapSatellite");
 			initTileManager(new GoogleMapSatelliteTileManager());
 		}
 
@@ -574,7 +553,7 @@ public class UIController implements Runnable {
 	public void tileManagerGoogleMapHybrid() {
 		// TODO Auto-generated method stub
 		if (isGoogleMapEnabled()) {
-			// System.out.println("Command: GoogleMapHybride");
+			// logger.debug("Command: GoogleMapHybride");
 			initTileManager(new GoogleMapHybridTileManager());
 		}
 
@@ -583,7 +562,7 @@ public class UIController implements Runnable {
 	public void tileManagerGoogleMapTerrain() {
 		// TODO Auto-generated method stub
 		if (isGoogleMapEnabled()) {
-			// System.out.println("Command: GoogleMapTerrain");
+			// logger.debug("Command: GoogleMapTerrain");
 			initTileManager(new GoogleMapTerrainTileManager());
 		}
 
@@ -591,7 +570,7 @@ public class UIController implements Runnable {
 
 	public void tileManagerHikeBikeMap() {
 		// TODO Auto-generated method stub
-		// System.out.println("Command: HikeBikeMap");
+		// logger.debug("Command: HikeBikeMap");
 		initTileManager(new HikeBikeTileManager());
 
 	}
@@ -608,7 +587,7 @@ public class UIController implements Runnable {
 
 	public void tileManagerMapQuest() {
 		// TODO Auto-generated method stub
-		// System.out.println("Command: MapQuest");
+		// logger.debug("Command: MapQuest");
 		initTileManager(new MapQuestTileManager());
 
 	}
@@ -754,8 +733,7 @@ public class UIController implements Runnable {
 	}
 
 	public void shortCut(Point start, Point end) {
-		System.out
-				.println("UIControlleR: shortCut (" + start + "," + end + ")");
+		logger.debug("UIControlleR: shortCut (" + start + "," + end + ")");
 		if (start != null && end != null) {
 			db.getTrackTableModel().getSelectedTrack().remove(start, end);
 		}

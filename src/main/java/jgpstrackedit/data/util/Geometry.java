@@ -4,13 +4,15 @@
 package jgpstrackedit.data.util;
 
 import jgpstrackedit.data.Point;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /** Class for geometric calculations.
  * @author Hubert
  *
  */
 public class Geometry {
-
+	private static final Logger logger = LoggerFactory.getLogger(Geometry.class);
 	private static final double EARTH_RADIUS_KM = 6372.795;
 
 	/** Calculates the distance of the given point to the given line, represented by
@@ -59,8 +61,8 @@ public class Geometry {
 	}
 
     /** Calculates the approximate distance (without proper consideration of the evalation) between the points
-     * @param firstpoint point to which the distance is calculated
-     * @param secondpoint
+     * @param firstPoint start point
+     * @param secondPoint second point to which the distance is calculated
      * @return distance to the given point in km
      */
     public static double distance(Point firstPoint, Point secondPoint) {
@@ -79,7 +81,7 @@ public class Geometry {
     	int grad = gradMinute / 100;
     	int minute = gradMinute % 100;
     	double second = (degree - gradMinute) * 100;
-    	System.out.println("g="+grad+"m="+minute+" s="+second);
+    	logger.info("g="+grad+"m="+minute+" s="+second);
     	return grad + (second/60.0 + minute)/60.0;
     }
 

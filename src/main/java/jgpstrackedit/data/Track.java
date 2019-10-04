@@ -4,21 +4,19 @@
  */
 package jgpstrackedit.data;
 
-import java.awt.Color;
+import jgpstrackedit.data.util.ColorUtils;
+import jgpstrackedit.data.util.Geometry;
+import jgpstrackedit.data.util.TrackUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.awt.*;
 import java.io.File;
 import java.nio.file.Path;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
 import java.util.List;
-import java.util.Optional;
-import java.util.TreeSet;
-
-import jgpstrackedit.data.util.ColorUtils;
-import jgpstrackedit.data.util.Geometry;
-import jgpstrackedit.data.util.TrackUtil;
+import java.util.*;
 
 
 /**
@@ -27,6 +25,7 @@ import jgpstrackedit.data.util.TrackUtil;
  */
 public class Track 
 {
+	private static final Logger logger = LoggerFactory.getLogger(Track.class);
 	private static ColorUtils colorConverter = new ColorUtils();
 	
 	private ArrayList<Point> points = new ArrayList<Point>();
@@ -163,7 +162,7 @@ public class Track
 
 	public void addTrackObserver(TrackObserver observer) {
 		trackObservers.add(observer);
-		// System.out.println(String.format("#track observers %d", trackObservers.size()));
+		logger.debug(String.format("#track observers %d", trackObservers.size()));
 	}
 
 	public void removeTrackObserver(TrackObserver observer) {

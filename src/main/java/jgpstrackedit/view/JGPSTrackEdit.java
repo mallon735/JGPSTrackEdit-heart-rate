@@ -11,54 +11,6 @@ package jgpstrackedit.view;
  * see also http://www.gnu.org/copyleft/gpl.html.
  * Usage only for non commercial purposes.
  */
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.Dialog.ModalityType;
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
-import java.awt.event.WindowEvent;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.Properties;
-
-import javax.imageio.ImageIO;
-import javax.swing.ButtonGroup;
-import javax.swing.DefaultCellEditor;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JDialog;
-import javax.swing.JFileChooser;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JPopupMenu;
-import javax.swing.JRadioButtonMenuItem;
-import javax.swing.JSeparator;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.JToolBar;
-import javax.swing.ListSelectionModel;
-import javax.swing.UIManager;
-import javax.swing.border.LineBorder;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import jgpstrackedit.config.Configuration;
 import jgpstrackedit.config.ConfigurationObserver;
@@ -83,6 +35,21 @@ import jgpstrackedit.util.Parser;
 import jgpstrackedit.view.util.ColorEditor;
 import jgpstrackedit.view.util.ColorRenderer;
 import jgpstrackedit.view.util.FileDrop;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import javax.swing.border.LineBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import java.awt.*;
+import java.awt.Dialog.ModalityType;
+import java.awt.event.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.*;
 
 /** 
  * TODO:

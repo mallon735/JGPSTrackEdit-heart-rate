@@ -3,9 +3,8 @@
  */
 package jgpstrackedit.gpsies;
 
-import java.util.ArrayList;
-
 import javax.swing.table.AbstractTableModel;
+import java.util.ArrayList;
 
 /**
  * @author Hubert

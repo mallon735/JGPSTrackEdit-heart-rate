@@ -3,11 +3,11 @@
  */
 package jgpstrackedit.map.tiledownload;
 
-import java.util.concurrent.LinkedBlockingQueue;
-
 import jgpstrackedit.map.tilehandler.AbstractDiskTileHandler;
 import jgpstrackedit.map.tilehandler.AbstractTileCommand;
 import jgpstrackedit.map.util.TileNumber;
+
+import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * @author hlutnik

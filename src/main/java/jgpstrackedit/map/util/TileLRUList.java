@@ -75,7 +75,7 @@ public class TileLRUList extends LinkedHashMap<TileNumber,Object> {
 			java.util.Map.Entry<TileNumber, Object> eldest) {
 		if (size() > getNumberElements()) {
 			notifyTileLRUObservers(eldest.getKey());
-			//System.out.println("LRU("+size()+"): free "+eldest.getKey());
+			//logger.info("LRU("+size()+"): free "+eldest.getKey());
 			return true;
 		} else {
 		  return false;
@@ -91,7 +91,7 @@ public class TileLRUList extends LinkedHashMap<TileNumber,Object> {
 	 */
 	public void touch(TileNumber tileNumber) {
 		put(tileNumber,null);
-		//System.out.println("LRU("+size()+"): touch "+tileNumber);
+		//logger.info("LRU("+size()+"): touch "+tileNumber);
 	}
 
 }

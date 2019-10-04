@@ -3,29 +3,19 @@
  */
 package jgpstrackedit.trackfile.kml;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.net.URL;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
-import javax.xml.parsers.ParserConfigurationException;
-
+import jgpstrackedit.data.Track;
+import jgpstrackedit.trackfile.TrackFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import jgpstrackedit.data.Track;
-import jgpstrackedit.trackfile.TrackFile;
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.*;
+import java.net.URL;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * @author Hubert

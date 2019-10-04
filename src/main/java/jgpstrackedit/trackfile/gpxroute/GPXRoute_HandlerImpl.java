@@ -14,6 +14,8 @@ package jgpstrackedit.trackfile.gpxroute;
 
 import jgpstrackedit.data.Point;
 import jgpstrackedit.data.Track;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
@@ -22,20 +24,19 @@ import org.xml.sax.SAXException;
  * @author hlutnik
  */
 public class GPXRoute_HandlerImpl implements GPXRoute_Handler {
-    public static final boolean DEBUG = false;
-
+    private static final Logger logger = LoggerFactory.getLogger(GPXRoute_HandlerImpl.class);
     private Track track;
     private Point point;
+    private boolean metadataFlag = false;
 
     public Track getTrack() {
         return track;
     }
-    private boolean metadataFlag = false;
 
 
 	public void handle_time(final String data, final Attributes meta) throws SAXException {
-        if (DEBUG) {
-            System.err.println("handle_time: " + meta);
+        if (logger.isDebugEnabled()) {
+            logger.debug("handle_time: " + meta);
         }
         if (metadataFlag) {
             track.setTime(data);
@@ -49,69 +50,69 @@ public class GPXRoute_HandlerImpl implements GPXRoute_Handler {
     }
 
     public void handle_text(final String data, final Attributes meta) throws SAXException {
-        if (DEBUG) {
-            System.err.println("handle_text: " + meta);
+        if (logger.isDebugEnabled()) {
+            logger.debug("handle_text: " + meta);
         }
         track.setLinkText(data);
     }
 
     public void start_rtept(final Attributes meta) throws SAXException {
-        if (DEBUG) {
-            System.err.println("start_rtept: " + meta);
+        if (logger.isDebugEnabled()) {
+            logger.debug("start_rtept: " + meta);
         }
         point = new Point(meta.getValue("lon"),meta.getValue("lat"));
         track.add(point);
     }
 
     public void end_rtept() throws SAXException {
-        if (DEBUG) {
-            System.err.println("end_rtept()");
+        if (logger.isDebugEnabled()) {
+            logger.debug("end_rtept()");
         }
     }
 
     public void start_link(final Attributes meta) throws SAXException {
-        if (DEBUG) {
-            System.err.println("start_link: " + meta);
+        if (logger.isDebugEnabled()) {
+            logger.debug("start_link: " + meta);
         }
         track.setLink(meta.getValue("href"));
     }
 
     public void end_link() throws SAXException {
-        if (DEBUG) {
-            System.err.println("end_link()");
+        if (logger.isDebugEnabled()) {
+            logger.debug("end_link()");
         }
     }
 
     public void handle_name(final String data, final Attributes meta) throws SAXException {
-        if (DEBUG) {
-            System.err.println("handle_name: " + meta);
+        if (logger.isDebugEnabled()) {
+            logger.debug("handle_name: " + meta);
         }
         if (metadataFlag)
             track.setName(data);
     }
 
     public void start_rte(final Attributes meta) throws SAXException {
-        if (DEBUG) {
-            System.err.println("start_rte: " + meta);
+        if (logger.isDebugEnabled()) {
+            logger.debug("start_rte: " + meta);
         }
     }
 
     public void end_rte() throws SAXException {
-        if (DEBUG) {
-            System.err.println("end_rte()");
+        if (logger.isDebugEnabled()) {
+            logger.debug("end_rte()");
         }
     }
 
     public void handle_copyright(final Attributes meta) throws SAXException {
-        if (DEBUG) {
-            System.err.println("handle_copyright: " + meta);
+        if (logger.isDebugEnabled()) {
+            logger.debug("handle_copyright: " + meta);
         }
         track.setCopyright(meta.getValue("author"));
     }
 
     public void start_gpx(final Attributes meta) throws SAXException {
-        if (DEBUG) {
-            System.err.println("start_gpx: " + meta);
+        if (logger.isDebugEnabled()) {
+            logger.debug("start_gpx: " + meta);
         }
         track = new Track();
         StringBuilder gpxAttributes = new StringBuilder();
@@ -123,29 +124,29 @@ public class GPXRoute_HandlerImpl implements GPXRoute_Handler {
     }
 
     public void end_gpx() throws SAXException {
-        if (DEBUG) {
-            System.err.println("end_gpx()");
+        if (logger.isDebugEnabled()) {
+            logger.debug("end_gpx()");
         }
         track.setValid(true);
     }
 
     public void handle_ele(final String data, final Attributes meta) throws SAXException {
-        if (DEBUG) {
-            System.err.println("handle_ele: " + meta);
+        if (logger.isDebugEnabled()) {
+            logger.debug("handle_ele: " + meta);
         }
         point.setElevation(data);
     }
 
     public void start_metadata(final Attributes meta) throws SAXException {
-        if (DEBUG) {
-            System.err.println("start_metadata: " + meta);
+        if (logger.isDebugEnabled()) {
+            logger.debug("start_metadata: " + meta);
         }
         metadataFlag = true;
     }
 
     public void end_metadata() throws SAXException {
-        if (DEBUG) {
-            System.err.println("end_metadata()");
+        if (logger.isDebugEnabled()) {
+            logger.debug("end_metadata()");
         }
         metadataFlag = false;
     }

@@ -4,12 +4,13 @@
  */
 package jgpstrackedit.view;
 
-import java.awt.Color;
-import java.util.LinkedList;
-import java.util.List;
 import jgpstrackedit.data.Point;
 import jgpstrackedit.data.Track;
 import jgpstrackedit.data.TrackObserver;
+
+import java.awt.*;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * 

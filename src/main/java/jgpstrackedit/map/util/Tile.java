@@ -3,7 +3,7 @@
  */
 package jgpstrackedit.map.util;
 
-import java.awt.Image;
+import java.awt.*;
 
 
 /** The Tile class represents a tile of the map. Usually a tile consist of an image with quadratic 

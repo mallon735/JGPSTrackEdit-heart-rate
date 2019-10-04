@@ -3,21 +3,13 @@
  */
 package jgpstrackedit.map.util;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.util.TreeMap;
-
+import jgpstrackedit.data.Point;
+import jgpstrackedit.util.Parser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import jgpstrackedit.data.Point;
-import jgpstrackedit.util.Parser;
+import java.io.*;
+import java.util.TreeMap;
 
 /** 
  * Manages map extracts.
@@ -136,7 +128,7 @@ public class MapExtractManager
     
 	public static void save() {
 		try {
-			System.out.println("MapExtractManager: save");
+			logger.info("MapExtractManager: save");
 			PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream("MapExtracts.dat"))));
 			for (MapExtract mapExtract:mapExtracts.values()) {
 				out.println(mapExtract.getName()+";"+mapExtract.getZoomLevel()+";"+

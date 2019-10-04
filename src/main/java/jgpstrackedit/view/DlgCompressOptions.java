@@ -1,21 +1,13 @@
 package jgpstrackedit.view;
 
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-
-import javax.swing.ButtonGroup;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JTextField;
-import javax.swing.border.EmptyBorder;
-import jgpstrackedit.util.Parser;
 import jgpstrackedit.international.International;
-import java.awt.event.ActionListener;
+import jgpstrackedit.util.Parser;
+
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class DlgCompressOptions extends JDialog {
 

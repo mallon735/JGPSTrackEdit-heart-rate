@@ -3,14 +3,18 @@
  */
 package jgpstrackedit.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.lang.reflect.Method;
 
 /**
+ * Browser
+ *
  * @author Hubert
- * 
  */
 public class Browser {
-
+	private static final Logger logger = LoggerFactory.getLogger(Browser.class);
 	/**
 	 * Method to Open the Broser with Given URL
 	 * 
@@ -47,7 +51,7 @@ public class Browser {
 					runtime.exec(new String[] { browser, url });
 			}
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error("Exception while open url \"" + url + "\"!", ex);
 		}
 
 	}
