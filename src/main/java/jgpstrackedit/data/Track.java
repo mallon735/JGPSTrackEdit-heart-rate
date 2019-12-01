@@ -26,9 +26,9 @@ import java.util.*;
 public class Track 
 {
 	private static final Logger logger = LoggerFactory.getLogger(Track.class);
-	private static ColorUtils colorConverter = new ColorUtils();
+	private static final ColorUtils colorConverter = new ColorUtils();
 	
-	private ArrayList<Point> points = new ArrayList<Point>();
+	private ArrayList<Point> points = new ArrayList<>();
 	private Point leftUpperBoundary = null;
 	private Point rightLowerBoundary = null;
 
@@ -46,7 +46,7 @@ public class Track
 	
 	private Color color;
 	private boolean colorSet = false;
-	private List<TrackObserver> trackObservers = Collections.synchronizedList(new ArrayList<TrackObserver>());
+	private final List<TrackObserver> trackObservers = Collections.synchronizedList(new ArrayList<>());
 
 	
 	private transient TreeSet<Integer> compressedTrackIndizes;
@@ -169,7 +169,7 @@ public class Track
 		trackObservers.remove(observer);
 	}
 
-	protected void notifyTrackObservers() {
+	private void notifyTrackObservers() {
 		if(trackObservers.size() > 0) {
 			TrackObserver[] observers = trackObservers.toArray(new TrackObserver[trackObservers.size()]);
 			for (TrackObserver observer : observers) {
@@ -228,7 +228,7 @@ public class Track
 	private String time;
 	private String gpxAttributes;
 
-	public String getGpxAttributes() {
+	private String getGpxAttributes() {
 		return gpxAttributes;
 	}
 
@@ -511,7 +511,7 @@ public class Track
 	 *            end point of interval
 	 */
 	public void remove(Point start, Point end) {
-		ArrayList<Point> removePoints = new ArrayList<Point>();
+		ArrayList<Point> removePoints = new ArrayList<>();
 		boolean isInterval = false;
 		for (Point point : points) {
 			if (point.equals(start) || point.equals(end)) {
@@ -555,7 +555,7 @@ public class Track
 	 */
 	public void add(Track track, boolean direct) {
 		if (!direct) {
-			double distances[] = new double[4];
+			double[] distances = new double[4];
 			distances[0] = getFirstPoint().distance(track.getFirstPoint());
 			distances[1] = getFirstPoint().distance(track.getLastPoint());
 			distances[2] = getLastPoint().distance(track.getFirstPoint());
@@ -650,7 +650,7 @@ public class Track
 	 * @param point
 	 *            point to be checked
 	 */
-	protected void checkBoundaries(Point point) {
+	private void checkBoundaries(Point point) {
 		if(point == null) {
 			return;
 		}
@@ -676,7 +676,7 @@ public class Track
 	 * Calculates the boundary of track. May be used to recalculate boundaries
 	 * after changing of coordinates of points
 	 */
-	public void checkBoundaries() {
+	private void checkBoundaries() {
 
 		leftUpperBoundary = null;
 		rightLowerBoundary = null;
@@ -782,8 +782,8 @@ public class Track
 	 * @param adjacentPoint
 	 *            second point
 	 */
-	protected void insertAdjacentPoint(int insertionIndex, Point selectedPoint,
-			Point adjacentPoint) {
+	private void insertAdjacentPoint(int insertionIndex, Point selectedPoint,
+									 Point adjacentPoint) {
 		double longitude = (selectedPoint.getLongitude() + adjacentPoint
 				.getLongitude()) / 2.0;
 		double latitude = (selectedPoint.getLatitude() + adjacentPoint
@@ -879,7 +879,7 @@ public class Track
      * @param maxDeviation 
 	 *            maximum deviation of a point  in meter
      */
-	protected void compressDP(int firstPointIndex, int lastPointIndex, double maxDeviation) {
+	private void compressDP(int firstPointIndex, int lastPointIndex, double maxDeviation) {
 		Point first = points.get(firstPointIndex);
 		Point last = points.get(lastPointIndex);
 		double maxDistance = 0.0;
@@ -908,9 +908,9 @@ public class Track
 	 *            maximum deviation of a point  in meter
      */
 	public void compressDouglasPeucker(double maxDeviation) {
-		compressedTrackIndizes = new TreeSet<Integer>(); 
+		compressedTrackIndizes = new TreeSet<>();
 		compressDP(0,points.size()-1,maxDeviation);
-		ArrayList<Point> pointsCompressed = new ArrayList<Point>();
+		ArrayList<Point> pointsCompressed = new ArrayList<>();
 		for (int i:compressedTrackIndizes) {
 			pointsCompressed.add(points.get(i));
 		}
@@ -1037,4 +1037,34 @@ public class Track
 		//return (points.get(pointIndex-2).getElevation() + points.get(pointIndex-1).getElevation()*2 
 		//		 + points.get(pointIndex).getElevation()*3 + points.get(pointIndex+1).getElevation()*2 + points.get(pointIndex+2).getElevation())/9.0;
 	}
+
+	/**
+	 * Returns the point of track, which is nearest to the given point
+	 * @param point point to search
+	 * @return point of the track which has the smallest distance to the given point, or null if the track has no points
+	 */
+	public Point nearestPoint(Point point) {
+		if (points.size() == 0)
+			return null;
+		double distance = point.distance(points.get(0));
+		Point nearestPoint = points.get(0);
+		for (Point p:points) {
+			if (p.distance(point) < distance) {
+				distance = p.distance(point);
+				nearestPoint = p;
+			}
+		}
+		return nearestPoint;
+	}
+
+	/**
+	 * Tests if the given point is within boundaries
+	 * @param point point to test
+	 * @return true if point within boundaries
+	 */
+	public boolean isInBoundary(Point point) {
+		return leftUpperBoundary.getLongitude() < point.getLongitude() && leftUpperBoundary.getLatitude() > point.getLatitude()
+				&& rightLowerBoundary.getLongitude() > point.getLongitude() && rightLowerBoundary.getLatitude() < point.getLatitude();
+	}
+
 }

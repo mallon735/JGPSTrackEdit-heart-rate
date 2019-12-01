@@ -69,11 +69,10 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 		ListSelectionListener, MouseListener, MouseMotionListener,
 		MouseWheelListener, ConfigurationObserver, KeyListener 
 {
-	private static Logger logger = LoggerFactory.getLogger(JGPSTrackEdit.class);
+	private static final Logger logger = LoggerFactory.getLogger(JGPSTrackEdit.class);
 	private static final long serialVersionUID = 1L;
 	
 	private TracksPanel tracksPanel;
-	private TrackPanel trackPanel;
 	private TrackDataPanel trackDataPanel;
 	private AltitudeProfilePanel altitudeProfilePanel;
 	private TracksView tracksView;
@@ -91,7 +90,6 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 	private boolean shortCut = false;
 	private boolean distanceMeasurement = false;
 	private Point distanceMeasurementFirstPoint = null;
-	private Point distanceMeasurementSecondPoint = null;
 	private Point shortCutStartPoint = null;
 	private int currentScreenX = 0;
 	private int currentScreenY = 0;
@@ -102,18 +100,17 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 	private boolean draggingActive = false;
 
 	private TileDownload tileDownload = null;
-	public static final int MODE_INACTIVE = 0;
-	public static final int MODE_WAIT_FIRST_POINT = 1;
-	public static final int MODE_WAIT_SECOND_POINT = 2;
+	private static final int MODE_INACTIVE = 0;
+	private static final int MODE_WAIT_FIRST_POINT = 1;
+	private static final int MODE_WAIT_SECOND_POINT = 2;
 	private int tileSelectionMode = MODE_INACTIVE;
 	private Point tileSelectFirstPoint = null;
 
-	private ButtonGroup mapRadioButtons = new ButtonGroup();
-	private JGPSTrackEdit own;
+	private final ButtonGroup mapRadioButtons = new ButtonGroup();
+	private final JGPSTrackEdit own;
 	private JPopupMenu popupTracksView;
 	private UnDoManager appendUnDo = null;
 	private JCheckBoxMenuItem chckbxmntmScale;
-	private boolean showScale = true;
 	private int selectedStartPointIndex;
 	private Track selectedTrack;
 	private int selectedEndPointIndex;
@@ -174,7 +171,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 	}
 
 	/** Creates new form JGPSTrackEdit */
-	public JGPSTrackEdit() {
+	private JGPSTrackEdit() {
 		own = this;
 		Configuration.addConfigurationObserver(this);
 		MapExtractManager.load();
@@ -207,7 +204,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 	}
 
 	
-	public UIController getUIController()
+	private UIController getUIController()
 	{
 		return uiController;
 	}
@@ -219,7 +216,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 		return appendUnDo;
 	}
 
-	public void initGPSViews() {
+	private void initGPSViews() {
 		db = new Database();
 		tracksView = new TracksView(db);
 		jTableTracks.setModel(db);
@@ -240,7 +237,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 		tracksPanel.addMouseMotionListener(this);
 		tracksPanel.addMouseWheelListener(this);
 		jPanelMap.add(tracksPanel, java.awt.BorderLayout.CENTER);
-		trackPanel = new TrackPanel();
+		TrackPanel trackPanel = new TrackPanel();
 		trackDataPanel = new TrackDataPanel();
 		altitudeProfilePanel = new AltitudeProfilePanel();
 		trackPanel.add(trackDataPanel, java.awt.BorderLayout.NORTH);
@@ -305,7 +302,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 		popupTracksView.addSeparator();
 		popupTracksView.add(mntmInsertAdjacentPointsP);
 		popupTracksView.addSeparator();
-		mnuItemReloadTile = new JMenuItem(
+		JMenuItem mnuItemReloadTile = new JMenuItem(
 				International.getText("menu.kontext.Reload_tile"));
 		mnuItemReloadTile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -319,7 +316,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 
 	}
 
-	protected void handleAppendModeChange() {
+	private void handleAppendModeChange() {
 		if (!appendMode && chckbxmntmAppendMode.isSelected()) {
 			if (appendUnDo == null)
 				appendUnDo = new UnDoManager();
@@ -344,7 +341,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 		}
 	}
 
-	protected void handleAppendRoutingModeChange() {
+	private void handleAppendRoutingModeChange() {
 		if (!appendRoutingMode && chckbxmntmAppendRoutingMode.isSelected()) {
 			chckbxmntmAppendMode.setSelected(false);
 			chckbxmntmAppendModeP.setSelected(false);
@@ -365,7 +362,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 		}
 	}
 
-	protected void handleNewTrack() {
+	private void handleNewTrack() {
 		Track track = uiController.newTrack();
 		if (track != null) {
 			track.setLeftUpperBoundary(Transform.getUpperLeftBoundary());
@@ -385,20 +382,20 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 
 	}
 
-	protected void handleConfiguration() {
+	private void handleConfiguration() {
 		ConfigurationDialog conf = new ConfigurationDialog(own);
 		conf.initialize();
 		conf.setVisible(true);
 
 	}
 
-	public void handleHelp() {
+	private void handleHelp() {
 		DlgHelp dialog = new DlgHelp();
 		dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		dialog.setVisible(true);
 	}
 
-	public void handleDistanceMeasurementChange() {
+	private void handleDistanceMeasurementChange() {
 		distanceMeasurement = chckbxmntmDistanceMeasurement.isSelected();
 		if (distanceMeasurement) {
 			distanceMeasurementFirstPoint = new Point(
@@ -425,15 +422,15 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 	// desc="Generated Code">//GEN-BEGIN:initComponents
 	private void initComponents() {
 
-		jPanelstatusBar = new javax.swing.JPanel();
+		JPanel jPanelstatusBar = new JPanel();
 		jTextFieldStateMessage = new javax.swing.JTextField();
-		jSplitPaneTrack = new javax.swing.JSplitPane();
+		JSplitPane jSplitPaneTrack = new JSplitPane();
 		jSplitPaneTrackDetail = new javax.swing.JSplitPane();
-		jSplitPaneMap = new javax.swing.JSplitPane(
-				javax.swing.JSplitPane.VERTICAL_SPLIT);
-		jScrollPaneTracksTable = new javax.swing.JScrollPane();
+		JSplitPane jSplitPaneMap = new JSplitPane(
+				JSplitPane.VERTICAL_SPLIT);
+		JScrollPane jScrollPaneTracksTable = new JScrollPane();
 		jScrollPaneTracksTable.setPreferredSize(new Dimension(200, 140));
-		jScrollPanePointsTable = new javax.swing.JScrollPane();
+		JScrollPane jScrollPanePointsTable = new JScrollPane();
 		jScrollPanePointsTable.setPreferredSize(new Dimension(150, 140));
 		jTableTracks = new javax.swing.JTable();
 		jTablePoints = new javax.swing.JTable();
@@ -443,28 +440,29 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 		jButtonWest = new javax.swing.JButton();
 		jButtonEast = new javax.swing.JButton();
 		popupTracksView = new JPopupMenu();
-		menuBar = new javax.swing.JMenuBar();
-		fileMenu = new javax.swing.JMenu();
-		openMenuItem = new javax.swing.JMenuItem();
-		saveMenuItem = new javax.swing.JMenuItem();
+		JMenuBar menuBar = new JMenuBar();
+		JMenu fileMenu = new JMenu();
+		JMenuItem openMenuItem = new JMenuItem();
+		JMenuItem saveMenuItem = new JMenuItem();
 		saveMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				uiController.save();
 			}
 		});
-		saveAsMenuItem = new javax.swing.JMenuItem();
-		exitMenuItem = new javax.swing.JMenuItem();
-		trackMenu = new javax.swing.JMenu();
-		jMenuItemReverse = new javax.swing.JMenuItem();
-		jMenuItemSmoothing = new javax.swing.JMenuItem();
-		helpMenu = new javax.swing.JMenu();
-		contentsMenuItem = new javax.swing.JMenuItem();
+		JMenuItem saveAsMenuItem = new JMenuItem();
+		JMenuItem exitMenuItem = new JMenuItem();
+		JMenu trackMenu = new JMenu();
+		JMenuItem jMenuItemReverse = new JMenuItem();
+		JMenuItem jMenuItemSmoothing = new JMenuItem();
+		JMenu helpMenu = new JMenu();
+		JMenuItem contentsMenuItem = new JMenuItem();
 		contentsMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				handleHelp();
 			}
 		});
-		aboutMenuItem = new javax.swing.JMenuItem();
+		// Variables declaration - do not modify//GEN-BEGIN:variables
+		JMenuItem aboutMenuItem = new JMenuItem();
 		aboutMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				handleAbout();
@@ -501,7 +499,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 		getContentPane().add(toolBar, java.awt.BorderLayout.NORTH);
 
 		toolBar.setFloatable(false);
-		jButtonOpenTrack = new javax.swing.JButton();
+		JButton jButtonOpenTrack = new JButton();
 		jButtonOpenTrack.setBorder(null);
 		toolBar.add(jButtonOpenTrack);
 		jButtonOpenTrack.setPreferredSize(new Dimension(20, 20));
@@ -560,7 +558,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 		btnNewButton_1.setToolTipText(International.getText("sel_dir"));
 		toolBar.add(btnNewButton_1);
 		toolBar.addSeparator();
-		jButtonSave = new javax.swing.JButton();
+		JButton jButtonSave = new JButton();
 		jButtonSave.setBorder(null);
 		jButtonSave.setMaximumSize(new Dimension(20, 20));
 		jButtonSave.setMinimumSize(new Dimension(20, 20));
@@ -577,7 +575,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 		toolBar.add(jButtonSave);
 		toolBar.add(btnNewButton);
 
-		btnConfiguration = new JButton("");
+		JButton btnConfiguration = new JButton("");
 		btnConfiguration.setBorder(null);
 		btnConfiguration.setMinimumSize(new Dimension(20, 20));
 		btnConfiguration.setMaximumSize(new Dimension(20, 20));
@@ -608,7 +606,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 			}
 		});
 
-		btnNewTrack = new JButton("");
+		JButton btnNewTrack = new JButton("");
 		btnNewTrack.setBorder(null);
 		btnNewTrack.setContentAreaFilled(false);
 		btnNewTrack.setMaximumSize(new Dimension(20, 20));
@@ -624,7 +622,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 		});
 		toolBar.add(btnNewTrack);
 
-		btnReverseTrack = new JButton("");
+		JButton btnReverseTrack = new JButton("");
 		btnReverseTrack.setBorder(null);
 		btnReverseTrack.setContentAreaFilled(false);
 		btnReverseTrack.setMaximumSize(new Dimension(20, 20));
@@ -640,7 +638,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 		});
 		toolBar.add(btnReverseTrack);
 
-		btnSplitTrack = new JButton("");
+		JButton btnSplitTrack = new JButton("");
 		btnSplitTrack.setMaximumSize(new Dimension(20, 20));
 		btnSplitTrack.setMinimumSize(new Dimension(20, 20));
 		btnSplitTrack.setPreferredSize(new Dimension(20, 20));
@@ -656,7 +654,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 		});
 		toolBar.add(btnSplitTrack);
 
-		btnMergeTrack = new JButton("");
+		JButton btnMergeTrack = new JButton("");
 		btnMergeTrack.setBorder(null);
 		btnMergeTrack.setContentAreaFilled(false);
 		btnMergeTrack.setMaximumSize(new Dimension(20, 20));
@@ -672,7 +670,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 		});
 		toolBar.add(btnMergeTrack);
 
-		btnCompressTrack = new JButton("");
+		JButton btnCompressTrack = new JButton("");
 		btnCompressTrack.setMaximumSize(new Dimension(20, 20));
 		btnCompressTrack.setMinimumSize(new Dimension(20, 20));
 		btnCompressTrack.setPreferredSize(new Dimension(20, 20));
@@ -689,7 +687,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 		});
 		toolBar.add(btnCompressTrack);
 
-		btnUpdateElevations = new JButton("");
+		JButton btnUpdateElevations = new JButton("");
 		btnUpdateElevations.setMaximumSize(new Dimension(20, 20));
 		btnUpdateElevations.setMinimumSize(new Dimension(20, 20));
 		btnUpdateElevations.setPreferredSize(new Dimension(20, 20));
@@ -707,7 +705,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 		toolBar.add(btnUpdateElevations);
 		toolBar.addSeparator();
 
-		btnMoveSelectedPoint = new JButton("");
+		JButton btnMoveSelectedPoint = new JButton("");
 		btnMoveSelectedPoint.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				handleMoveSelectedPoint();
@@ -724,7 +722,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 				.getResource("/jgpstrackedit/view/icon/anchor.png")));
 		toolBar.add(btnMoveSelectedPoint);
 
-		btnAppendMode = new JButton("");
+		JButton btnAppendMode = new JButton("");
 		btnAppendMode.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				chckbxmntmAppendMode.setSelected(!chckbxmntmAppendMode
@@ -744,7 +742,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 				.getResource("/jgpstrackedit/view/icon/map_edit.png")));
 		toolBar.add(btnAppendMode);
 
-		btnAppendRoutingMode = new JButton("");
+		JButton btnAppendRoutingMode = new JButton("");
 		btnAppendRoutingMode.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				chckbxmntmAppendRoutingMode
@@ -766,7 +764,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 				.getResource("/jgpstrackedit/view/icon/map_go.png")));
 		toolBar.add(btnAppendRoutingMode);
 
-		btnUndoAppends = new JButton("");
+		JButton btnUndoAppends = new JButton("");
 		btnUndoAppends.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				uiController.undoAppend();
@@ -782,7 +780,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 				.getResource("/jgpstrackedit/view/icon/arrow_undo.png")));
 		toolBar.add(btnUndoAppends);
 
-		btnInsertAdjacentPoints = new JButton("");
+		JButton btnInsertAdjacentPoints = new JButton("");
 		btnInsertAdjacentPoints.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				uiController.insertAdjacentPoints();
@@ -799,7 +797,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 		btnInsertAdjacentPoints.setBorder(null);
 		toolBar.add(btnInsertAdjacentPoints);
 
-		btnDeletePoint = new JButton("");
+		JButton btnDeletePoint = new JButton("");
 		btnDeletePoint.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				uiController.deleteSelectedPoint();
@@ -815,7 +813,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 				.getResource("/jgpstrackedit/view/icon/delete.png")));
 		toolBar.add(btnDeletePoint);
 
-		btnDeleteMode = new JButton("");
+		JButton btnDeleteMode = new JButton("");
 		btnDeleteMode.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				chckbxmntmDeleteMode.setSelected(!chckbxmntmDeleteMode
@@ -833,7 +831,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 		btnDeleteMode.setBorder(null);
 		toolBar.add(btnDeleteMode);
 
-		btnShortCut = new JButton("");
+		JButton btnShortCut = new JButton("");
 		btnShortCut.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				handleShortCut();
@@ -898,7 +896,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 		});
 		toolBar.add(btnZoomTrack);
 
-		btnNewButton_2 = new JButton("");
+		JButton btnNewButton_2 = new JButton("");
 		btnNewButton_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				uiController.zoomSelectedPoint();
@@ -1157,7 +1155,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 		});
 		fileMenu.add(openMenuItem);
 
-		mntmOpenGpsiescomTrack = new JMenuItem(
+		JMenuItem mntmOpenGpsiescomTrack = new JMenuItem(
 				International.getText("menu.File.Open_GPSies.com") + "...");
 		mntmOpenGpsiescomTrack.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -1194,7 +1192,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 			}
 		});
 
-		mntmConfiguration = new JMenuItem(
+		JMenuItem mntmConfiguration = new JMenuItem(
 				International.getText("menu.File.Configuration") + "...");
 		mntmConfiguration.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -1202,28 +1200,28 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 			}
 		});
 
-		mntmDelete_1 = new JMenuItem(International.getText("menu.File.Close"));
+		JMenuItem mntmDelete_1 = new JMenuItem(International.getText("menu.File.Close"));
 		mntmDelete_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				uiController.delete();
 			}
 		});
 
-		mntmDelete_All= new JMenuItem(International.getText("menu.File.CloseAll"));
+		JMenuItem mntmDelete_All = new JMenuItem(International.getText("menu.File.CloseAll"));
 		mntmDelete_All.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				uiController.deleteAll();
 			}
 		});
 
-		mntmDelete_All= new JMenuItem(International.getText("menu.File.CloseAll"));
+		mntmDelete_All = new JMenuItem(International.getText("menu.File.CloseAll"));
 		mntmDelete_All.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				uiController.deleteAll();
 			}
 		});
 
-		mntmSaveToGpsiescom = new JMenuItem(International.getText("menu.File.Save_GPSies.com") + "...");
+		JMenuItem mntmSaveToGpsiescom = new JMenuItem(International.getText("menu.File.Save_GPSies.com") + "...");
 		mntmSaveToGpsiescom.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				uiController.saveGPSies();
@@ -1233,16 +1231,16 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 		fileMenu.add(mntmDelete_1);
 		fileMenu.add(mntmDelete_All);
 		fileMenu.addSeparator();
-		
-		mntmSaveMapView = new JMenuItem(International.getText("menu.File.Save_Map_View_as_Image") + "...");
+
+		JMenuItem mntmSaveMapView = new JMenuItem(International.getText("menu.File.Save_Map_View_as_Image") + "...");
 		mntmSaveMapView.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				mntmSaveMapViewActionPerformed(arg0);
 			}
 		});
 		fileMenu.add(mntmSaveMapView);
-		
-		mntmSaveAltitudeProfile = new JMenuItem(International.getText("menu.File.Save_Altitude_Profile_as_Image") + "...");
+
+		JMenuItem mntmSaveAltitudeProfile = new JMenuItem(International.getText("menu.File.Save_Altitude_Profile_as_Image") + "...");
 		mntmSaveAltitudeProfile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				mntmSaveAltitudeProfileActionPerformed(arg0);
@@ -1264,7 +1262,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 			}
 		});
 
-		mntmNew = new JMenuItem(International.getText("menu.Track.New"));
+		JMenuItem mntmNew = new JMenuItem(International.getText("menu.Track.New"));
 		mntmNew.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				handleNewTrack();
@@ -1276,7 +1274,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 
 		menuBar.add(trackMenu);
 
-		mntmSplit = new JMenuItem(International.getText("menu.Track.Split")
+		JMenuItem mntmSplit = new JMenuItem(International.getText("menu.Track.Split")
 				+ "...");
 		mntmSplit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -1286,7 +1284,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 		});
 		trackMenu.add(mntmSplit);
 
-		mntmMerge = new JMenuItem(International.getText("menu.Track.Merge")
+		JMenuItem mntmMerge = new JMenuItem(International.getText("menu.Track.Merge")
 				+ "...");
 		mntmMerge.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -1342,7 +1340,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 		});
 		trackMenu.add(mntmCorrectPoints);
 
-		mntmRemoveInvalidPoints = new JMenuItem(
+		JMenuItem mntmRemoveInvalidPoints = new JMenuItem(
 				International.getText("menu.Track.Remove_invalid_points"));
 		mntmRemoveInvalidPoints.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -1351,10 +1349,10 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 		});
 		trackMenu.add(mntmRemoveInvalidPoints);
 
-		mnPoints = new JMenu(International.getText("menu.Point"));
+		JMenu mnPoints = new JMenu(International.getText("menu.Point"));
 		menuBar.add(mnPoints);
 
-		mntmDelete = new JMenuItem(International.getText("menu.Point.Delete"));
+		JMenuItem mntmDelete = new JMenuItem(International.getText("menu.Point.Delete"));
 		mntmDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				uiController.deleteSelectedPoint();
@@ -1368,7 +1366,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 			}
 		});
 
-		mntmInsertAdjacentPoints = new JMenuItem(
+		JMenuItem mntmInsertAdjacentPoints = new JMenuItem(
 				International.getText("menu.Point.Insert_adjacent_points"));
 		mntmInsertAdjacentPoints.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -1383,7 +1381,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 			}
 		});
 
-		mntmMoveSelectedPoint = new JMenuItem(
+		JMenuItem mntmMoveSelectedPoint = new JMenuItem(
 				International.getText("menu.Point.Move_selected_point"));
 		mntmMoveSelectedPoint.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -1460,7 +1458,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 		});
 		mnPoints.add(chckbxmntmAppendRoutingMode);
 
-		mntmUndoAppend = new JMenuItem(
+		JMenuItem mntmUndoAppend = new JMenuItem(
 				International.getText("menu.Point.Undo_append"));
 		mntmUndoAppend.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -1480,7 +1478,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 		mnPoints.add(mntmInsertAdjacentPoints);
 		mnPoints.addSeparator();
 
-		mntmMarkTrackStart = new JMenuItem(International.getText("menu.Point.Start_Point"));
+		JMenuItem mntmMarkTrackStart = new JMenuItem(International.getText("menu.Point.Start_Point"));
 		mntmMarkTrackStart.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				mntmStartPointActionPerformed(e);
@@ -1601,7 +1599,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 		});
 		mnPoints.add(chckbxmntmDeleteMode);
 
-		mntmShortCut = new JMenuItem(
+		JMenuItem mntmShortCut = new JMenuItem(
 				International.getText("menu.Point.Short_Cut"));
 		mntmShortCut.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -1618,8 +1616,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 		});
 
 
-
-		mntmEditPoint = new JMenuItem("Edit Point");
+		JMenuItem mntmEditPoint = new JMenuItem("Edit Point");
 		mntmEditPoint.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				mntmEditPointActionPerformed(e);
@@ -1636,10 +1633,10 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 			}
 		});
 
-		mnView = new JMenu(International.getText("menu.View"));
+		JMenu mnView = new JMenu(International.getText("menu.View"));
 		menuBar.add(mnView);
 
-		mntmZoomIn = new JMenuItem(International.getText("menu.View.Zoom_In"));
+		JMenuItem mntmZoomIn = new JMenuItem(International.getText("menu.View.Zoom_In"));
 		mntmZoomIn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				uiController.zoomIn();
@@ -1647,7 +1644,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 		});
 		mnView.add(mntmZoomIn);
 
-		mntmZoomOut = new JMenuItem(International.getText("menu.View.Zoom_out"));
+		JMenuItem mntmZoomOut = new JMenuItem(International.getText("menu.View.Zoom_out"));
 		mntmZoomOut.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				uiController.zoomOut();
@@ -1655,7 +1652,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 		});
 		mnView.add(mntmZoomOut);
 
-		mntmZoomSelectedTrack = new JMenuItem(
+		JMenuItem mntmZoomSelectedTrack = new JMenuItem(
 				International.getText("menu.View.Zoom_selected_track"));
 		mntmZoomSelectedTrack.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -1693,10 +1690,10 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 		mnView.add(mntmSaveCurrentMap);
 		mnView.addSeparator();
 
-		mnMaps = new JMenu(International.getText("menu.View.Maps"));
+		JMenu mnMaps = new JMenu(International.getText("menu.View.Maps"));
 		mnView.add(mnMaps);
 
-		rdbtnmntmNone = new JRadioButtonMenuItem(
+		JRadioButtonMenuItem rdbtnmntmNone = new JRadioButtonMenuItem(
 				International.getText("menu.View.Maps.None"));
 		rdbtnmntmNone.setSelected(true);
 		mapRadioButtons.add(rdbtnmntmNone);
@@ -1846,7 +1843,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 		});
 		mnView.add(chckbxmntmShowDayTour);
 
-		mntmRefreshMap = new JMenuItem(
+		JMenuItem mntmRefreshMap = new JMenuItem(
 				International.getText("menu.View.Refresh_Map"));
 		mntmRefreshMap.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -1949,11 +1946,11 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 			}
 		});
 
-		mnTiledownload = new JMenu(
+		JMenu mnTiledownload = new JMenu(
 				International.getText("menu.TileDown.Tile_Download"));
 		menuBar.add(mnTiledownload);
 
-		mntmStartTileDownload = new JMenuItem(
+		JMenuItem mntmStartTileDownload = new JMenuItem(
 				International.getText("menu.TileDown.Start_Tile_Download_Mode"));
 		mntmStartTileDownload.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -1963,7 +1960,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 		mnTiledownload.add(mntmStartTileDownload);
 		mnTiledownload.addSeparator();
 
-		mntmAddBorderTiles = new JMenuItem(
+		JMenuItem mntmAddBorderTiles = new JMenuItem(
 				International.getText("menu.TileDown.Add_Border_Tiles"));
 		mntmAddBorderTiles.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -1972,7 +1969,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 		});
 		mnTiledownload.add(mntmAddBorderTiles);
 
-		mntmSaveCurrentWork = new JMenuItem(
+		JMenuItem mntmSaveCurrentWork = new JMenuItem(
 				International.getText("menu.TileDown.Save_Current_Work"));
 		mntmSaveCurrentWork.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -1980,7 +1977,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 			}
 		});
 
-		mntmAddCurentMap = new JMenuItem(
+		JMenuItem mntmAddCurentMap = new JMenuItem(
 				International.getText("menu.TileDown.Add_Current_Map_Extract"));
 		mntmAddCurentMap.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -1988,7 +1985,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 			}
 		});
 
-		mntmAddArea = new JMenuItem(
+		JMenuItem mntmAddArea = new JMenuItem(
 				International.getText("menu.TileDown.Add_Area"));
 		mntmAddArea.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -2002,7 +1999,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 
 		mnTiledownload.add(mntmSaveCurrentWork);
 
-		mntmStopAndSave = new JMenuItem(
+		JMenuItem mntmStopAndSave = new JMenuItem(
 				International.getText("menu.TileDown.Save_Download_Exit_Mode"));
 		mntmStopAndSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -2033,14 +2030,14 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 		}
 	}
 
-	protected void chckbxmntmScaleActionPerformed(ActionEvent arg0) {
+	private void chckbxmntmScaleActionPerformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub
-		showScale = chckbxmntmScale.isSelected();
+		boolean showScale = chckbxmntmScale.isSelected();
 		tracksPanel.setShowScale(showScale);
 		repaint();
 	}
 
-	protected void handleMoveSelectedPointMode(boolean selected) {
+	private void handleMoveSelectedPointMode(boolean selected) {
 		// TODO Auto-generated method stub
 		chckbxmntmMoveselectedpointmode.setSelected(selected);
 		chckbxmntmMoveselectedpointmodeP.setSelected(selected);
@@ -2053,21 +2050,21 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 		return jTablePoints;
 	}
 
-	protected void handleAbout() {
+	private void handleAbout() {
 		DlgAbout dialog = new DlgAbout();
 		dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		dialog.setVisible(true);
 
 	}
 
-	protected void handleDeleteMode() {
+	private void handleDeleteMode() {
 		pointDeleteMode = chckbxmntmDeleteMode.getState();
 		tracksPanel.setPointDeleteMode(chckbxmntmDeleteMode.getState());
 		repaint();
 
 	}
 
-	protected void handleMerge() {
+	private void handleMerge() {
 		try {
 			if(db.getTracks().size() < 2) {
 				return;
@@ -2092,7 +2089,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 
 	}
 
-	protected void handleSplit() {
+	private void handleSplit() {
 		try {
 			DlgSplit dialog = new DlgSplit(db.getTrack(
 					jTableTracks.getSelectedRow()).getName());
@@ -2110,7 +2107,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 
 	}
 
-	protected void handleShortCut() {
+	private void handleShortCut() {
 		shortCut = true;
 		shortCutStartPoint = getTracksView().getSelectedTrackView()
 				.getSelectedPoint();
@@ -2121,7 +2118,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 		// tracksPanel.setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
 	}
 
-	protected void handleMoveSelectedPoint() {
+	private void handleMoveSelectedPoint() {
 		moveSelectedPoint = true;
 		tracksPanel.setShowBonds(true);
 		TrackView selectedTrackView = getTracksView().getSelectedTrackView();
@@ -2178,7 +2175,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 
 	private void jMenuItemSmoothingActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jMenuItemSmoothingActionPerformed
 		// TODO add your handling code here:
-		uiController.smoothTrackElevation();;
+		uiController.smoothTrackElevation();
 	}// GEN-LAST:event_jMenuItemSmoothingActionPerformed
 
 	private void saveAsMenuItemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_saveAsMenuItemActionPerformed
@@ -2232,7 +2229,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 	 * @param args
 	 *            the command line arguments
 	 */
-	public static void main(String args[]) {
+	public static void main(String[] args) {
 		java.awt.EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				JGPSTrackEdit w = new JGPSTrackEdit();
@@ -2273,7 +2270,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 		});
 	}
 
-	protected void handleUpdateRequest() {
+	private void handleUpdateRequest() {
 		// Warning: month are counted from 0! (February == 1)
 		GregorianCalendar updateDay = new GregorianCalendar(2014, 5, 18);
 		GregorianCalendar today = new GregorianCalendar();
@@ -2294,94 +2291,36 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 		}
 	}
 
-	// Variables declaration - do not modify//GEN-BEGIN:variables
-	private javax.swing.JMenuItem aboutMenuItem;
-	private javax.swing.JMenuItem contentsMenuItem;
-	private javax.swing.JMenuItem exitMenuItem;
-	private javax.swing.JMenu fileMenu;
-	private javax.swing.JMenu helpMenu;
-	private javax.swing.JButton jButtonSave;
 	private javax.swing.JButton jButtonEast;
 	private javax.swing.JButton jButtonNorth;
-	private javax.swing.JButton jButtonOpenTrack;
 	private javax.swing.JButton jButtonSouth;
 	private javax.swing.JButton jButtonWest;
-	private javax.swing.JMenuItem jMenuItemReverse;
-	private javax.swing.JMenuItem jMenuItemSmoothing;
-	private javax.swing.JPanel jPanelstatusBar;
 	private javax.swing.JPanel jPanelMap;
-	private javax.swing.JScrollPane jScrollPaneTracksTable;
-	private javax.swing.JScrollPane jScrollPanePointsTable;
-	private javax.swing.JSplitPane jSplitPaneTrack;
 	private javax.swing.JSplitPane jSplitPaneTrackDetail;
-	private javax.swing.JSplitPane jSplitPaneMap;
 	private javax.swing.JTable jTableTracks;
 	private javax.swing.JTable jTablePoints;
 	private javax.swing.JTextField jTextFieldStateMessage;
-	private javax.swing.JMenuBar menuBar;
-	private javax.swing.JMenuItem openMenuItem;
-	private javax.swing.JMenuItem saveAsMenuItem;
-	private javax.swing.JMenuItem saveMenuItem;
-	private javax.swing.JMenu trackMenu;
-	private JMenuItem mntmConfiguration;
-	private JMenu mnPoints;
-	private JMenuItem mntmDelete;
 	private JMenuItem mntmDeleteP;
 	private JCheckBoxMenuItem chckbxmntmDeleteMode;
 	private JCheckBoxMenuItem chckbxmntmDeleteModeP;
-	private JMenu mnView;
-	private JMenuItem mntmZoomIn;
-	private JMenuItem mntmZoomOut;
-	private JMenuItem mntmSplit;
-	private JMenuItem mntmMerge;
-	private JMenuItem mntmDelete_1;
-	private JMenuItem mntmDelete_All;
-	private JMenu mnMaps;
-	private JRadioButtonMenuItem rdbtnmntmNone;
 	private JRadioButtonMenuItem rdbtnmntmOpenstreetmapmapnik;
-	private JMenuItem mntmZoomSelectedTrack;
-	private JMenuItem mntmRefreshMap;
 	private JCheckBoxMenuItem chckbxmntmShowDayTour;
-	private JMenuItem mntmMoveSelectedPoint;
 	private JMenuItem mntmMoveSelectedPointP;
 	private JCheckBoxMenuItem chckbxmntmAppendMode;
 	private JCheckBoxMenuItem chckbxmntmAppendModeP;
 	private JRadioButtonMenuItem rdbtnmntmOpencyclemap;
 	private JCheckBoxMenuItem chckbxmntmShowCoordinates;
-	private JMenuItem mntmInsertAdjacentPoints;
 	private JMenuItem mntmInsertAdjacentPointsP;
-	private JMenuItem mntmNew;
-	private JButton btnConfiguration;
 	private JCheckBoxMenuItem chckbxmntmNewCheckItem;
-	private JMenuItem mnuItemReloadTile;
-	private JMenuItem mntmOpenGpsiescomTrack;
 	private JRadioButtonMenuItem rdbtnmntmHikebikemap;
 	private JRadioButtonMenuItem rdbtnmntmMapquest;
 	private JCheckBoxMenuItem chckbxmntmAppendRoutingMode;
 	private JCheckBoxMenuItem chckbxmntmAppendRoutingModeP;
 	private JCheckBoxMenuItem chckbxmntmAutoRefresh;
-	private JMenuItem mntmUndoAppend;
 	private JMenuItem mntmUndoAppendP;
 	private JRadioButtonMenuItem rdbtnmntmMapquestsatellite;
 	private JRadioButtonMenuItem rdbtnmntmMapquesthybride;
-	private JMenuItem mntmShortCut;
 	private JMenuItem mntmShortCutP;
-	private JMenuItem mntmRemoveInvalidPoints;
-	private JButton btnNewTrack;
-	private JButton btnReverseTrack;
-	private JButton btnSplitTrack;
-	private JButton btnMergeTrack;
-	private JButton btnCompressTrack;
-	private JButton btnUpdateElevations;
-	private JButton btnMoveSelectedPoint;
-	private JButton btnAppendMode;
-	private JButton btnAppendRoutingMode;
-	private JButton btnUndoAppends;
-	private JButton btnInsertAdjacentPoints;
-	private JButton btnDeletePoint;
-	private JButton btnDeleteMode;
-	private JButton btnShortCut;
-	private JButton btnNewButton_2;
 	private JCheckBoxMenuItem chckbxmntmMoveselectedpointmode;
 	private JCheckBoxMenuItem chckbxmntmMoveselectedpointmodeP;
 	private JCheckBoxMenuItem chckbxmntmDistanceMeasurement;
@@ -2391,21 +2330,9 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 	private JRadioButtonMenuItem rdbtnmntmGooglemaphybrid;
 	private JRadioButtonMenuItem rdbtnmntmGooglemapterrain;
 	private JRadioButtonMenuItem rdbtnmntmGooglemap;
-	private JMenu mnTiledownload;
-	private JMenuItem mntmStartTileDownload;
-	private JMenuItem mntmAddBorderTiles;
-	private JMenuItem mntmStopAndSave;
-	private JMenuItem mntmSaveCurrentWork;
-	private JMenuItem mntmAddCurentMap;
-	private JMenuItem mntmAddArea;
 	private JCheckBoxMenuItem chckbxmntmShowTrackLength;
 	private JCheckBoxMenuItem chckbxmntmPointInformation;
-	private JMenuItem mntmEditPoint;
 	private JMenuItem mntmEditPointP;
-	private JMenuItem mntmSaveToGpsiescom;
-	private JMenuItem mntmSaveMapView;
-	private JMenuItem mntmSaveAltitudeProfile;
-	private JMenuItem mntmMarkTrackStart;
 	private JMenuItem mntmMarkTrackEnd;
 	private JMenuItem mntmAppendTrackPart;
 	private JMenuItem mntmPrependTrackPart;
@@ -2423,7 +2350,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 	/**
 	 * Sets the selected track in some components. Not for general use!
 	 * 
-	 * @param track
+	 * @param selectedTrack the selected track
 	 */
 	public void setSelectedTrack(Track selectedTrack) {
 		tracksView.setSelectedTrack(selectedTrack);
@@ -2570,6 +2497,16 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 			repaint();
 		}
 
+		if (e.getClickCount() == 2) {
+			Track selTrack = db.getTrack(Transform.mapPoint(screenX, screenY));
+			if (selTrack != null) {
+				setSelectedTrack(selTrack);
+				db.getTrackTableModel().setSelectedTrack(selTrack);
+				int index = db.getTrack(selTrack);
+				jTableTracks.setRowSelectionInterval(index, index);
+			}
+		}
+
 		lastScreenX = screenX;
 		lastScreenY = screenY;
 		lastDraggedX = -1;
@@ -2659,7 +2596,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 		int screenY = e.getY();
 		tracksPanel.setMousePosition(screenX, screenY);
 		if (distanceMeasurement) {
-			distanceMeasurementSecondPoint = new Point(
+			Point distanceMeasurementSecondPoint = new Point(
 					Transform.mapLongitude(screenX),
 					Transform.mapLatitude(screenY), 0);
 			double distance = distanceMeasurementFirstPoint
@@ -2781,7 +2718,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 
 	}
 
-	protected void mntmStartTileDownloadActionPerformed(ActionEvent arg0) {
+	private void mntmStartTileDownloadActionPerformed(ActionEvent arg0) {
 		DlgStartTiledownloadMode dialog = new DlgStartTiledownloadMode(this,
 				Transform.getZoomLevel(), TileManager.getCurrentTileManager()
 						.getMaxZoom());
@@ -2840,14 +2777,14 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 		repaint();
 	}
 
-	protected void mntmAddBorderTilesActionPerformed(ActionEvent e) {
+	private void mntmAddBorderTilesActionPerformed(ActionEvent e) {
 		if (tileDownload != null) {
 			tileDownload.appendBorderTiles();
 			repaint();
 		}
 	}
 
-	protected void mntmSaveCurrentWorkActionPerformed(ActionEvent e) {
+	private void mntmSaveCurrentWorkActionPerformed(ActionEvent e) {
 		if (tileDownload != null) {
 			JFileChooser fileSaveChooser = new JFileChooser();
 			int returnVal = fileSaveChooser.showSaveDialog(this);
@@ -2870,7 +2807,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 		}
 	}
 
-	protected void mntmStopAndSaveActionPerformed(ActionEvent arg0) {
+	private void mntmStopAndSaveActionPerformed(ActionEvent arg0) {
 		if (tileDownload != null) {
 			JFileChooser fileSaveChooser = new JFileChooser();
 			int returnVal = fileSaveChooser.showSaveDialog(this);
@@ -2922,19 +2859,19 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 		}
 	}
 
-	protected void mntmAddCurentMapActionPerformed(ActionEvent arg0) {
+	private void mntmAddCurentMapActionPerformed(ActionEvent arg0) {
 		tileDownload.addTiles(Transform.getUpperLeftBoundary(),
 				Transform.getLowerRightBoundary());
 	}
 
-	protected void mntmAddAreaActionPerformed(ActionEvent arg0) {
+	private void mntmAddAreaActionPerformed(ActionEvent arg0) {
 		tileSelectionMode = MODE_WAIT_FIRST_POINT;
 		logger.info("tileSelectionMode = MODE_WAIT_FIRST_POINT");
 		tracksPanel.setCursorText("Define upper left corner", Color.RED);
 		repaint();
 	}
 
-	protected void chckbxmntmShowTrackLengthActionPerformed(ActionEvent arg0) {
+	private void chckbxmntmShowTrackLengthActionPerformed(ActionEvent arg0) {
 		ViewingConfiguration.setShowLength(chckbxmntmShowTrackLength
 				.isSelected());
 		if (getTracksTable().getSelectedRowCount() == 1) {
@@ -2946,13 +2883,13 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 
 	}
 
-	protected void chckbxmntmPointInformationActionPerformed(ActionEvent arg0) {
+	private void chckbxmntmPointInformationActionPerformed(ActionEvent arg0) {
 		ViewingConfiguration.setShowInformation(chckbxmntmPointInformation
 				.isSelected());
 		repaint();
 	}
 
-	protected void mntmEditPointActionPerformed(ActionEvent e) {
+	private void mntmEditPointActionPerformed(ActionEvent e) {
 		if( null == getTracksView().getSelectedTrackView()){
 			return;
 		}
@@ -2969,7 +2906,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 		}
 	}
 
-	protected void mntmStartPointActionPerformed(ActionEvent e) {
+	private void mntmStartPointActionPerformed(ActionEvent e) {
 		if( null == getTracksView().getSelectedTrackView()){
 			return;
 		}
@@ -2995,7 +2932,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 		}
 	}
 
-	protected void mntmEndPointActionPerformed(ActionEvent e) {
+	private void mntmEndPointActionPerformed(ActionEvent e) {
 		if( null == getTracksView().getSelectedTrackView()){
 			return;
 		}
@@ -3020,7 +2957,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 		}
 	}
 
-	protected ArrayList<Point> trackpartHelper(boolean sametrack ){
+	private ArrayList<Point> trackpartHelper(boolean sametrack){
 
 		if( null == getTracksView().getSelectedTrackView()){
 			return null;
@@ -3036,7 +2973,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 				return null;
 			}
 		}
-		ArrayList<Point> points = new ArrayList<Point>();
+		ArrayList<Point> points = new ArrayList<>();
 		if( selectedEndPointIndex > selectedStartPointIndex ){
 			for( int index=selectedStartPointIndex; index <= selectedEndPointIndex; index++){
 				points.add( selectedTrack.getPoint(index).clone() );
@@ -3051,7 +2988,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 		return points;
 	}
 
-	protected void mntmPrependTrackActionPerformed(ActionEvent e) {
+	private void mntmPrependTrackActionPerformed(ActionEvent e) {
 		ArrayList<Point> points = trackpartHelper(false);
 		if( null != points ){
 			Track tmpselectedTrack= getTracksView().getSelectedTrackView().getTrack();
@@ -3075,7 +3012,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 		}
 	}
 
-	protected void mntmInsertTrackActionPerformed(ActionEvent e) {
+	private void mntmInsertTrackActionPerformed(ActionEvent e) {
 		ArrayList<Point> points = trackpartHelper(false);
 		if( null != points ){
 			Point selectedPoint = getTracksView().getSelectedTrackView().getSelectedPoint();
@@ -3105,7 +3042,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 		}
 	}
 
-	protected void mntmAppendTrackActionPerformed(ActionEvent e) {
+	private void mntmAppendTrackActionPerformed(ActionEvent e) {
 		ArrayList<Point> points = trackpartHelper(false);
 		if( null != points ){
 			Track tmpselectedTrack= getTracksView().getSelectedTrackView().getTrack();
@@ -3129,7 +3066,7 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 		}
 	}
 
-	protected void mntmDeleteTrackActionPerformed(ActionEvent e){
+	private void mntmDeleteTrackActionPerformed(ActionEvent e){
 		ArrayList<Point> points = trackpartHelper(true);
 		if( null != points ){
 			Track tmpselectedTrack= getTracksView().getSelectedTrackView().getTrack();
@@ -3158,11 +3095,11 @@ public class JGPSTrackEdit extends javax.swing.JFrame implements
 		}
 	}
 	
-	protected void mntmSaveMapViewActionPerformed(ActionEvent arg0) {
+	private void mntmSaveMapViewActionPerformed(ActionEvent arg0) {
 		uiController.saveMapViewAsImage();
 	}
 	
-	protected void mntmSaveAltitudeProfileActionPerformed(ActionEvent arg0) {
+	private void mntmSaveAltitudeProfileActionPerformed(ActionEvent arg0) {
 		uiController.saveAltitudeProfileasImage();
 	}
 }
