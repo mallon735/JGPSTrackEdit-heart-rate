@@ -44,7 +44,7 @@ public class TracksView implements DBObserver
 	 * @return list of views
 	 */
 	public List<TrackView> getTracksView() {
-		return Collections.unmodifiableList(tracksView);
+		return new LinkedList<>(tracksView);
 	}
 
 	public Point getLeftUpperBoundary() {

@@ -18,8 +18,8 @@ import java.util.List;
  */
 public class TrackView implements TrackObserver {
 
-	private LinkedList<PointView> points = new LinkedList<PointView>();
-	private Track track;
+	private LinkedList<PointView> points = new LinkedList<>();
+	private final Track track;
 	private boolean selected = false;
 	private Point selectedPoint;
 
@@ -36,7 +36,8 @@ public class TrackView implements TrackObserver {
 	}
 
 	/**
-	 * @param selected
+	 *
+	 * @param selectedTrack
 	 *            the selected to set
 	 */
 	public void setSelected(Track selectedTrack) {
@@ -44,11 +45,7 @@ public class TrackView implements TrackObserver {
 	}
 
 	public List<PointView> getPoints() {
-		return points;
-	}
-
-	public void setPoints(LinkedList<PointView> points) {
-		this.points = points;
+		return new LinkedList<>(points);
 	}
 
 	public void setView(Point leftUpperBoundary, Point rightLowerBoundary) {
@@ -75,10 +72,6 @@ public class TrackView implements TrackObserver {
 			}
 			previous = point;
 		}
-	}
-
-	public String getName() {
-		return track.getName();
 	}
 
 	public Color getColor() {
@@ -119,25 +112,6 @@ public class TrackView implements TrackObserver {
 				return pointView;
 		}
 		return null;
-
-	}
-
-	/**
-	 * If the given x,y-Screen-Coordinate matches to a stored PointView the
-	 * Index of the PointView is returned, else -1.
-	 * 
-	 * @param x
-	 *            X-Coordinate (screen)
-	 * @param y
-	 *            Y-Coordinate (screen)
-	 * @return Index if Coordinate matches, else -1
-	 */
-	public int getPointIndexAt(int x, int y) {
-		for (int i = 0; i < points.size(); i++) {
-			if (points.get(i).contains(x, y))
-				return i;
-		}
-		return -1;
 
 	}
 
@@ -189,13 +163,10 @@ public class TrackView implements TrackObserver {
      * Inserts adjacent points.
      */
 	public void insertAdjacentPoints() {
-		// TODO Auto-generated method stub
 		track.insertAdjacentPoints(selectedPoint);
-		
 	}
 
 	public void setSelectedPointPosition(double mapLongitude,double mapLatitude) {
-		// TODO Auto-generated method stub
 		track.setPointPosition(selectedPoint,mapLongitude,mapLatitude);
 	}
 
