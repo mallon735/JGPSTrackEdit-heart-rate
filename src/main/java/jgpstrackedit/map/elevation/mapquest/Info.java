@@ -1,18 +1,18 @@
 
 package jgpstrackedit.map.elevation.mapquest;
 
+import java.util.List;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
-import java.util.List;
-
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-    "statuscode",
-    "copyright",
-    "messages"
+        "statuscode",
+        "copyright",
+        "messages"
 })
+
 public class Info {
 
     @JsonProperty("statuscode")
@@ -20,8 +20,8 @@ public class Info {
     @JsonProperty("copyright")
     private Copyright copyright;
     @JsonProperty("messages")
-    private List<Object> messages = null;
-    
+    private List<String> messages = null;
+
     @JsonProperty("statuscode")
     public Integer getStatuscode() {
         return statuscode;
@@ -43,12 +43,13 @@ public class Info {
     }
 
     @JsonProperty("messages")
-    public List<Object> getMessages() {
+    public List<String> getMessages() {
         return messages;
     }
 
     @JsonProperty("messages")
-    public void setMessages(List<Object> messages) {
+    public void setMessages(List<String> messages) {
         this.messages = messages;
     }
+
 }

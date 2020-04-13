@@ -7,10 +7,11 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-    "imageAltText",
-    "imageUrl",
-    "text"
+        "imageAltText",
+        "imageUrl",
+        "text"
 })
+
 public class Copyright {
 
     @JsonProperty("imageAltText")
@@ -50,3 +51,4 @@ public class Copyright {
         this.text = text;
     }
 }
+

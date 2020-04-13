@@ -1,4 +1,4 @@
-/*
+/**
  * File:           ElevationParser.java
  * Date:           20. Februar 2012  16:14
  *
@@ -27,10 +27,10 @@ import java.util.Stack;
 public class ElevationParser implements ContentHandler {
     private static final Logger logger = LoggerFactory.getLogger(ElevationParser.class);
 
-    private ElevationHandler handler;
-    private Stack context;
-    private StringBuffer buffer;
-    private EntityResolver resolver;
+    private final ElevationHandler handler;
+    private final Stack<Object> context;
+    private final StringBuffer buffer;
+    private final EntityResolver resolver;
 
     /**
      *
@@ -43,7 +43,7 @@ public class ElevationParser implements ContentHandler {
         this.handler = handler;
         this.resolver = resolver;
         buffer = new StringBuffer(111);
-        context = new java.util.Stack();
+        context = new java.util.Stack<>();
     }
 
     /**
@@ -169,52 +169,48 @@ public class ElevationParser implements ContentHandler {
     }
 
     /**
-     *
      * The recognizer entry method taking an InputSource.
+     *
      * @param input InputSource to be parsed.
      * @throws java.io.IOException on I/O error
      * @throws org.xml.sax.SAXException propagated exception thrown by a DocumentHandler
      * @throws javax.xml.parsers.ParserConfigurationException a parser satisfying the requested configuration cannot be created
-     * @throws javax.xml.parsers.FactoryConfigurationRrror if the implementation cannot be instantiated
      */
     public void parse(final org.xml.sax.InputSource input) throws SAXException, ParserConfigurationException, IOException {
         parse(input, this);
     }
 
     /**
-     *
      * The recognizer entry method taking a URL.
+     *
      * @param url URL Source to be parsed.
      * @throws java.io.IOException on I/O error
      * @throws org.xml.sax.SAXException propagated exception thrown by a DocumentHandler
      * @throws javax.xml.parsers.ParserConfigurationException a parser satisfying the requested configuration cannot be created
-     * @throws javax.xml.parsers.FactoryConfigurationRrror if the implementation cannot be instantiated
      */
     public void parse(final java.net.URL url) throws SAXException, ParserConfigurationException, IOException {
         parse(new org.xml.sax.InputSource(url.toExternalForm()), this);
     }
 
     /**
+     * The recognizer entry method taking an input source.
      *
-     * The recognizer entry method taking an Inputsource.
      * @param input InputSource to be parsed.
      * @throws java.io.IOException on I/O error
      * @throws org.xml.sax.SAXException propagated exception thrown by a DocumentHandler
      * @throws javax.xml.parsers.ParserConfigurationException a parser satisfying the requested configuration cannot be created
-     * @throws javax.xml.parsers.FactoryConfigurationRrror if the implementation cannot be instantiated
      */
-    public static void parse(final org.xml.sax.InputSource input, final ElevationHandler handler) throws SAXException, ParserConfigurationException, IOException {
+    private static void parse(final org.xml.sax.InputSource input, final ElevationHandler handler) throws SAXException, ParserConfigurationException, IOException {
         parse(input, new ElevationParser(handler, null));
     }
 
     /**
-     *
      * The recognizer entry method taking a URL.
+     *
      * @param url URL source to be parsed.
      * @throws java.io.IOException on I/O error
      * @throws org.xml.sax.SAXException propagated exception thrown by a DocumentHandler
      * @throws javax.xml.parsers.ParserConfigurationException a parser satisfying the requested configuration cannot be created
-     * @throws javax.xml.parsers.FactoryConfigurationRrror if the implementation cannot be instantiated
      */
     public static void parse(final java.net.URL url, final ElevationHandler handler) throws SAXException, ParserConfigurationException, IOException {
         parse(new org.xml.sax.InputSource(url.toExternalForm()), handler);
@@ -238,7 +234,7 @@ public class ElevationParser implements ContentHandler {
      * Creates default error handler used by this parser.
      * @return org.xml.sax.ErrorHandler implementation
      */
-    protected ErrorHandler getDefaultErrorHandler() {
+    private ErrorHandler getDefaultErrorHandler() {
         return new ErrorHandler() {
 
             public void error(SAXParseException ex) throws SAXException {

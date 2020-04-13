@@ -1,6 +1,3 @@
-/**
- * 
- */
 package jgpstrackedit.map.elevation.mapquest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -32,11 +29,11 @@ import java.util.stream.Collectors;
 public class MapQuestElevationCorrection implements IElevationCorrection 
 {
 	private static final Logger logger = LoggerFactory.getLogger(MapQuestElevationCorrection.class);
-	private static final String BASE_URL = "http://open.mapquestapi.com/elevation/v1/profile?key=Fmjtd%7Cluubn96ynu%2C2s%3Do5-907guw&shapeFormat=cmp&outShapeFormat=none&latLngCollection=";
+	private static final String BASE_URL = "http://open.mapquestapi.com/elevation/v1/profile?key=Fmjtd%7Cluubn96ynu%2C2s%3Do5-907guw&shapeFormat=cmp&latLngCollection=";
 	private static final int NUMBER_OF_POINTS_PER_REQUEST = 120;
-	private static int NO_DATA_ERROR = 601;
-	private static int PARTIAL_SUCCESS = 602;
-	private static int NO_HEIGHT_DATA = -32768;
+	private static final int NO_DATA_ERROR = 601;
+	private static final int PARTIAL_SUCCESS = 602;
+	private static final int NO_HEIGHT_DATA = -32768;
 
 	/**
 	 * Updates the elevation of the given track using mapquest elevation api.
@@ -57,7 +54,7 @@ public class MapQuestElevationCorrection implements IElevationCorrection
 		}
 	}
 	
-	void updateElevationThrow(Track track, IProgressDetector progressDetector) throws Exception {
+	private void updateElevationThrow(Track track, IProgressDetector progressDetector) throws Exception {
 		List<List<PointWrapper>> splittedList = splitUpTrack(track);
 		ObjectMapper mapper = new ObjectMapper();
 		
@@ -92,15 +89,15 @@ public class MapQuestElevationCorrection implements IElevationCorrection
 	 * @param elevationResponse mapquest elevation profile response 
 	 * @param list list of points
 	 * @param track track to correct the elevation
-	 * @throws ElevationException 
+	 * @throws ElevationException elevation exception
 	 */
-	void updatePoints(ElevationResponse elevationResponse, List<PointWrapper> list, Track track) throws ElevationException {
+	private void updatePoints(ElevationResponse elevationResponse, List<PointWrapper> list, Track track) throws ElevationException {
 		int status = getStatus(elevationResponse);
-		
+
 		if(status == NO_DATA_ERROR) {
 			return;
 		}
-		
+
 		if(status > 0 && status != PARTIAL_SUCCESS) {
 			throw new ElevationException(
 					String.format("Mapquest response: [%d] %s", status, getErrorInfo(elevationResponse)));
@@ -124,12 +121,8 @@ public class MapQuestElevationCorrection implements IElevationCorrection
 		if(elevationProfile.getHeight() == null) {
 			return false;
 		}
-		
-		if(elevationProfile.getHeight().intValue() == NO_HEIGHT_DATA) {
-			return false;
-		}
-		
-		return true;
+
+		return elevationProfile.getHeight() != NO_HEIGHT_DATA;
 	}
 	
 	private int getStatus(ElevationResponse elevationResponse) {
@@ -145,21 +138,21 @@ public class MapQuestElevationCorrection implements IElevationCorrection
 				&& elevationResponse.getInfo().getMessages().size() > 0) {
 			return elevationResponse.getInfo().getMessages()
 					.stream()
-					.map(msg -> msg.toString())
+					.map(Object::toString)
 					.collect(Collectors.joining(","));
 		}
 		return "";
 	}
 
-	List<List<PointWrapper>> splitUpTrack(Track track) {
-		List<List<PointWrapper>> splittedList = new LinkedList<List<PointWrapper>>();
-		List<PointWrapper> pointList = new ArrayList<PointWrapper>(NUMBER_OF_POINTS_PER_REQUEST + 1);
+	private List<List<PointWrapper>> splitUpTrack(Track track) {
+		List<List<PointWrapper>> splittedList = new LinkedList<>();
+		List<PointWrapper> pointList = new ArrayList<>(NUMBER_OF_POINTS_PER_REQUEST + 1);
 		
 		for (int i = 0; i < track.getNumberPoints(); i++) {
 			pointList.add(new PointWrapper(track.getPoint(i), i));
 			if((i > 0) && (i % NUMBER_OF_POINTS_PER_REQUEST == 0)) {
 				splittedList.add(pointList);
-				pointList = new ArrayList<PointWrapper>(NUMBER_OF_POINTS_PER_REQUEST + 1);
+				pointList = new ArrayList<>(NUMBER_OF_POINTS_PER_REQUEST + 1);
 			}
 		}
 		
@@ -173,8 +166,8 @@ public class MapQuestElevationCorrection implements IElevationCorrection
 	 * @param points List of points
 	 * @return Request URL
 	 */
-	String getRequest(List<PointWrapper> points) {
-		StringBuilder urlBuilder = new StringBuilder(BASE_URL);
+	private String getRequest(List<PointWrapper> points) {
+		final StringBuilder urlBuilder = new StringBuilder(BASE_URL);
 		urlBuilder.append(compress(points));
 		return urlBuilder.toString();
 	}

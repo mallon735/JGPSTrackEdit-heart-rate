@@ -7,9 +7,10 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-    "distance",
-    "height"
+        "distance",
+        "height"
 })
+
 public class ElevationProfile {
 
     @JsonProperty("distance")
@@ -36,4 +37,5 @@ public class ElevationProfile {
     public void setHeight(Integer height) {
         this.height = height;
     }
+
 }
