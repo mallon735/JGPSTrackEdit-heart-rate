@@ -20,8 +20,8 @@ public class DlgAbout extends JDialog {
 	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
 	
-	private static final String VERSION_INFO_STATIC = "1.7.0-RC2";
-	private static final String RELEASE_DATE_STATIC = "2019/10/04";
+	private static final String VERSION_INFO_STATIC = "1.7.0-RC3";
+	private static final String RELEASE_DATE_STATIC = "2020/04/14";
 
 	/**
 	 * Create the dialog.
