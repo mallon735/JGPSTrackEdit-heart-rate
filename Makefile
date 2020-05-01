@@ -1,5 +1,6 @@
-all:
+build:
 	mvn package
-
+clean:
+	rm -r target
 run:
-	java -jar target/JGPSTrackEdit-1.7.0-RC2-bundle.jar
+	java -jar target/JGPSTrackEdit-*-bundle.jar

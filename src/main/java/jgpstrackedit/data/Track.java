@@ -790,7 +790,22 @@ public class Track
 				.getLatitude()) / 2.0;
 		double elevation = (selectedPoint.getElevation() + adjacentPoint
 				.getElevation()) / 2.0;
-		Point point = new Point(longitude, latitude, elevation);
+		// time
+		java.time.OffsetDateTime time1 = java.time.OffsetDateTime.parse(selectedPoint.getTime());
+		java.time.OffsetDateTime time2 = java.time.OffsetDateTime.parse(adjacentPoint.getTime());
+		long timeDiff = (time2.toEpochSecond() - time1.toEpochSecond()) / 2;
+		String time = time1.plusSeconds​(timeDiff).toString();
+		System.out.println("TIME: " + time1 + " " + time2 + " " + timeDiff + " " + time);
+		// heart-rate
+		String hr = selectedPoint.getExtension();
+		System.out.println("HR: " + hr + " " + adjacentPoint.getExtension());
+		if (selectedPoint.getExtension() != null && adjacentPoint.getExtension() != null)
+		{
+			double hr1 = Double.valueOf(selectedPoint.getExtension());
+			double hr2 = Double.valueOf(adjacentPoint.getExtension());
+			hr = String.valueOf(hr1 + (hr2 - hr1) / 2);
+		}
+		Point point = new Point(longitude, latitude, elevation, time, selectedPoint.getInformation(), hr);
 		points.add(insertionIndex, point);
 	}
 
