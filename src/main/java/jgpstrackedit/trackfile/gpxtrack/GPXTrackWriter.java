@@ -36,7 +36,13 @@ public class GPXTrackWriter {
 			if (p.getTime() != null) {
 			  out.println("        <time>" + p.getTime() + "</time>");
 			}
-			
+			if (p.getExtension() != null) {
+			  out.println("        <extensions>");
+			  out.println("          <gpxtpx:TrackPointExtension>");
+			  out.println("            <gpxtpx:hr>" + p.getExtension() + "</gpxtpx:hr>");
+			  out.println("          </gpxtpx:TrackPointExtension>");
+			  out.println("        </extensions>");
+			}
 			out.println("      </trkpt>");
 		}
 		out.println("    </trkseg>");

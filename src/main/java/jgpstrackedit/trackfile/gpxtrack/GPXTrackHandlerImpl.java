@@ -196,6 +196,12 @@ public class GPXTrackHandlerImpl implements GPXTrackHandler {
         if (point != null)
             point.setElevation(data);
     }
+    
+    public void handle_extension(final String data, final Attributes meta) throws SAXException {
+        logger.debug("TODO: handle_ext: " + meta);
+        if (point != null)
+            point.setExtension(data);
+    }
 
     public void start_metadata(final Attributes meta) throws SAXException {
         if (logger.isDebugEnabled()) {

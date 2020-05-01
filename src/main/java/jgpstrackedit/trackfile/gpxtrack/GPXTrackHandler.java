@@ -178,6 +178,10 @@ public interface GPXTrackHandler {
      */
     public void handle_ele(final String data, final Attributes meta) throws SAXException;
 
+
+    public void handle_extension(final String data, final Attributes meta) throws SAXException;
+
+
     /**
      *
      * A container element start event handling method.

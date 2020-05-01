@@ -19,25 +19,28 @@ public class Point {
     private double elevation = 0D;
     private String time = null;
     private String information = null;
+    private String extension = null;
     private transient double length;
 
     public Point() {
     }
 
-    public Point(String longitude, String latitude, String elevation, String time, String information) {
+    public Point(String longitude, String latitude, String elevation, String time, String information, String extension) {
         setLongitude(longitude);
         setLatitude(latitude);
         setElevation(elevation);
         setTime(time);
         setInformation(information);
+        setExtension(extension);
     }
 
-    public Point(double longitude, double latitude, double elevation, String time, String information) {
+    public Point(double longitude, double latitude, double elevation, String time, String information, String extension) {
     	this.longitude = longitude;
         this.latitude = latitude;
         this.elevation = elevation;
         setTime(time);
         setInformation(information);
+        setExtension(extension);
     }
     
     public Point(String longitude, String latitude, String elevation, String time) {
@@ -154,13 +157,22 @@ public class Point {
 		this.information = information;
 	}
 
+  public String getExtension() {
+ 		return extension;
+  }
+  
+  public void setExtension(String extension) {
+  	this.extension = extension;
+  }
+
 	@Override
     public Point clone()  {
         return new Point(getLongitude(),
                               getLatitude(),
                               getElevation(),
                               getTime(),
-                              getInformation());
+                              getInformation(),
+                              getExtension());
     }
 
     @Override
